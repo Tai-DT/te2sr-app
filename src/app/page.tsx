@@ -1,152 +1,131 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
+import React, { useState } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { GlassCard } from '@/components/GlassCard';
 import { OrderModal } from '@/components/OrderModal';
-import { getTranslation, LanguageCode } from '@/lib/i18n/dictionaries';
+import { AuthModal } from '@/components/AuthModal';
+import { LanguageCode, getTranslation } from '@/lib/i18n/dictionaries';
+import { useAuth } from '@/lib/auth';
 import {
-  TestTube, Rocket, Star, CheckCircle, Zap,
-  ArrowRight, Globe2, ShieldCheck, Timer,
-  ChevronRight, TrendingUp, Package, ShieldAlert, BadgeDollarSign, Sparkles, Clock, Lock, Tag, Percent, CreditCard,
+  Rocket,
+  ShieldCheck,
+  CheckCircle,
+  TestTube,
+  Star,
+  Zap,
+  ArrowRight,
+  TrendingUp,
+  CreditCard,
+  PhoneCall,
 } from 'lucide-react';
 
-/* ─── Animated Counter Hook ─── */
-function useCounter(target: number, duration = 1800) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        let start = 0;
-        const step = target / (duration / 16);
-        const timer = setInterval(() => {
-          start += step;
-          if (start >= target) { setCount(target); clearInterval(timer); }
-          else setCount(Math.floor(start));
-        }, 16);
-        observer.disconnect();
-      },
-      { threshold: 0.3 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [target, duration]);
-  return { count, ref };
-}
-
-/* ─── Stat Counter Component ─── */
-function StatCounter({ value, suffix, label, color }: { value: number; suffix: string; label: string; color: string }) {
-  const { count, ref } = useCounter(value);
+function StatCounter({ value, label, suffix = '', color = 'text-brand-blue' }: { value: number; label: string; suffix?: string; color?: string }) {
   return (
-    <div ref={ref} className="text-center p-5">
-      <div className={`text-2xl sm:text-4xl font-extrabold font-display ${color} tabular-nums`}>
-        {count.toLocaleString()}{suffix}
+    <div className="text-center p-4">
+      <div className={`text-3xl sm:text-4xl font-extrabold font-display ${color}`}>
+        {value.toLocaleString()}{suffix}
       </div>
-      <div className="text-xs text-slate-800 mt-1.5 font-bold leading-tight">{label}</div>
+      <div className="text-xs text-slate-700 font-extrabold mt-1">{label}</div>
     </div>
   );
 }
 
-export default function LandingPage() {
+export default function HomePage() {
   const [currentLang, setCurrentLang] = useState<LanguageCode>('vi');
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
-  const [modalInitialService, setModalInitialService] = useState<
-    'Testing' | 'Publishing' | 'Promotion_5Star'
+  const [initialService, setInitialService] = useState<
+    'Testing' | 'Publishing' | 'Promotion_5Star' | 'DesignAnalyzer'
   >('Testing');
 
+  const { isAuthModalOpen, closeAuthModal } = useAuth();
   const t = (key: string) => getTranslation(currentLang, key);
 
-  const openServiceModal = (service: 'Testing' | 'Publishing' | 'Promotion_5Star') => {
-    setModalInitialService(service);
+  const openServiceModal = (service: 'Testing' | 'Publishing' | 'Promotion_5Star' | 'DesignAnalyzer') => {
+    setInitialService(service);
     setIsOrderModalOpen(true);
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans selection:bg-brand-blue/10 selection:text-brand-blue">
+    <div className="min-h-screen flex flex-col bg-white text-slate-900 font-sans selection:bg-brand-blue selection:text-white">
+      {/* Navbar */}
       <Navbar currentLang={currentLang} onLanguageChange={setCurrentLang} />
 
+      {/* Main Content */}
       <main className="flex-1">
-
         {/* ════════════════════════════
-            HERO SECTION (Apple/Samsung Light)
+            HERO SECTION
         ════════════════════════════ */}
-        <section className="relative pt-16 md:pt-28 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-slate-50 via-white to-white overflow-hidden">
-
-          {/* Grid Background */}
-          <div className="absolute inset-0 hero-grid-bg opacity-40 pointer-events-none" />
-
-          <div className="relative z-10 max-w-5xl mx-auto text-center space-y-8">
-
-            {/* Announcement Badge */}
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-blue-50 border border-blue-300 text-brand-blue text-xs font-extrabold tracking-wide shadow-apple-sm">
-              <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
-              <span>💳 THANH TOÁN 2 ĐỢT: 50% KHI HOÀN THÀNH 12 TESTERS (14 NGÀY) & 50% KHI APP LIVE!</span>
-              <ChevronRight className="w-3.5 h-3.5 opacity-70" />
+        <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden border-b border-slate-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-8">
+            {/* Top Payment & Guarantee Badges */}
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-200 text-brand-blue text-xs font-extrabold shadow-apple-sm">
+                <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
+                <span>💳 THANH TOÁN 2 ĐỢT: 50% KHI HOÀN THÀNH 12 TESTERS (14 NGÀY) & 50% KHI APP LIVE!</span>
+              </div>
             </div>
 
             {/* Main Headline */}
-            <div className="space-y-4">
-              <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold font-display leading-[1.1] tracking-tight text-slate-900">
-                Đưa App Của Bạn{' '}
-                <br className="hidden sm:block" />
-                <span className="text-brand-blue">
+            <div className="space-y-4 max-w-4xl mx-auto">
+              <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold font-display tracking-tight text-slate-900 leading-[1.1]">
+                Đưa App Của Bạn <br />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-blue to-blue-600">
                   Lên Top Store
                 </span>
               </h1>
-              <p className="text-base sm:text-xl text-slate-800 max-w-2xl mx-auto leading-relaxed font-medium">
+
+              <p className="text-base sm:text-xl text-slate-800 max-w-2xl mx-auto font-medium leading-relaxed">
                 Cung cấp giải pháp kiểm thử toàn diện & đưa app lên App Store/Google Play. <strong>Thanh toán 50% sau khi cài 12 testers đếm 14 ngày & 50% còn lại khi app live thành công!</strong>
               </p>
             </div>
 
-            {/* 100% Refund, Security & 2-Step Payment Schedule Policy Banners */}
-            <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="p-3.5 rounded-2xl bg-blue-50 border border-blue-300 text-brand-blue text-xs font-extrabold flex items-center justify-center gap-2 shadow-apple-sm">
-                <CreditCard className="w-4 h-4 text-brand-blue shrink-0" />
+            {/* Key Value Badges */}
+            <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+              <div className="px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 text-xs font-extrabold flex items-center gap-2 shadow-apple-sm">
+                <CreditCard className="w-4 h-4 text-brand-blue" />
                 <span>Thanh toán 50% đếm 14 ngày + 50% khi app live</span>
               </div>
-              <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs font-extrabold flex items-center justify-center gap-2 shadow-apple-sm">
-                <BadgeDollarSign className="w-4 h-4 text-emerald-700 shrink-0" />
+              <div className="px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs font-extrabold flex items-center gap-2 shadow-apple-sm">
+                <ShieldCheck className="w-4 h-4 text-emerald-700" />
                 <span>Hoàn tiền 100% nếu trượt cam kết</span>
               </div>
-              <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-300 text-amber-900 text-xs font-extrabold flex items-center justify-center gap-2 shadow-apple-sm">
-                <ShieldAlert className="w-4 h-4 text-amber-700 shrink-0" />
+              <div className="px-3.5 py-2 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-xs font-extrabold flex items-center gap-2 shadow-apple-sm">
+                <ShieldCheck className="w-4 h-4 text-amber-700" />
                 <span>KHÔNG nhận app lừa đảo / cờ bạc</span>
               </div>
             </div>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+            {/* Call to Actions */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
               <button
                 onClick={() => openServiceModal('Publishing')}
-                className="group w-full sm:w-auto px-8 py-4 rounded-2xl bg-brand-blue hover:bg-blue-600 text-white font-extrabold text-sm shadow-brand-blue hover:scale-[1.02] transition-all flex items-center justify-center gap-2.5 active:scale-95"
+                className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-brand-blue hover:bg-blue-600 text-white font-extrabold text-sm transition-all shadow-brand-blue hover:scale-[1.02] flex items-center justify-center gap-2.5"
               >
-                <Rocket className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+                <Rocket className="w-4 h-4" />
                 <span>Bắt Đầu Đăng Tải Ngay</span>
               </button>
 
               <button
                 onClick={() => openServiceModal('Testing')}
-                className="group w-full sm:w-auto px-8 py-4 rounded-2xl bg-slate-100 hover:bg-slate-200 border border-slate-300 text-slate-900 font-extrabold text-sm transition-all flex items-center justify-center gap-2.5"
+                className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-slate-100 border border-slate-300 hover:bg-slate-200 text-slate-900 font-extrabold text-sm transition-all flex items-center justify-center gap-2 shadow-apple-sm"
               >
-                <TestTube className="w-4 h-4 text-brand-blue group-hover:scale-110 transition-transform" />
+                <TestTube className="w-4 h-4 text-brand-blue" />
                 <span>Kiểm Thử App Ngay</span>
               </button>
             </div>
 
-            {/* Trust Indicators */}
-            <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-slate-800 pt-4">
+            {/* Trust Badges */}
+            <div className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-700 font-extrabold">
               {[
-                { icon: <ShieldCheck className="w-4 h-4 text-emerald-600" />, text: 'Bảo mật 100% tài khoản Dev' },
-                { icon: <Timer className="w-4 h-4 text-brand-blue" />, text: 'Xử lý trong 24h' },
-                { icon: <Globe2 className="w-4 h-4 text-slate-800" />, text: '50+ Quốc gia' },
+                { icon: ShieldCheck, text: 'Bảo mật 100% tài khoản Dev' },
+                { icon: Zap, text: 'Xử lý trong 24h' },
+                { icon: TrendingUp, text: '50+ Quốc gia' },
               ].map((item, i) => (
-                <div key={i} className="flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-300 shadow-apple-sm">
-                  {item.icon}
-                  <span className="font-bold text-slate-900">{item.text}</span>
+                <div key={i} className="flex items-center gap-2 bg-slate-50 px-3.5 py-1.5 rounded-full border border-slate-200">
+                  <item.icon className="w-4 h-4 text-brand-blue" />
+                  <span>{item.text}</span>
                 </div>
               ))}
             </div>
@@ -199,7 +178,7 @@ export default function LandingPage() {
                 iconBg: 'bg-slate-100 border-slate-300',
                 title: t('svc_publishing_title'),
                 desc: t('svc_publishing_desc'),
-                features: ['Apple & Google Developer Console', 'Tích hợp cổng thanh toán & API', 'Thanh toán 2 đợt (50% - 50%)', 'Giảm 50% khi chỉ đăng 1 Store'],
+                features: ['Apple & Google Developer Console', 'Tích hợp cổng thanh toán & API', 'Thanh toán 2 đợt (50% - 50%)', 'Tối ưu ASO chuẩn duyệt Store'],
                 cta: 'Đăng Tải App Ngay',
                 glow: 'blue' as const,
               },
@@ -208,7 +187,7 @@ export default function LandingPage() {
                 icon: <Star className="w-6 h-6 text-amber-500" />,
                 iconBg: 'bg-amber-50 border-amber-200',
                 title: '⭐️ Gói Đánh Giá 5 Sao (Tặng Kèm 10 Reviews)',
-                desc: 'Hiện tại tất cả các gói dịch vụ đều được tặng kèm 10 đánh giá 5 sao thực tế giúp app xây dựng uy tín ban đầu trên Store.',
+                desc: 'Tất cả các gói dịch vụ đều được tặng kèm 10 đánh giá 5 sao thực tế giúp app xây dựng uy tín ban đầu trên Store.',
                 features: ['Tặng 10 Đánh Giá 5★ Người Dùng Thật', 'Tối Ưu Keyword ASO Cơ Bản', 'Đánh giá theo ngôn ngữ chỉ định', 'Gói số lượng lớn sẽ ra mắt sau ⏳'],
                 cta: 'Đăng Ký Nhận 10★',
                 glow: 'magenta' as const,
@@ -245,7 +224,7 @@ export default function LandingPage() {
         </section>
 
         {/* ════════════════════════════
-            PRICING SECTION ($50 / $100 / $200 + 50%-50% SCHEDULE)
+            PRICING SECTION ($50 / $100 / ENTERPRISE LIÊN HỆ)
         ════════════════════════════ */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 bg-slate-50 border-y border-slate-200 space-y-12">
           <div className="text-center space-y-3">
@@ -256,19 +235,19 @@ export default function LandingPage() {
               Bảng Giá Dịch Vụ Mới
             </h2>
             <p className="text-sm sm:text-base text-slate-800 max-w-xl mx-auto font-medium">
-              Thanh toán linh hoạt: <strong>50% sau khi kết nối 12 testers đếm 14 ngày & 50% còn lại khi app live trên Store.</strong> (Giảm 50% nếu chỉ đăng tải 1 Store).
+              Thanh toán linh hoạt: <strong>50% sau khi kết nối 12 testers đếm 14 ngày & 50% còn lại khi app live trên Store.</strong>
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
-            {/* Starter ($50) */}
+            {/* Starter ($50 - Google Play) */}
             <div className="bg-white rounded-2xl border border-slate-300 p-7 flex flex-col justify-between space-y-6 shadow-apple-sm card-shine">
               <div className="space-y-4">
                 <div className="space-y-1">
-                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-slate-700">Gói Khởi Động</p>
+                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-slate-700">Đăng Tải Google Play</p>
                   <div className="flex items-baseline gap-1.5">
                     <span className="text-5xl font-extrabold font-display text-slate-900">$50</span>
-                    <span className="text-xs text-slate-700 font-bold">/ 1 store</span>
+                    <span className="text-xs text-slate-700 font-bold">/ Android App</span>
                   </div>
                   <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-blue-50 border border-blue-200 text-brand-blue text-[11px] font-extrabold">
                     <CreditCard className="w-3.5 h-3.5" />
@@ -278,7 +257,7 @@ export default function LandingPage() {
                 <div className="border-t border-slate-200" />
                 <ul className="space-y-3 text-xs text-slate-900 font-bold">
                   {[
-                    'Đưa app lên App Store HOẶC Google Play',
+                    'Đưa app lên Google Play Console',
                     'Cài 12 testers thực tế đếm 14 ngày',
                     '🎁 TẶNG 10 Đánh giá 5★ chất lượng',
                     'Tối ưu Metadata ASO cơ bản',
@@ -296,11 +275,11 @@ export default function LandingPage() {
                 onClick={() => openServiceModal('Publishing')}
                 className="w-full py-3.5 rounded-xl bg-slate-100 border border-slate-300 text-slate-900 font-extrabold text-xs hover:border-brand-blue hover:bg-white transition-all"
               >
-                Chọn Gói Starter ($50)
+                Chọn Gói Google Play ($50)
               </button>
             </div>
 
-            {/* Standard / Pro ($100 - Featured) */}
+            {/* Standard ($100 - Featured Cả 2 Store) */}
             <div className="relative bg-white rounded-2xl border-2 border-brand-blue p-7 flex flex-col justify-between space-y-6 shadow-apple-md card-shine">
               <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
                 <span className="px-4 py-1 rounded-full bg-brand-blue text-white text-[11px] font-extrabold tracking-wider shadow-brand-blue whitespace-nowrap">
@@ -309,27 +288,26 @@ export default function LandingPage() {
               </div>
               <div className="space-y-4 pt-2">
                 <div className="space-y-1">
-                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-brand-blue">Gói Tiêu Chuẩn</p>
+                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-brand-blue">Gói Cả 2 Store</p>
                   <div className="flex items-baseline gap-1.5">
                     <span className="text-6xl font-extrabold font-display text-slate-900">$100</span>
                     <span className="text-xs text-slate-700 font-bold">/ cả 2 stores</span>
                   </div>
-                  {/* 50% discount callout badge */}
-                  <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-[11px] font-extrabold">
-                    <CreditCard className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
-                    <span>Thanh toán: $50 (12 testers 14 ngày) + $50 (Store live)</span>
+                  <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 border border-blue-200 text-brand-blue text-[11px] font-extrabold">
+                    <CreditCard className="w-3.5 h-3.5 text-brand-blue shrink-0" />
+                    <span>Thanh toán 2 đợt ($50 + $50)</span>
                   </div>
                 </div>
                 <div className="border-t border-slate-200" />
                 <ul className="space-y-3 text-xs text-slate-900 font-bold">
                   {[
-                    'Đăng tải CẢ 2 Store ($100) hoặc 1 Store ($50)',
+                    'Đăng tải CẢ 2 Store: Google Play & iOS App Store',
+                    '12 Testers Google Play (14 ngày) + TestFlight iOS',
                     '🐞 BÁO LỖI & phân tích Crash log chi tiết',
                     '💳 TÍCH HỢP CỔNG thanh toán & API',
-                    '12 Testers thực tế cài đặt đủ 14 ngày',
                     '🎁 TẶNG 10 Đánh giá 5★ chất lượng',
                     '🔒 Bảo mật 100% an toàn tài khoản Dev',
-                    'Hoàn tiền 100% nếu trượt',
+                    'Hoàn tiền 100% nếu trượt cam kết',
                   ].map((f, i) => (
                     <li key={i} className="flex items-start gap-2.5">
                       <CheckCircle className="w-4 h-4 text-brand-blue shrink-0 mt-0.5" />
@@ -342,36 +320,35 @@ export default function LandingPage() {
                 onClick={() => openServiceModal('Publishing')}
                 className="w-full py-3.5 rounded-xl bg-brand-blue hover:bg-blue-600 text-white font-extrabold text-sm shadow-brand-blue hover:scale-[1.02] transition-all"
               >
-                Đăng Ký Gói Tiêu Chuẩn ($100 / $50)
+                Đăng Ký Cả 2 Store ($100)
               </button>
             </div>
 
-            {/* Advanced / Premium ($200) */}
+            {/* Enterprise (LIÊN HỆ) */}
             <div className="bg-white rounded-2xl border border-slate-300 p-7 flex flex-col justify-between space-y-6 shadow-apple-sm card-shine">
               <div className="space-y-4">
                 <div className="space-y-1">
-                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-slate-900">Gói Nâng Cao</p>
+                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-slate-900">Gói Doanh Nghiệp</p>
                   <div className="flex items-baseline gap-1.5">
-                    <span className="text-5xl font-extrabold font-display text-slate-900">$200</span>
-                    <span className="text-xs text-slate-700 font-bold">/ cả 2 stores</span>
+                    <span className="text-4xl font-extrabold font-display text-slate-900">LIÊN HỆ</span>
+                    <span className="text-xs text-slate-700 font-bold">/ custom plan</span>
                   </div>
-                  {/* 50% discount callout badge */}
-                  <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-[11px] font-extrabold">
-                    <CreditCard className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
-                    <span>Thanh toán: $100 (12 testers 14 ngày) + $100 (Store live)</span>
+                  <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-[11px] font-extrabold">
+                    <PhoneCall className="w-3.5 h-3.5 text-amber-700 shrink-0" />
+                    <span>Tư vấn 1-1 riêng với Kỹ sư Trưởng</span>
                   </div>
                 </div>
                 <div className="border-t border-slate-200" />
                 <ul className="space-y-3 text-xs text-slate-900 font-bold">
                   {[
+                    'Đăng tải Đa Ứng Dụng / Số Lượng Lớn',
                     '🛠️ TRỰC TIẾP FIX LỖI (Sửa code & giao diện)',
                     '🎨 KIỂM TRA UI/UX chuyên sâu tiêu chuẩn Apple/Google',
-                    '🧪 FULL TEST với 12 testers thực tế đủ 14 ngày',
+                    '🧪 FULL TEST với 20+ thiết bị thực tế',
                     '🐞 BÁO LỖI chi tiết & phân tích hiệu năng',
-                    'Đăng tải CẢ 2 Store ($200) hoặc 1 Store ($100)',
                     '🎁 TẶNG 10 Đánh giá 5★ theo ngôn ngữ chỉ định',
                     '🔒 Bảo mật 100% an toàn tài khoản Dev',
-                    'Hoàn tiền 100% nếu trượt cam kết',
+                    'Hợp đồng bảo mật NDA & Cam kết SLA',
                   ].map((f, i) => (
                     <li key={i} className="flex items-start gap-2.5">
                       <CheckCircle className="w-4 h-4 text-slate-900 shrink-0 mt-0.5" />
@@ -382,94 +359,30 @@ export default function LandingPage() {
               </div>
               <button
                 onClick={() => openServiceModal('Publishing')}
-                className="w-full py-3.5 rounded-xl bg-slate-100 border border-slate-300 text-slate-900 font-extrabold text-xs hover:border-slate-900 hover:bg-slate-900 hover:text-white transition-all"
+                className="w-full py-3.5 rounded-xl bg-slate-900 hover:bg-brand-blue text-white font-extrabold text-xs transition-all shadow-apple-sm"
               >
-                Tư Vấn Gói Nâng Cao ($200 / $100)
+                Liên Hệ Tư Vấn Doanh Nghiệp
               </button>
             </div>
           </div>
-
-          {/* Security & Account Safety Guarantee Card */}
-          <div className="max-w-4xl mx-auto bg-blue-50 border border-blue-300 rounded-2xl p-6 shadow-apple-sm grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-            <div className="md:col-span-2 space-y-2">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 border border-blue-300 text-brand-blue text-[11px] font-extrabold uppercase tracking-wider">
-                <Lock className="w-3.5 h-3.5 text-brand-blue" />
-                <span>Bảo Mật Tuyệt Đối</span>
-              </div>
-              <h4 className="text-base font-extrabold text-slate-900">🔒 Cam Kết 100% An Toàn Cho Tài Khoản Developer</h4>
-              <p className="text-xs text-slate-800 leading-relaxed font-medium">
-                TE2SR tuân thủ nghiêm ngặt các quy trình bảo mật dữ liệu. Thông tin tài khoản Apple Developer & Google Play Console của khách hàng được mã hóa an toàn, ký cam kết NDA và không bao giờ chia sẻ cho bên thứ ba.
-              </p>
-            </div>
-            <div className="flex flex-col gap-2 justify-center">
-              <div className="p-3 bg-white rounded-xl border border-blue-200 text-xs font-extrabold text-slate-900 flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>Mã hóa thông tin tài khoản</span>
-              </div>
-              <div className="p-3 bg-white rounded-xl border border-blue-200 text-xs font-extrabold text-slate-900 flex items-center gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>Ký hợp đồng bảo mật NDA</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Coming Soon Notice for Large Review Packages */}
-          <div className="max-w-2xl mx-auto bg-amber-50 border border-amber-300 rounded-2xl p-5 text-center space-y-2 shadow-apple-sm">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-200 text-amber-900 text-[11px] font-extrabold uppercase tracking-wider">
-              <Clock className="w-3.5 h-3.5 text-amber-700" />
-              <span>Sắp Ra Mắt (Coming Soon)</span>
-            </div>
-            <h4 className="text-sm font-extrabold text-slate-900">⚡ Gói Tăng Đánh Giá 5★ Số Lượng Lớn</h4>
-            <p className="text-xs text-slate-800 leading-relaxed font-semibold">
-              Hiện tại TE2SR đang áp dụng ưu đãi <strong>tặng kèm 10 đánh giá 5★</strong> cho tất cả các gói dịch vụ ($50, $100, $200). Dịch vụ boost đánh giá số lượng lớn (hàng trăm/hàng nghìn review) hiện đang hoàn thiện quy trình an toàn và sẽ chính thức ra mắt trong thời gian tới!
-            </p>
-          </div>
         </section>
-
-        {/* ════════════════════════════
-            PROCESS / HOW IT WORKS
-        ════════════════════════════ */}
-        <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 pb-24 space-y-12">
-          <div className="text-center space-y-3">
-            <div className="inline-block px-4 py-1.5 rounded-full bg-slate-100 border border-slate-300 text-xs text-slate-900 font-extrabold uppercase tracking-wider">
-              Quy Trình Triển Khai
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold font-display text-slate-900">
-              Chỉ 3 Bước Đơn Giản
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-            {[
-              { step: '01', title: 'Gửi Yêu Cầu', desc: 'Điền form đơn hàng với thông tin app, chọn gói & lựa chọn 1 Store hoặc cả 2 Store.', icon: <Package className="w-6 h-6 text-brand-blue" /> },
-              { step: '02', title: 'Hoàn Thành 12 Testers (Đợt 1 50%)', desc: 'Đội ngũ TE2SR cài 12 testers, đếm 14 ngày & nhận 50% đợt 1.', icon: <Zap className="w-6 h-6 text-slate-900" /> },
-              { step: '03', title: 'App Live & Tất Toán (Đợt 2 50%)', desc: 'App lên Store thành công. Tất toán 50% còn lại, nhận 10 đánh giá 5★.', icon: <TrendingUp className="w-6 h-6 text-emerald-600" /> },
-            ].map((step, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-slate-300 p-8 text-center space-y-4 shadow-apple-sm card-shine">
-                <div className="relative mx-auto w-14 h-14">
-                  <div className="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-300 flex items-center justify-center shadow-apple-sm">
-                    {step.icon}
-                  </div>
-                  <div className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-slate-900 text-white flex items-center justify-center text-[10px] font-extrabold">
-                    {step.step}
-                  </div>
-                </div>
-                <h3 className="text-base font-extrabold text-slate-900">{step.title}</h3>
-                <p className="text-xs text-slate-800 leading-relaxed font-medium">{step.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
       </main>
 
+      {/* Footer */}
       <Footer currentLang={currentLang} />
 
+      {/* Modals */}
       <OrderModal
         isOpen={isOrderModalOpen}
         onClose={() => setIsOrderModalOpen(false)}
         currentLang={currentLang}
-        initialService={modalInitialService}
+        initialService={initialService}
+      />
+
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={closeAuthModal}
+        currentLang={currentLang}
       />
     </div>
   );

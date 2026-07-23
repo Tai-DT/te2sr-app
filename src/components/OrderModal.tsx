@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { getTranslation, LanguageCode } from '@/lib/i18n/dictionaries';
-import { X, CheckCircle2, Send, Rocket, TestTube, Star, BadgeDollarSign, ShieldCheck, Tag, Percent, Users, Copy, Check, CreditCard, Link2 } from 'lucide-react';
+import { X, CheckCircle2, Send, Rocket, TestTube, Star, BadgeDollarSign, ShieldCheck, Tag, Percent, Users, Copy, Check, CreditCard, Link2, PhoneCall } from 'lucide-react';
 
 interface OrderModalProps {
   isOpen: boolean;
@@ -296,7 +296,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
               </div>
             </div>
 
-            {/* Testing Link Field (New) */}
+            {/* Testing Link Field */}
             <div>
               <label className="text-xs font-extrabold text-slate-900 block mb-1 flex items-center gap-1.5">
                 <Link2 className="w-3.5 h-3.5 text-brand-blue" />
@@ -314,23 +314,18 @@ export const OrderModal: React.FC<OrderModalProps> = ({
               </p>
             </div>
 
-            {/* Platform & 50% Discount Selector */}
+            {/* Package / Platform Selector */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="text-xs font-extrabold text-slate-900">Nền Tảng Đăng Tải</label>
-                  {platform !== 'Both' && (
-                    <span className="text-[10px] font-extrabold text-emerald-600">🏷️ GIẢM 50%</span>
-                  )}
-                </div>
+                <label className="text-xs font-extrabold text-slate-900 block mb-1">Chọn Gói Đăng Tải</label>
                 <select
                   value={platform}
                   onChange={(e: any) => setPlatform(e.target.value)}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-extrabold text-slate-900 focus:outline-none focus:border-brand-blue focus:bg-white transition-all"
                 >
-                  <option value="Both">Cả 2 Store (iOS & Android) - Giá Chuẩn</option>
-                  <option value="iOS">Chỉ iOS App Store - GIẢM NGAY 50%</option>
-                  <option value="Android">Chỉ Android Google Play - GIẢM NGAY 50%</option>
+                  <option value="Android">Gói Google Play ($50)</option>
+                  <option value="Both">Gói Cả 2 Store - Google Play & iOS ($100)</option>
+                  <option value="iOS">Gói Doanh Nghiệp / Đa Ứng Dụng (LIÊN HỆ)</option>
                 </select>
               </div>
 
@@ -377,7 +372,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
               <label className="text-xs font-extrabold text-slate-900 block mb-1">Ghi Chú Hoặc Yêu Cầu Đặc Biệt</label>
               <textarea
                 rows={2}
-                placeholder="Mô tả mục tiêu (ví dụ: đăng tải 1 store duy nhất để nhận ưu đãi giảm 50%...)"
+                placeholder="Mô tả mục tiêu..."
                 value={details}
                 onChange={(e) => setDetails(e.target.value)}
                 className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-brand-blue focus:bg-white transition-all"
