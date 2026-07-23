@@ -1,26 +1,188 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
+/* ═══════════════════════════════════════════════
+   CSS CUSTOM PROPERTIES (Apple Light Design System)
+═══════════════════════════════════════════════ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --font-inter: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-montserrat: 'Montserrat', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Apple / Samsung Light Palette */
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F5F5F7;
+  --bg-tertiary: #E5E5EA;
+
+  --text-primary: #000000;
+  --text-secondary: #2C2C2E;
+  --text-tertiary: #48484A;
+
+  --apple-blue: #0071E3;
+  --apple-blue-hover: #0077ED;
+  --apple-dark: #1D1D1F;
+  --apple-border: #E5E5EA;
+
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-snappy: cubic-bezier(0.215, 0.610, 0.355, 1.000);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ═══════════════════════════════════════════════
+   BASE RESET & BODY
+═══════════════════════════════════════════════ */
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text-primary);
+  background-color: #FFFFFF;
+  font-family: var(--font-inter);
+  overflow-x: hidden;
+}
+
+/* Selection */
+::selection {
+  background: rgba(0, 113, 227, 0.15);
+  color: #0071E3;
+}
+
+/* ═══════════════════════════════════════════════
+   CUSTOM SCROLLBAR
+═══════════════════════════════════════════════ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F5F5F7;
+}
+::-webkit-scrollbar-thumb {
+  background: #C7C7CC;
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #8E8E93;
+}
+
+/* ═══════════════════════════════════════════════
+   APPLE-GRADE LIGHT GLASS & CARDS
+═══════════════════════════════════════════════ */
+
+/* Clean White Card */
+.glass-panel {
+  background: #FFFFFF;
+  border: 1px solid #E5E5EA;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+/* Titanium Glass (Light Variant) */
+.titanium-glass {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+/* Frosted Header / Nav */
+.frosted-dark {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid #E5E5EA;
+}
+
+/* Interactive Glass Button */
+.glass-button {
+  background: #F5F5F7;
+  border: 1px solid #E5E5EA;
+  color: #1D1D1F;
+  transition: all 0.2s var(--ease-smooth);
+}
+
+.glass-button:hover {
+  background: #E8E8ED;
+  border-color: #D1D1D6;
+  color: #000000;
+  transform: translateY(-1px);
+}
+
+/* ═══════════════════════════════════════════════
+   TEXT GRADIENTS
+═══════════════════════════════════════════════ */
+.text-gradient-neon {
+  background: linear-gradient(135deg, #0071E3 0%, #1D1D1F 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ═══════════════════════════════════════════════
+   GLASS PANEL HOVER VARIANTS
+═══════════════════════════════════════════════ */
+.glass-panel-hover {
+  transition: all 0.3s var(--ease-smooth);
+}
+
+.glass-panel-hover:hover {
+  background: #FFFFFF;
+  border-color: #0071E3;
+  box-shadow: 0 12px 32px rgba(0, 113, 227, 0.12);
+  transform: translateY(-2px);
+}
+
+/* Light Card Shine Sweep */
+.card-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 30%;
+  height: 200%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(0, 113, 227, 0.05) 50%,
+    transparent 100%
+  );
+  transform: skewX(-15deg);
+  transition: left 0.7s ease;
+}
+
+.card-shine:hover::after {
+  left: 130%;
+}
+
+/* Light Hero Grid Pattern */
+.hero-grid-bg {
+  background-image:
+    linear-gradient(rgba(0, 113, 227, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 113, 227, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%);
+}
+
+/* Modal Backdrop */
+.modal-backdrop {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
