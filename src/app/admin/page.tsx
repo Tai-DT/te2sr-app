@@ -83,6 +83,18 @@ export default function AdminPortalPage() {
 
   useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
 
+  // Near-realtime: poll for new messages every 4s while the chat is open.
+  useEffect(() => {
+    if (activeTab !== 'chat' || !selectedOrder || !user) return;
+    const id = setInterval(async () => {
+      try {
+        const msgs = await api.listMessages(selectedOrder.id);
+        setMessages((prev) => (msgs.length !== prev.length ? msgs : prev));
+      } catch { /* ignore transient errors */ }
+    }, 4000);
+    return () => clearInterval(id);
+  }, [activeTab, selectedOrder, user]);
+
   const handleCopyGroup = () => {
     navigator.clipboard.writeText(googleGroupEmail);
     setCopiedGroup(true);
