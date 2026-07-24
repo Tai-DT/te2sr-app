@@ -82,6 +82,22 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     
     footer_copy: '© 2026 TE2SR Platform. Bảo lưu mọi quyền.',
     
+    
+    
+    adm_start_date_label: "Ngày bắt đầu đếm",
+    adm_countdown_title: "Bộ đếm kiểm thử 14 ngày",
+    
+    adm_days_remaining: "ngày còn lại",
+    
+    adm_testing_progress: "Ngày kiểm thử",
+    
+    adm_countdown_done: "Đã hoàn tất 14 ngày kiểm thử",
+    
+    adm_countdown_not_started: "Chưa bắt đầu đếm 14 ngày",
+    
+    adm_start_countdown: "Bắt đầu đếm 14 ngày",
+    
+    adm_reset_countdown: "Đặt lại bộ đếm",
     home_pay_split_badge: "Thanh toán 50% cho 14 ngày kiểm thử + 50% khi app live",
     
     home_refund_commitment: "Hoàn tiền 100% nếu trượt cam kết",
@@ -726,6 +742,22 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     
     footer_copy: '© 2026 TE2SR Platform. All rights reserved.',
     
+    
+    
+    adm_start_date_label: "Countdown start date",
+    adm_countdown_title: "14-day testing countdown",
+    
+    adm_days_remaining: "days left",
+    
+    adm_testing_progress: "Testing day",
+    
+    adm_countdown_done: "14-day testing completed",
+    
+    adm_countdown_not_started: "14-day countdown not started",
+    
+    adm_start_countdown: "Start 14-day countdown",
+    
+    adm_reset_countdown: "Reset countdown",
     home_pay_split_badge: "Pay 50% for the 14-day testing + 50% when the app goes live",
     
     home_refund_commitment: "100% refund if we miss our commitment",
@@ -1361,6 +1393,14 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     admin_table_date: '登録日',
     admin_table_action: '操作',
     footer_copy: '© 2026 TE2SR Platform. All rights reserved.',
+    adm_start_date_label: "カウントダウン開始日",
+    adm_countdown_title: "14日間テストカウントダウン",
+    adm_days_remaining: "日残り",
+    adm_testing_progress: "テスト日",
+    adm_countdown_done: "14日間のテストが完了",
+    adm_countdown_not_started: "14日カウントダウン未開始",
+    adm_start_countdown: "14日カウントダウン開始",
+    adm_reset_countdown: "カウントダウンをリセット",
     home_pay_split_badge: "14日間の検証で50%＋アプリ公開時に50%をお支払い",
     home_refund_commitment: "コミットメント未達の場合は100%返金",
     home_no_scam_apps: "詐欺・ギャンブルアプリは受け付けません",
@@ -1705,6 +1745,14 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     admin_table_date: '생성일',
     admin_table_action: '작업',
     footer_copy: '© 2026 TE2SR Platform. All rights reserved.',
+    adm_start_date_label: "카운트다운 시작일",
+    adm_countdown_title: "14일 테스트 카운트다운",
+    adm_days_remaining: "일 남음",
+    adm_testing_progress: "테스트 일자",
+    adm_countdown_done: "14일 테스트 완료",
+    adm_countdown_not_started: "14일 카운트다운 미시작",
+    adm_start_countdown: "14일 카운트다운 시작",
+    adm_reset_countdown: "카운트다운 재설정",
     home_pay_split_badge: "14일 검증에 50% + 앱 출시 시 50% 결제",
     home_refund_commitment: "약속 미이행 시 100% 환불",
     home_no_scam_apps: "사기 / 도박 앱은 받지 않습니다",
@@ -2049,6 +2097,14 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     admin_table_date: 'Date de Création',
     admin_table_action: 'Actions',
     footer_copy: '© 2026 TE2SR Platform. Tous droits réservés.',
+    adm_start_date_label: "Date de début",
+    adm_countdown_title: "Compte à rebours de test de 14 jours",
+    adm_days_remaining: "jours restants",
+    adm_testing_progress: "Jour de test",
+    adm_countdown_done: "Test de 14 jours terminé",
+    adm_countdown_not_started: "Compte à rebours non démarré",
+    adm_start_countdown: "Démarrer le compte à rebours",
+    adm_reset_countdown: "Réinitialiser",
     home_pay_split_badge: "Payez 50 % pour le test de 14 jours + 50 % à la mise en ligne",
     home_refund_commitment: "Remboursement à 100 % en cas de non-respect de l'engagement",
     home_no_scam_apps: "Nous n'acceptons PAS les applis d'arnaque / de jeux d'argent",
@@ -2393,6 +2449,14 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     admin_table_date: 'Erstellt am',
     admin_table_action: 'Aktionen',
     footer_copy: '© 2026 TE2SR Platform. Alle Rechte vorbehalten.',
+    adm_start_date_label: "Startdatum",
+    adm_countdown_title: "14-Tage-Test-Countdown",
+    adm_days_remaining: "Tage übrig",
+    adm_testing_progress: "Testtag",
+    adm_countdown_done: "14-Tage-Test abgeschlossen",
+    adm_countdown_not_started: "Countdown noch nicht gestartet",
+    adm_start_countdown: "14-Tage-Countdown starten",
+    adm_reset_countdown: "Zurücksetzen",
     home_pay_split_badge: "50 % für das 14-Tage-Testing + 50 % beim Live-Gang der App",
     home_refund_commitment: "100 % Rückerstattung bei Nichteinhaltung der Zusage",
     home_no_scam_apps: "KEINE Betrugs- / Glücksspiel-Apps",
@@ -2737,6 +2801,14 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     admin_table_date: 'Fecha de Creación',
     admin_table_action: 'Acciones',
     footer_copy: '© 2026 TE2SR Platform. Todos los derechos reservados.',
+    adm_start_date_label: "Fecha de inicio",
+    adm_countdown_title: "Cuenta atrás de prueba de 14 días",
+    adm_days_remaining: "días restantes",
+    adm_testing_progress: "Día de prueba",
+    adm_countdown_done: "Prueba de 14 días completada",
+    adm_countdown_not_started: "Cuenta atrás no iniciada",
+    adm_start_countdown: "Iniciar cuenta atrás",
+    adm_reset_countdown: "Reiniciar",
     home_pay_split_badge: "Paga 50 % por las pruebas de 14 días + 50 % cuando la app esté activa",
     home_refund_commitment: "Reembolso del 100 % si no cumplimos el compromiso",
     home_no_scam_apps: "NO aceptamos apps de estafa / apuestas",
@@ -3081,6 +3153,14 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     admin_table_date: '创建日期',
     admin_table_action: '操作',
     footer_copy: '© 2026 TE2SR Platform. 保留所有权利。',
+    adm_start_date_label: "倒计时开始日期",
+    adm_countdown_title: "14天测试倒计时",
+    adm_days_remaining: "天剩余",
+    adm_testing_progress: "测试天数",
+    adm_countdown_done: "14天测试已完成",
+    adm_countdown_not_started: "尚未开始14天倒计时",
+    adm_start_countdown: "开始14天倒计时",
+    adm_reset_countdown: "重置倒计时",
     home_pay_split_badge: "14天测试付50%，应用上线再付50%",
     home_refund_commitment: "未达成承诺100%退款",
     home_no_scam_apps: "拒接诈骗 / 赌博类应用",

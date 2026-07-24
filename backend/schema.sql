@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS orders (
   package_price    INTEGER,
   paid_deposit     INTEGER NOT NULL DEFAULT 0,
   paid_final       INTEGER NOT NULL DEFAULT 0,
+  testing_started_at TEXT,
   created_at       TEXT NOT NULL,
   updated_at       TEXT NOT NULL
 );

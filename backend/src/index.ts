@@ -238,11 +238,34 @@ app.patch('/api/orders/:id/payment', requireAdmin, async (c) => {
   try {
     const { field, value } = await c.req.json();
     if (field !== 'paid_deposit' && field !== 'paid_final') return c.json({ success: false, error: 'Trường thanh toán không hợp lệ.' }, 400);
-    const order = await db.updateOrderPayment(c.env.DB, c.req.param('id')!, field, !!value);
+    const id = c.req.param('id')!;
+    let order = await db.updateOrderPayment(c.env.DB, id, field, !!value);
     if (!order) return c.json({ success: false, error: 'Không tìm thấy đơn hàng.' }, 404);
+    // Paying the deposit kicks off the 14-day testing countdown.
+    if (field === 'paid_deposit' && !!value) {
+      await db.startTestingIfUnset(c.env.DB, id);
+      order = await db.getOrderById(c.env.DB, id);
+    }
     return c.json({ success: true, order });
   } catch {
     return c.json({ success: false, error: 'Cập nhật thanh toán thất bại.' }, 500);
+  }
+});
+
+// Manually start / reset the 14-day testing countdown (admin).
+app.patch('/api/orders/:id/testing', requireAdmin, async (c) => {
+  try {
+    const { action, startedAt } = await c.req.json();
+    if (action !== 'start' && action !== 'reset') return c.json({ success: false, error: 'Hành động không hợp lệ.' }, 400);
+    let value: string | null = null;
+    if (action === 'start') {
+      value = startedAt && !Number.isNaN(Date.parse(startedAt)) ? new Date(startedAt).toISOString() : db.nowIso();
+    }
+    const order = await db.setTestingStarted(c.env.DB, c.req.param('id')!, value);
+    if (!order) return c.json({ success: false, error: 'Không tìm thấy đơn hàng.' }, 404);
+    return c.json({ success: true, order });
+  } catch {
+    return c.json({ success: false, error: 'Cập nhật bộ đếm thất bại.' }, 500);
   }
 });
 

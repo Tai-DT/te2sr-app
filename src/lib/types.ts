@@ -31,6 +31,7 @@ export interface Order {
   packagePrice: number | null;
   paidDeposit: boolean;
   paidFinal: boolean;
+  testingStartedAt: string | null;
   createdAt: string;
   updatedAt: string;
 }

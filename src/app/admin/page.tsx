@@ -32,6 +32,23 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; dot: string 
 
 const ALL_STATUSES: Order['status'][] = ['Pending', 'In Progress', 'Completed', 'Rejected'];
 
+const TESTING_DAYS = 14;
+function testingCountdown(startedAt: string | null) {
+  if (!startedAt) return null;
+  const start = new Date(startedAt).getTime();
+  if (Number.isNaN(start)) return null;
+  const elapsedDays = Math.max(0, Math.floor((Date.now() - start) / 86400000));
+  const daysLeft = Math.max(0, TESTING_DAYS - elapsedDays);
+  const pct = Math.min(100, Math.round((Math.min(elapsedDays, TESTING_DAYS) / TESTING_DAYS) * 100));
+  return { elapsedDays, daysLeft, pct, done: daysLeft === 0, dayNo: Math.min(elapsedDays + 1, TESTING_DAYS) };
+}
+function toLocalInput(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
 export default function AdminPortalPage() {
   const { t } = useLanguage();
   const { user, loading: authLoading, openAuthModal } = useAuth();
@@ -69,7 +86,14 @@ export default function AdminPortalPage() {
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [inputMessage, setInputMessage] = useState('');
   const [sending, setSending] = useState(false);
+  const [testingInput, setTestingInput] = useState('');
   const chatEndRef = useRef<HTMLDivElement>(null);
+
+  // Sync the countdown start-date input when the selected order changes.
+  useEffect(() => {
+    if (!selectedOrder) return;
+    setTestingInput(toLocalInput(selectedOrder.testingStartedAt || new Date().toISOString()));
+  }, [selectedOrder?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const googleGroupEmail = 'te2sr@googlegroups.com';
 
@@ -124,6 +148,17 @@ export default function AdminPortalPage() {
   const handleUpdateStatus = async (orderId: string, status: Order['status']) => {
     try {
       const updated = await api.updateOrderStatus(orderId, status);
+      setOrders((prev) => prev.map((o) => (o.id === orderId ? updated : o)));
+      setSelectedOrder((prev) => (prev?.id === orderId ? updated : prev));
+    } catch (err) {
+      alert(err instanceof ApiError ? err.message : t('adm_update_failed'));
+    }
+  };
+
+  const handleSetTesting = async (orderId: string, action: 'start' | 'reset') => {
+    try {
+      const startedAt = action === 'start' && testingInput ? new Date(testingInput).toISOString() : undefined;
+      const updated = await api.setTesting(orderId, action, startedAt);
       setOrders((prev) => prev.map((o) => (o.id === orderId ? updated : o)));
       setSelectedOrder((prev) => (prev?.id === orderId ? updated : prev));
     } catch (err) {
@@ -493,6 +528,52 @@ export default function AdminPortalPage() {
                               <span>{p.label}</span>
                             </button>
                           ))}
+                        </div>
+
+                        {/* 14-day testing countdown */}
+                        <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl space-y-2">
+                          <div className="flex items-center gap-1.5 text-brand-blue font-extrabold text-[11px]">
+                            <Clock className="w-3.5 h-3.5" />
+                            <span>{t('adm_countdown_title')}</span>
+                          </div>
+                          {(() => {
+                            const cd = testingCountdown(selectedOrder.testingStartedAt);
+                            if (!cd) return <p className="text-[11px] text-slate-600 font-semibold">{t('adm_countdown_not_started')}</p>;
+                            return (
+                              <div className="space-y-1.5">
+                                <div className="flex items-baseline justify-between gap-2">
+                                  <span className="text-[11px] font-bold text-slate-700">{t('adm_testing_progress')} {cd.dayNo}/{TESTING_DAYS}</span>
+                                  <span className={`font-extrabold ${cd.done ? 'text-emerald-700 text-[11px]' : 'text-brand-blue'}`}>
+                                    {cd.done ? t('adm_countdown_done') : <><span className="text-lg">{cd.daysLeft}</span> <span className="text-[11px]">{t('adm_days_remaining')}</span></>}
+                                  </span>
+                                </div>
+                                <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
+                                  <div className={`h-full rounded-full transition-all duration-700 ${cd.done ? 'bg-emerald-500' : 'bg-brand-blue'}`} style={{ width: `${cd.pct}%` }} />
+                                </div>
+                              </div>
+                            );
+                          })()}
+                          {isAdmin && (
+                            <div className="space-y-1.5 pt-1">
+                              <label className="text-[10px] font-bold text-slate-600 block">{t('adm_start_date_label')}</label>
+                              <div className="flex gap-1.5">
+                                <input
+                                  type="datetime-local"
+                                  value={testingInput}
+                                  onChange={(e) => setTestingInput(e.target.value)}
+                                  className="flex-1 min-w-0 px-2 py-1.5 bg-white border border-slate-300 rounded-lg text-[11px] font-semibold text-slate-900 focus:outline-none focus:border-brand-blue"
+                                />
+                                <button onClick={() => handleSetTesting(selectedOrder.id, 'start')} className="px-2.5 py-1.5 rounded-lg bg-brand-blue text-white text-[11px] font-extrabold hover:bg-blue-600 shrink-0 transition-colors">
+                                  {t('adm_start_countdown')}
+                                </button>
+                              </div>
+                              {selectedOrder.testingStartedAt && (
+                                <button onClick={() => handleSetTesting(selectedOrder.id, 'reset')} className="text-[10px] font-extrabold text-red-600 hover:underline">
+                                  {t('adm_reset_countdown')}
+                                </button>
+                              )}
+                            </div>
+                          )}
                         </div>
 
                         {(selectedOrder.platform === 'Android' || selectedOrder.platform === 'Both') && (

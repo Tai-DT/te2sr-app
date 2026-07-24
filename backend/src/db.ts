@@ -36,7 +36,8 @@ interface OrderRow {
   id: string; user_id: string | null; app_name: string; client_email: string;
   platform: string; service_type: string; status: string; target_countries: string;
   testing_url: string | null; details: string | null; package_price: number | null;
-  paid_deposit: number; paid_final: number; created_at: string; updated_at: string;
+  paid_deposit: number; paid_final: number; testing_started_at: string | null;
+  created_at: string; updated_at: string;
 }
 interface MessageRow {
   id: string; order_id: string; sender_id: string | null; sender_name: string;
@@ -64,6 +65,7 @@ function rowToOrder(r: OrderRow): Order {
     status: r.status as OrderStatus, targetCountries: countries, testingUrl: r.testing_url,
     details: r.details || '', packagePrice: r.package_price,
     paidDeposit: !!r.paid_deposit, paidFinal: !!r.paid_final,
+    testingStartedAt: r.testing_started_at,
     createdAt: r.created_at, updatedAt: r.updated_at,
   };
 }
@@ -169,6 +171,18 @@ export async function updateOrderPayment(db: D1Database, id: string, field: 'pai
   // `field` is validated against a whitelist by the caller.
   await db.prepare(`UPDATE orders SET ${field} = ?, updated_at = ? WHERE id = ?`).bind(value ? 1 : 0, nowIso(), id).run();
   return getOrderById(db, id);
+}
+
+/** Set (or clear) the start of the 14-day testing window. */
+export async function setTestingStarted(db: D1Database, id: string, value: string | null): Promise<Order | null> {
+  await db.prepare(`UPDATE orders SET testing_started_at = ?, updated_at = ? WHERE id = ?`).bind(value, nowIso(), id).run();
+  return getOrderById(db, id);
+}
+
+/** Begin the 14-day countdown only if it hasn't started yet (used when the deposit is paid). */
+export async function startTestingIfUnset(db: D1Database, id: string): Promise<void> {
+  const now = nowIso();
+  await db.prepare(`UPDATE orders SET testing_started_at = ?, updated_at = ? WHERE id = ? AND testing_started_at IS NULL`).bind(now, now, id).run();
 }
 
 // ── Messages ──────────────────────────────────────────────────
