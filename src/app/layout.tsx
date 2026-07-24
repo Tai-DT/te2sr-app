@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { AuthProvider } from '@/lib/auth';
+import { AuthModal } from '@/components/AuthModal';
 
 export const metadata: Metadata = {
   title: 'TE2SR App - Platform Kiểm Thử & Triển Khai App Store',
@@ -31,7 +32,10 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          {children}
+          <AuthModal />
+        </AuthProvider>
       </body>
     </html>
   );

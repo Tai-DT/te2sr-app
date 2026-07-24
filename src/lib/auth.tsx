@@ -1,21 +1,23 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { api, clearToken, getToken, setToken, ApiError } from './api-client';
+import type { User } from './types';
 
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: 'client' | 'admin';
-  avatar?: string;
-  authProvider?: string;
+export type { User } from './types';
+
+interface AuthResult {
+  ok: boolean;
+  error?: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, role?: 'client' | 'admin') => void;
-  loginWithGoogleBackend: (credential?: string, email?: string, role?: 'client' | 'admin') => Promise<boolean>;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<AuthResult>;
+  register: (name: string, email: string, password: string) => Promise<AuthResult>;
+  loginWithGoogle: (credential: string) => Promise<AuthResult>;
   logout: () => void;
   isAuthModalOpen: boolean;
   openAuthModal: () => void;
@@ -24,78 +26,95 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const USER_KEY = 'te2sr_user';
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const router = useRouter();
 
+  // Bootstrap from a cached session, then revalidate against the backend.
   useEffect(() => {
-    const savedUser = localStorage.getItem('te2sr_user');
-    if (savedUser) {
-      try {
-        setUser(JSON.parse(savedUser));
-      } catch (e) {
-        console.error(e);
-      }
+    const cached = typeof window !== 'undefined' ? localStorage.getItem(USER_KEY) : null;
+    if (cached) {
+      try { setUser(JSON.parse(cached)); } catch { /* ignore */ }
     }
+    const token = getToken();
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+    api
+      .me()
+      .then((fresh) => {
+        setUser(fresh);
+        localStorage.setItem(USER_KEY, JSON.stringify(fresh));
+      })
+      .catch((err) => {
+        // Only drop the session on an explicit auth failure — keep it on network errors.
+        if (err instanceof ApiError && (err.status === 401 || err.status === 404)) {
+          clearToken();
+          localStorage.removeItem(USER_KEY);
+          setUser(null);
+        }
+      })
+      .finally(() => setLoading(false));
   }, []);
 
-  const login = (email: string, role: 'client' | 'admin' = 'client') => {
-    const name = email.split('@')[0];
-    const newUser: User = {
-      id: `USR-${Math.floor(1000 + Math.random() * 9000)}`,
-      name: name.charAt(0).toUpperCase() + name.slice(1),
-      email,
-      role,
-      authProvider: 'Standard Login',
-    };
-    setUser(newUser);
-    localStorage.setItem('te2sr_user', JSON.stringify(newUser));
+  const persistSession = useCallback((token: string, u: User) => {
+    setToken(token);
+    setUser(u);
+    if (typeof window !== 'undefined') localStorage.setItem(USER_KEY, JSON.stringify(u));
     setIsAuthModalOpen(false);
+    if (u.role === 'admin') router.push('/admin');
+  }, [router]);
 
-    if (role === 'admin') {
-      router.push('/admin');
-    }
-  };
-
-  const loginWithGoogleBackend = async (credential?: string, email?: string, role: 'client' | 'admin' = 'client'): Promise<boolean> => {
+  const login = useCallback(async (email: string, password: string): Promise<AuthResult> => {
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
-      const res = await fetch(`${apiUrl}/api/auth/google`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ credential, email, role }),
-      });
-
-      const data = await res.json();
-      if (data.success && data.user) {
-        setUser(data.user);
-        localStorage.setItem('te2sr_user', JSON.stringify(data.user));
-        setIsAuthModalOpen(false);
-
-        if (data.user.role === 'admin') {
-          router.push('/admin');
-        }
-        return true;
-      }
+      const { token, user: u } = await api.login(email, password);
+      persistSession(token, u);
+      return { ok: true };
     } catch (err) {
-      console.error('Google Backend Login Error:', err);
+      return { ok: false, error: err instanceof ApiError ? err.message : 'Đăng nhập thất bại.' };
     }
-    return false;
-  };
+  }, [persistSession]);
 
-  const logout = () => {
+  const register = useCallback(async (name: string, email: string, password: string): Promise<AuthResult> => {
+    try {
+      const { token, user: u } = await api.register(name, email, password);
+      persistSession(token, u);
+      return { ok: true };
+    } catch (err) {
+      return { ok: false, error: err instanceof ApiError ? err.message : 'Đăng ký thất bại.' };
+    }
+  }, [persistSession]);
+
+  const loginWithGoogle = useCallback(async (credential: string): Promise<AuthResult> => {
+    try {
+      const { token, user: u } = await api.google(credential);
+      persistSession(token, u);
+      return { ok: true };
+    } catch (err) {
+      return { ok: false, error: err instanceof ApiError ? err.message : 'Đăng nhập Google thất bại.' };
+    }
+  }, [persistSession]);
+
+  const logout = useCallback(() => {
+    clearToken();
+    if (typeof window !== 'undefined') localStorage.removeItem(USER_KEY);
     setUser(null);
-    localStorage.removeItem('te2sr_user');
     router.push('/');
-  };
+  }, [router]);
 
   return (
     <AuthContext.Provider
       value={{
         user,
+        loading,
         login,
-        loginWithGoogleBackend,
+        register,
+        loginWithGoogle,
         logout,
         isAuthModalOpen,
         openAuthModal: () => setIsAuthModalOpen(true),

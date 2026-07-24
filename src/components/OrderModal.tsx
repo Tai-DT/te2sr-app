@@ -2,7 +2,9 @@
 
 import React, { useState } from 'react';
 import { getTranslation, LanguageCode } from '@/lib/i18n/dictionaries';
-import { X, CheckCircle2, Send, Rocket, TestTube, Star, BadgeDollarSign, ShieldCheck, Tag, Percent, Users, Copy, Check, CreditCard, Link2, PhoneCall } from 'lucide-react';
+import { api, ApiError } from '@/lib/api-client';
+import type { Order, Platform } from '@/lib/types';
+import { X, CheckCircle2, Send, Rocket, TestTube, Star, BadgeDollarSign, AlertCircle, Users, Copy, Check, CreditCard, Link2 } from 'lucide-react';
 
 interface OrderModalProps {
   isOpen: boolean;
@@ -28,7 +30,8 @@ export const OrderModal: React.FC<OrderModalProps> = ({
   const [details, setDetails] = useState('');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submittedOrder, setSubmittedOrder] = useState<any>(null);
+  const [submittedOrder, setSubmittedOrder] = useState<Order | null>(null);
+  const [error, setError] = useState('');
   const [copiedGroup, setCopiedGroup] = useState(false);
 
   const googleGroupEmail = 'te2sr@googlegroups.com';
@@ -46,29 +49,21 @@ export const OrderModal: React.FC<OrderModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError('');
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
-      const res = await fetch(`${apiUrl}/api/services`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          appName,
-          clientEmail,
-          platform,
-          serviceType,
-          targetCountries: targetCountries.split(',').map((s) => s.trim()),
-          testingUrl,
-          details,
-        }),
+      const order = await api.createOrder({
+        appName,
+        clientEmail,
+        platform,
+        serviceType,
+        targetCountries: targetCountries.split(',').map((s) => s.trim()).filter(Boolean),
+        testingUrl: testingUrl || undefined,
+        details: details || undefined,
       });
-
-      const data = await res.json();
-      if (data.success) {
-        setSubmittedOrder(data.order);
-      }
+      setSubmittedOrder(order);
     } catch (err) {
-      console.error(err);
+      setError(err instanceof ApiError ? err.message : 'Gửi yêu cầu thất bại. Vui lòng thử lại.');
     } finally {
       setIsSubmitting(false);
     }
@@ -76,6 +71,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
 
   const resetForm = () => {
     setSubmittedOrder(null);
+    setError('');
     setAppName('');
     setClientEmail('');
     setTestingUrl('');
@@ -320,7 +316,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
                 <label className="text-xs font-extrabold text-slate-900 block mb-1">Chọn Gói Đăng Tải</label>
                 <select
                   value={platform}
-                  onChange={(e: any) => setPlatform(e.target.value)}
+                  onChange={(e) => setPlatform(e.target.value as Platform)}
                   className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-extrabold text-slate-900 focus:outline-none focus:border-brand-blue focus:bg-white transition-all"
                 >
                   <option value="Android">Gói Google Play ($50)</option>
@@ -378,6 +374,13 @@ export const OrderModal: React.FC<OrderModalProps> = ({
                 className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:border-brand-blue focus:bg-white transition-all"
               />
             </div>
+
+            {error && (
+              <div className="flex items-start gap-2 p-3 rounded-xl bg-red-50 border border-red-200 text-red-800 text-xs font-semibold">
+                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                <span>{error}</span>
+              </div>
+            )}
 
             <button
               type="submit"

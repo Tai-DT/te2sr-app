@@ -5,9 +5,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LanguageSelector } from './LanguageSelector';
 import { getTranslation, LanguageCode } from '@/lib/i18n/dictionaries';
-import { Layers, TestTube, Rocket, Star, LayoutDashboard, Menu, X, PlusCircle, User as UserIcon, LogOut, ShieldCheck } from 'lucide-react';
+import { Layers, TestTube, Rocket, Star, LayoutDashboard, Menu, X, PlusCircle, User as UserIcon, LogOut, ShieldCheck, Sparkles } from 'lucide-react';
 import { OrderModal } from './OrderModal';
-import { AuthModal } from './AuthModal';
 import { useAuth } from '@/lib/auth';
 
 interface NavbarProps {
@@ -19,7 +18,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLang, onLanguageChange })
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
-  const { user, logout, isAuthModalOpen, openAuthModal, closeAuthModal } = useAuth();
+  const { user, logout, openAuthModal } = useAuth();
 
   const t = (key: string) => getTranslation(currentLang, key);
 
@@ -29,6 +28,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLang, onLanguageChange })
     { href: '/services/testing', label: t('nav_testing'), icon: TestTube },
     { href: '/services/publishing', label: t('nav_publishing'), icon: Rocket },
     { href: '/services/promotion', label: t('nav_promotion'), icon: Star },
+    { href: '/analyzer', label: t('nav_analyzer'), icon: Sparkles },
   ];
 
   // If user is Admin, dynamically append Admin Portal link to nav
@@ -182,12 +182,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLang, onLanguageChange })
       <OrderModal
         isOpen={isOrderModalOpen}
         onClose={() => setIsOrderModalOpen(false)}
-        currentLang={currentLang}
-      />
-      {/* Auth Modal */}
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={closeAuthModal}
         currentLang={currentLang}
       />
     </>

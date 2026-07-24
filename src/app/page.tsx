@@ -5,9 +5,7 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { GlassCard } from '@/components/GlassCard';
 import { OrderModal } from '@/components/OrderModal';
-import { AuthModal } from '@/components/AuthModal';
 import { LanguageCode, getTranslation } from '@/lib/i18n/dictionaries';
-import { useAuth } from '@/lib/auth';
 import {
   Rocket,
   ShieldCheck,
@@ -39,7 +37,6 @@ export default function HomePage() {
     'Testing' | 'Publishing' | 'Promotion_5Star' | 'DesignAnalyzer'
   >('Testing');
 
-  const { isAuthModalOpen, closeAuthModal } = useAuth();
   const t = (key: string) => getTranslation(currentLang, key);
 
   const openServiceModal = (service: 'Testing' | 'Publishing' | 'Promotion_5Star' | 'DesignAnalyzer') => {
@@ -377,12 +374,6 @@ export default function HomePage() {
         onClose={() => setIsOrderModalOpen(false)}
         currentLang={currentLang}
         initialService={initialService}
-      />
-
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={closeAuthModal}
-        currentLang={currentLang}
       />
     </div>
   );

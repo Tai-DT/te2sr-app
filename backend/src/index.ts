@@ -1,189 +1,319 @@
+// ══════════════════════════════════════════════════════════════
+//  TE2SR — Node backend (Hono + MySQL)
+//  Persistent orders, real JWT auth, per-order chat, AI design reports.
+// ══════════════════════════════════════════════════════════════
+
+import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
+import { config } from './config';
+import type { JwtPayload, Order, OrderStatus, Platform, ServiceType, Variables } from './types';
+import { hashPassword, isAdminEmail, optionalAuth, requireAdmin, requireAuth, signJwt, verifyPassword } from './auth';
+import * as db from './db';
+import { analyzeDesign } from './analyzer';
 
-const app = new Hono();
+const app = new Hono<{ Variables: Variables }>();
 
-app.use('*', cors());
+// ── CORS ──────────────────────────────────────────────────────
+const allowAll = config.allowedOrigins.includes('*');
+app.use(
+  '*',
+  cors({
+    origin: (origin) => (allowAll ? origin || '*' : config.allowedOrigins.includes(origin) ? origin : config.allowedOrigins[0]),
+    allowMethods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowHeaders: ['Content-Type', 'Authorization'],
+    maxAge: 86400,
+  }),
+);
 
-export interface Order {
-  id: string;
-  appName: string;
-  platform: 'iOS' | 'Android' | 'Both';
-  serviceType: 'Testing' | 'Publishing' | 'Promotion_5Star' | 'DesignAnalyzer';
-  status: 'Pending' | 'In Progress' | 'Completed' | 'Rejected';
-  createdAt: string;
-  clientEmail: string;
-  targetCountries: string[];
-  details: string;
+// ── Validation helpers ────────────────────────────────────────
+const VALID_STATUSES: OrderStatus[] = ['Pending', 'In Progress', 'Completed', 'Rejected'];
+const VALID_PLATFORMS: Platform[] = ['iOS', 'Android', 'Both'];
+const VALID_SERVICES: ServiceType[] = ['Testing', 'Publishing', 'Promotion_5Star', 'DesignAnalyzer'];
+
+/** Default USD price derived from the chosen package/platform. */
+function priceFor(platform: Platform): number | null {
+  if (platform === 'Android') return 50; // Google Play package
+  if (platform === 'Both') return 100; // both stores
+  return null; // iOS-only maps to the Enterprise "contact us" tier
 }
 
-export interface DesignAnalysisReport {
-  id: string;
-  fileName: string;
-  score: number;
-  layoutScore: number;
-  typographyScore: number;
-  contrastScore: number;
-  accessibilityScore: number;
-  suggestions: {
-    category: 'Typography' | 'Layout & Spacing' | 'Color & Contrast' | 'Call To Action' | 'Store Guidelines';
-    level: 'Critical' | 'Warning' | 'Recommendation';
-    title: string;
-    description: string;
-  }[];
-  createdAt: string;
+function canAccessOrder(order: Order, user: JwtPayload): boolean {
+  return user.role === 'admin' || order.userId === user.sub || order.clientEmail.toLowerCase() === user.email.toLowerCase();
 }
 
-const orders: Order[] = [
-  {
-    id: 'ORD-8921',
-    appName: 'CryptoPulse Trading Pro',
-    platform: 'Both',
-    serviceType: 'Publishing',
-    status: 'In Progress',
-    createdAt: '2026-07-22',
-    clientEmail: 'dev@cryptopulse.io',
-    targetCountries: ['USA', 'Vietnam', 'Japan'],
-    details: 'Full publishing setup for iOS App Store and Google Play with ASO metadata optimization.',
-  },
-  {
-    id: 'ORD-8922',
-    appName: 'ZenFit Yoga & Meditate',
-    platform: 'iOS',
-    serviceType: 'Promotion_5Star',
-    status: 'In Progress',
-    createdAt: '2026-07-21',
-    clientEmail: 'support@zenfitapp.com',
-    targetCountries: ['Korea', 'USA', 'Germany'],
-    details: '5,000 keyword downloads + 500 localized 5-star reviews campaign.',
-  },
-  {
-    id: 'ORD-8923',
-    appName: 'SpeedyDelivery Partner',
-    platform: 'Android',
-    serviceType: 'Testing',
-    status: 'Completed',
-    createdAt: '2026-07-19',
-    clientEmail: 'qa@speedydelivery.vn',
-    targetCountries: ['Vietnam'],
-    details: '20-device internal tester coverage & crash profiling report generated.',
-  },
-  {
-    id: 'ORD-8924',
-    appName: 'Artisan Photo Studio AI',
-    platform: 'Both',
-    serviceType: 'DesignAnalyzer',
-    status: 'Completed',
-    createdAt: '2026-07-18',
-    clientEmail: 'design@artisanphoto.com',
-    targetCountries: ['Worldwide'],
-    details: 'Automated AI UI/UX visual inspection & Apple HIG compliance check.',
-  },
-];
+const isEmail = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 
-app.get('/health', (c) => c.json({ status: 'ok', service: 'Cloudflare Workers Backend' }));
+// ── Health ────────────────────────────────────────────────────
+app.get('/', (c) => c.json({ service: 'TE2SR Backend', status: 'ok', docs: '/health' }));
+app.get('/health', (c) => c.json({ status: 'ok', service: 'te2sr-backend', time: db.nowIso() }));
 
-app.get('/api/services', (c) => {
+// ══════════════════════════════════════════════════════════════
+//  AUTH
+// ══════════════════════════════════════════════════════════════
+app.post('/api/auth/register', async (c) => {
+  try {
+    const { name, email, password } = await c.req.json();
+    if (!name || !email || !password) return c.json({ success: false, error: 'Thiếu họ tên, email hoặc mật khẩu.' }, 400);
+    if (!isEmail(email)) return c.json({ success: false, error: 'Email không hợp lệ.' }, 400);
+    if (String(password).length < 6) return c.json({ success: false, error: 'Mật khẩu tối thiểu 6 ký tự.' }, 400);
+
+    const existing = await db.getUserByEmail(email);
+    if (existing) return c.json({ success: false, error: 'Email đã được đăng ký. Vui lòng đăng nhập.' }, 409);
+
+    const role = isAdminEmail(email) ? 'admin' : 'client';
+    const passwordHash = await hashPassword(String(password));
+    const user = await db.createUser({
+      id: db.newUserId(), name: String(name).trim(), email, passwordHash, role, authProvider: 'password',
+    });
+    const token = await signJwt({ sub: user.id, email: user.email, role: user.role, name: user.name }, config.jwtSecret);
+    return c.json({ success: true, token, user });
+  } catch {
+    return c.json({ success: false, error: 'Đăng ký thất bại.' }, 500);
+  }
+});
+
+app.post('/api/auth/login', async (c) => {
+  try {
+    const { email, password } = await c.req.json();
+    if (!email || !password) return c.json({ success: false, error: 'Thiếu email hoặc mật khẩu.' }, 400);
+
+    const record = await db.getUserByEmail(email);
+    if (!record || !(await verifyPassword(String(password), record.passwordHash))) {
+      return c.json({ success: false, error: 'Email hoặc mật khẩu không đúng.' }, 401);
+    }
+
+    // Promote to admin if the email is now on the admin allow-list.
+    let role = record.role;
+    if (isAdminEmail(record.email) && role !== 'admin') {
+      await db.setUserRole(record.id, 'admin');
+      role = 'admin';
+    }
+    const user = { id: record.id, name: record.name, email: record.email, role, avatar: record.avatar, authProvider: record.authProvider, createdAt: record.createdAt };
+    const token = await signJwt({ sub: user.id, email: user.email, role: user.role, name: user.name }, config.jwtSecret);
+    return c.json({ success: true, token, user });
+  } catch {
+    return c.json({ success: false, error: 'Đăng nhập thất bại.' }, 500);
+  }
+});
+
+app.post('/api/auth/google', async (c) => {
+  try {
+    const { credential } = await c.req.json();
+    if (!credential) return c.json({ success: false, error: 'Thiếu Google credential (id_token).' }, 400);
+
+    const res = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(credential)}`);
+    if (!res.ok) return c.json({ success: false, error: 'Xác thực Google thất bại.' }, 401);
+    const info = (await res.json()) as { aud?: string; email?: string; email_verified?: string; name?: string; picture?: string };
+
+    if (config.googleClientId && info.aud !== config.googleClientId) {
+      return c.json({ success: false, error: 'Google client id không khớp.' }, 401);
+    }
+    if (!info.email) return c.json({ success: false, error: 'Không lấy được email từ Google.' }, 401);
+
+    const email = info.email.toLowerCase();
+    const role = isAdminEmail(email) ? 'admin' : 'client';
+    let user = await db.getUserByEmail(email);
+    if (!user) {
+      const created = await db.createUser({
+        id: db.newUserId(),
+        name: info.name || email.split('@')[0],
+        email,
+        passwordHash: null,
+        role,
+        avatar: info.picture,
+        authProvider: 'google',
+      });
+      user = { ...created, passwordHash: null };
+    } else if (role === 'admin' && user.role !== 'admin') {
+      await db.setUserRole(user.id, 'admin');
+      user.role = 'admin';
+    }
+
+    const publicUser = { id: user.id, name: user.name, email: user.email, role: user.role, avatar: user.avatar, authProvider: user.authProvider, createdAt: user.createdAt };
+    const token = await signJwt({ sub: user.id, email: user.email, role: user.role, name: user.name }, config.jwtSecret);
+    return c.json({ success: true, token, user: publicUser });
+  } catch {
+    return c.json({ success: false, error: 'Lỗi xác thực Google.' }, 500);
+  }
+});
+
+app.get('/api/auth/me', requireAuth, async (c) => {
+  const payload = c.get('user');
+  const user = await db.getUserById(payload.sub);
+  if (!user) return c.json({ success: false, error: 'Không tìm thấy người dùng.' }, 404);
+  return c.json({ success: true, user });
+});
+
+app.post('/api/auth/change-password', requireAuth, async (c) => {
+  try {
+    const { currentPassword, newPassword } = await c.req.json();
+    if (!newPassword || String(newPassword).length < 6) {
+      return c.json({ success: false, error: 'Mật khẩu mới tối thiểu 6 ký tự.' }, 400);
+    }
+    const record = await db.getUserByEmail(c.get('user').email);
+    if (!record) return c.json({ success: false, error: 'Không tìm thấy người dùng.' }, 404);
+
+    // Accounts that already have a password must prove the current one.
+    // Google-only accounts (no hash yet) may set an initial password.
+    if (record.passwordHash) {
+      if (!currentPassword || !(await verifyPassword(String(currentPassword), record.passwordHash))) {
+        return c.json({ success: false, error: 'Mật khẩu hiện tại không đúng.' }, 401);
+      }
+    }
+    await db.setUserPassword(record.id, await hashPassword(String(newPassword)));
+    return c.json({ success: true });
+  } catch {
+    return c.json({ success: false, error: 'Đổi mật khẩu thất bại.' }, 500);
+  }
+});
+
+// ══════════════════════════════════════════════════════════════
+//  ORDERS
+// ══════════════════════════════════════════════════════════════
+app.get('/api/orders', requireAuth, async (c) => {
+  const user = c.get('user');
+  const orders = user.role === 'admin'
+    ? await db.listAllOrders()
+    : await db.listOrdersForUser(user.sub, user.email);
   return c.json({ success: true, orders });
 });
 
-app.post('/api/services', async (c) => {
+app.post('/api/orders', optionalAuth, async (c) => {
   try {
     const body = await c.req.json();
-    const { appName, clientEmail, platform, serviceType, targetCountries, details } = body;
+    const appName = String(body.appName || '').trim();
+    const clientEmail = String(body.clientEmail || '').trim();
+    if (!appName || !clientEmail) return c.json({ success: false, error: 'Cần tên app và email liên hệ.' }, 400);
+    if (!isEmail(clientEmail)) return c.json({ success: false, error: 'Email liên hệ không hợp lệ.' }, 400);
 
-    if (!appName || !clientEmail) {
-      return c.json({ success: false, error: 'App name and client email are required.' }, 400);
-    }
+    const platform: Platform = VALID_PLATFORMS.includes(body.platform) ? body.platform : 'Both';
+    const serviceType: ServiceType = VALID_SERVICES.includes(body.serviceType) ? body.serviceType : 'Testing';
+    const targetCountries = Array.isArray(body.targetCountries)
+      ? body.targetCountries.map((s: unknown) => String(s).trim()).filter(Boolean)
+      : ['Worldwide'];
 
-    const newOrder: Order = {
-      id: `ORD-${Math.floor(1000 + Math.random() * 9000)}`,
+    const currentUser = c.get('user');
+    const order = await db.createOrder({
+      id: db.newOrderId(),
+      userId: currentUser?.sub ?? null,
       appName,
       clientEmail,
-      platform: platform || 'Both',
-      serviceType: serviceType || 'Testing',
-      targetCountries: targetCountries || ['Worldwide'],
-      details: details || '',
-      status: 'Pending',
-      createdAt: new Date().toISOString().split('T')[0],
-    };
-
-    orders.unshift(newOrder);
-    return c.json({ success: true, order: newOrder });
-  } catch (err) {
-    return c.json({ success: false, error: 'Failed to create order.' }, 500);
-  }
-});
-
-app.patch('/api/admin/orders', async (c) => {
-  try {
-    const body = await c.req.json();
-    const { orderId, status } = body;
-
-    const order = orders.find((o) => o.id === orderId);
-    if (!order) {
-      return c.json({ success: false, error: 'Order not found' }, 404);
-    }
-
-    order.status = status;
+      platform,
+      serviceType,
+      targetCountries,
+      testingUrl: body.testingUrl ? String(body.testingUrl).trim() : null,
+      details: body.details ? String(body.details).trim() : '',
+      packagePrice: priceFor(platform),
+    });
     return c.json({ success: true, order });
-  } catch (err) {
-    return c.json({ success: false, error: 'Failed to update order' }, 500);
+  } catch {
+    return c.json({ success: false, error: 'Tạo đơn hàng thất bại.' }, 500);
   }
 });
 
-app.post('/api/analyze-design', async (c) => {
+app.get('/api/orders/:id', requireAuth, async (c) => {
+  const order = await db.getOrderById(c.req.param('id')!);
+  if (!order) return c.json({ success: false, error: 'Không tìm thấy đơn hàng.' }, 404);
+  if (!canAccessOrder(order, c.get('user'))) return c.json({ success: false, error: 'Không có quyền truy cập đơn này.' }, 403);
+  return c.json({ success: true, order });
+});
+
+app.patch('/api/orders/:id/status', requireAdmin, async (c) => {
   try {
-    const body = await c.req.json();
-    const fileName = body.fileName || 'app-screenshot.png';
-
-    const report: DesignAnalysisReport = {
-      id: `RPT-${Math.floor(100000 + Math.random() * 900000)}`,
-      fileName,
-      score: Math.floor(78 + Math.random() * 18),
-      layoutScore: Math.floor(80 + Math.random() * 15),
-      typographyScore: Math.floor(75 + Math.random() * 20),
-      contrastScore: Math.floor(82 + Math.random() * 14),
-      accessibilityScore: Math.floor(72 + Math.random() * 22),
-      createdAt: new Date().toISOString(),
-      suggestions: [
-        {
-          category: 'Call To Action',
-          level: 'Critical',
-          title: 'Thắt chặt khoảng cách và tăng độ nổi bật nút CTA (Button Prominence)',
-          description: 'Nút "Bắt đầu" có độ tương phản màu 3.2:1 so với nền kính glassmorphic. Khuyên dùng màu Neon Blue (#00D2FF) hoặc gradient với viền phát sáng 2px để đáp ứng tiêu chuẩn WCAG AAA (>= 4.5:1).',
-        },
-        {
-          category: 'Typography',
-          level: 'Warning',
-          title: 'Chuẩn hóa Hierarchy chữ giữa Heading và Subtitle',
-          description: 'Tỷ lệ cỡ chữ giữa Tiêu đề chính (24px) và Nội dung phụ (18px) quá gần nhau. Đề xuất tăng font Montserrat của Headline lên 32px (font-weight 700) để phân cấp thị giác rõ ràng hơn trên di động.',
-        },
-        {
-          category: 'Layout & Spacing',
-          level: 'Recommendation',
-          title: 'Tăng Padding mặt định các Card Glassmorphism',
-          description: 'Nội dung thẻ dịch vụ sát viền kính (12px padding). Theo chuẩn Stitch Lumina Nexus, card glassmorphism nên dùng tối thiểu 24px - 32px padding để giao diện thoáng đạt, sang trọng.',
-        },
-        {
-          category: 'Store Guidelines',
-          level: 'Warning',
-          title: 'Kiểm tra tỷ lệ Màn hình đục lỗ (Notch & Safe Area Padding)',
-          description: 'Các icon ở thanh header đang đè lên vị trí Dynamic Island / Camera đục lỗ trên iOS. Cần thêm safe-area-inset-top: env(safe-area-inset-top) để tránh bị từ chối khi duyệt trên App Store.',
-        },
-        {
-          category: 'Color & Contrast',
-          level: 'Recommendation',
-          title: 'Bổ sung hiệu ứng Ambient Glow cho các chỉ số quan trọng',
-          description: 'Các tag trạng thái và chỉ số đánh giá 5 sao sẽ sống động hơn khi kết hợp cùng lớp nền mờ drop-shadow(0 0 12px #00D2FF40).',
-        },
-      ],
-    };
-
-    return c.json({ success: true, report });
-  } catch (err) {
-    return c.json({ success: false, error: 'Failed to analyze design.' }, 500);
+    const { status } = await c.req.json();
+    if (!VALID_STATUSES.includes(status)) return c.json({ success: false, error: 'Trạng thái không hợp lệ.' }, 400);
+    const order = await db.updateOrderStatus(c.req.param('id')!, status);
+    if (!order) return c.json({ success: false, error: 'Không tìm thấy đơn hàng.' }, 404);
+    return c.json({ success: true, order });
+  } catch {
+    return c.json({ success: false, error: 'Cập nhật trạng thái thất bại.' }, 500);
   }
+});
+
+app.patch('/api/orders/:id/payment', requireAdmin, async (c) => {
+  try {
+    const { field, value } = await c.req.json();
+    if (field !== 'paid_deposit' && field !== 'paid_final') return c.json({ success: false, error: 'Trường thanh toán không hợp lệ.' }, 400);
+    const order = await db.updateOrderPayment(c.req.param('id')!, field, !!value);
+    if (!order) return c.json({ success: false, error: 'Không tìm thấy đơn hàng.' }, 404);
+    return c.json({ success: true, order });
+  } catch {
+    return c.json({ success: false, error: 'Cập nhật thanh toán thất bại.' }, 500);
+  }
+});
+
+// ══════════════════════════════════════════════════════════════
+//  ORDER MESSAGES (support chat)
+// ══════════════════════════════════════════════════════════════
+app.get('/api/orders/:id/messages', requireAuth, async (c) => {
+  const order = await db.getOrderById(c.req.param('id')!);
+  if (!order) return c.json({ success: false, error: 'Không tìm thấy đơn hàng.' }, 404);
+  if (!canAccessOrder(order, c.get('user'))) return c.json({ success: false, error: 'Không có quyền.' }, 403);
+  const messages = await db.listMessages(order.id);
+  return c.json({ success: true, messages });
+});
+
+app.post('/api/orders/:id/messages', requireAuth, async (c) => {
+  try {
+    const order = await db.getOrderById(c.req.param('id')!);
+    if (!order) return c.json({ success: false, error: 'Không tìm thấy đơn hàng.' }, 404);
+    const user = c.get('user');
+    if (!canAccessOrder(order, user)) return c.json({ success: false, error: 'Không có quyền.' }, 403);
+    const { text } = await c.req.json();
+    if (!text || !String(text).trim()) return c.json({ success: false, error: 'Nội dung tin nhắn trống.' }, 400);
+    const message = await db.addMessage({
+      orderId: order.id,
+      senderId: user.sub,
+      senderName: user.role === 'admin' ? 'TE2SR Support' : user.name,
+      role: user.role,
+      text: String(text).trim().slice(0, 4000),
+    });
+    return c.json({ success: true, message });
+  } catch {
+    return c.json({ success: false, error: 'Gửi tin nhắn thất bại.' }, 500);
+  }
+});
+
+// ══════════════════════════════════════════════════════════════
+//  AI DESIGN ANALYSIS
+// ══════════════════════════════════════════════════════════════
+app.post('/api/analyze-design', optionalAuth, async (c) => {
+  try {
+    const body = await c.req.json().catch(() => ({}));
+    const fileName = body.fileName ? String(body.fileName) : 'app-screenshot.png';
+    const user = c.get('user');
+    const report = analyzeDesign(fileName, user?.sub ?? null);
+    if (user) await db.saveReport(report); // persist for logged-in users
+    return c.json({ success: true, report });
+  } catch {
+    return c.json({ success: false, error: 'Phân tích thiết kế thất bại.' }, 500);
+  }
+});
+
+app.get('/api/reports', requireAuth, async (c) => {
+  const reports = await db.listReportsForUser(c.get('user').sub);
+  return c.json({ success: true, reports });
+});
+
+// ══════════════════════════════════════════════════════════════
+//  ADMIN
+// ══════════════════════════════════════════════════════════════
+app.get('/api/admin/stats', requireAdmin, async (c) => {
+  const stats = await db.adminStats();
+  return c.json({ success: true, stats });
+});
+
+// ── Fallback ──────────────────────────────────────────────────
+app.notFound((c) => c.json({ success: false, error: 'Endpoint không tồn tại.' }, 404));
+app.onError((err, c) => {
+  console.error('Unhandled error:', err);
+  return c.json({ success: false, error: 'Lỗi máy chủ nội bộ.' }, 500);
+});
+
+// ── Boot ──────────────────────────────────────────────────────
+serve({ fetch: app.fetch, port: config.port }, (info) => {
+  console.log(`🚀 TE2SR backend listening on http://localhost:${info.port}`);
 });
 
 export default app;
