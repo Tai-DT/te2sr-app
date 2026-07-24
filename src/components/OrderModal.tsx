@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { getTranslation, LanguageCode } from '@/lib/i18n/dictionaries';
+import { useLanguage } from '@/lib/i18n/language-context';
 import { api, ApiError } from '@/lib/api-client';
 import type { Order, Platform } from '@/lib/types';
 import { X, CheckCircle2, Send, Rocket, TestTube, Star, BadgeDollarSign, AlertCircle, Users, Copy, Check, CreditCard, Link2 } from 'lucide-react';
@@ -9,16 +9,15 @@ import { X, CheckCircle2, Send, Rocket, TestTube, Star, BadgeDollarSign, AlertCi
 interface OrderModalProps {
   isOpen: boolean;
   onClose: () => void;
-  currentLang: LanguageCode;
   initialService?: 'Testing' | 'Publishing' | 'Promotion_5Star' | 'DesignAnalyzer';
 }
 
 export const OrderModal: React.FC<OrderModalProps> = ({
   isOpen,
   onClose,
-  currentLang,
   initialService = 'Testing',
 }) => {
+  const { t } = useLanguage();
   const [appName, setAppName] = useState('');
   const [clientEmail, setClientEmail] = useState('');
   const [platform, setPlatform] = useState<'iOS' | 'Android' | 'Both'>('Both');
@@ -35,8 +34,6 @@ export const OrderModal: React.FC<OrderModalProps> = ({
   const [copiedGroup, setCopiedGroup] = useState(false);
 
   const googleGroupEmail = 'te2sr@googlegroups.com';
-
-  const t = (key: string) => getTranslation(currentLang, key);
 
   if (!isOpen) return null;
 

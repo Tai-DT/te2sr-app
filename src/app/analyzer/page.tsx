@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { LanguageCode, getTranslation } from '@/lib/i18n/dictionaries';
+import { useLanguage } from '@/lib/i18n/language-context';
 import { api, ApiError } from '@/lib/api-client';
 import { useAuth } from '@/lib/auth';
 import type { DesignAnalysisReport, SuggestionLevel } from '@/lib/types';
@@ -67,9 +67,8 @@ function SubScore({ label, value }: { label: string; value: number }) {
 }
 
 export default function AnalyzerPage() {
-  const [currentLang, setCurrentLang] = useState<LanguageCode>('vi');
   const { user } = useAuth();
-  const t = (key: string) => getTranslation(currentLang, key);
+  const { t } = useLanguage();
 
   const [fileName, setFileName] = useState('');
   const [previewUrl, setPreviewUrl] = useState('');
@@ -120,7 +119,7 @@ export default function AnalyzerPage() {
 
   return (
     <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans">
-      <Navbar currentLang={currentLang} onLanguageChange={setCurrentLang} />
+      <Navbar />
 
       <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-12 space-y-8">
         {/* Header */}
@@ -271,7 +270,7 @@ export default function AnalyzerPage() {
         )}
       </main>
 
-      <Footer currentLang={currentLang} />
+      <Footer />
     </div>
   );
 }

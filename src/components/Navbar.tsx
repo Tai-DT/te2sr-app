@@ -4,23 +4,17 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LanguageSelector } from './LanguageSelector';
-import { getTranslation, LanguageCode } from '@/lib/i18n/dictionaries';
+import { useLanguage } from '@/lib/i18n/language-context';
 import { Layers, TestTube, Rocket, Star, LayoutDashboard, Menu, X, PlusCircle, User as UserIcon, LogOut, ShieldCheck, Sparkles } from 'lucide-react';
 import { OrderModal } from './OrderModal';
 import { useAuth } from '@/lib/auth';
 
-interface NavbarProps {
-  currentLang: LanguageCode;
-  onLanguageChange: (lang: LanguageCode) => void;
-}
-
-export const Navbar: React.FC<NavbarProps> = ({ currentLang, onLanguageChange }) => {
+export const Navbar: React.FC = () => {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
   const { user, logout, openAuthModal } = useAuth();
-
-  const t = (key: string) => getTranslation(currentLang, key);
+  const { t } = useLanguage();
 
   // Base public links
   const navLinks = [
@@ -78,7 +72,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLang, onLanguageChange })
 
           {/* Right Actions */}
           <div className="flex items-center gap-3">
-            <LanguageSelector currentLang={currentLang} onLanguageChange={onLanguageChange} />
+            <LanguageSelector />
 
             {/* Account Role Badge */}
             {user ? (
@@ -182,7 +176,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentLang, onLanguageChange })
       <OrderModal
         isOpen={isOrderModalOpen}
         onClose={() => setIsOrderModalOpen(false)}
-        currentLang={currentLang}
       />
     </>
   );

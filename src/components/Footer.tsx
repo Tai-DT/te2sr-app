@@ -2,16 +2,13 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { getTranslation, LanguageCode, LANGUAGES } from '@/lib/i18n/dictionaries';
+import { LANGUAGES } from '@/lib/i18n/dictionaries';
+import { useLanguage } from '@/lib/i18n/language-context';
 import { ShieldCheck, Globe, Star, TestTube, Rocket } from 'lucide-react';
 import { FloatingSocialChat } from './FloatingSocialChat';
 
-interface FooterProps {
-  currentLang: LanguageCode;
-}
-
-export const Footer: React.FC<FooterProps> = ({ currentLang }) => {
-  const t = (key: string) => getTranslation(currentLang, key);
+export const Footer: React.FC = () => {
+  const { t } = useLanguage();
 
   return (
     <footer className="w-full bg-slate-50 border-t border-slate-200 text-slate-600 py-12 px-4 sm:px-6 lg:px-8">

@@ -5,7 +5,8 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { GlassCard } from '@/components/GlassCard';
 import { OrderModal } from '@/components/OrderModal';
-import { LanguageCode, getTranslation } from '@/lib/i18n/dictionaries';
+import { ServiceIllustration } from '@/components/ServiceIllustration';
+import { useLanguage } from '@/lib/i18n/language-context';
 import {
   Rocket,
   ShieldCheck,
@@ -31,13 +32,11 @@ function StatCounter({ value, label, suffix = '', color = 'text-brand-blue' }: {
 }
 
 export default function HomePage() {
-  const [currentLang, setCurrentLang] = useState<LanguageCode>('vi');
+  const { t } = useLanguage();
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
   const [initialService, setInitialService] = useState<
     'Testing' | 'Publishing' | 'Promotion_5Star' | 'DesignAnalyzer'
   >('Testing');
-
-  const t = (key: string) => getTranslation(currentLang, key);
 
   const openServiceModal = (service: 'Testing' | 'Publishing' | 'Promotion_5Star' | 'DesignAnalyzer') => {
     setInitialService(service);
@@ -47,7 +46,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col bg-white text-slate-900 font-sans selection:bg-brand-blue selection:text-white">
       {/* Navbar */}
-      <Navbar currentLang={currentLang} onLanguageChange={setCurrentLang} />
+      <Navbar />
 
       {/* Main Content */}
       <main className="flex-1">
@@ -60,21 +59,21 @@ export default function HomePage() {
             <div className="flex flex-wrap items-center justify-center gap-2">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-200 text-brand-blue text-xs font-extrabold shadow-apple-sm">
                 <span className="w-2 h-2 rounded-full bg-brand-blue animate-pulse" />
-                <span>💳 THANH TOÁN 2 ĐỢT: 50% KHI HOÀN THÀNH 12 TESTERS (14 NGÀY) & 50% KHI APP LIVE!</span>
+                <span>{t('hero_pay_badge')}</span>
               </div>
             </div>
 
             {/* Main Headline */}
             <div className="space-y-4 max-w-4xl mx-auto">
               <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold font-display tracking-tight text-slate-900 leading-[1.1]">
-                Đưa App Của Bạn <br />
+                {t('hero_line1')} <br />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-blue to-blue-600">
-                  Lên Top Store
+                  {t('hero_line2')}
                 </span>
               </h1>
 
               <p className="text-base sm:text-xl text-slate-800 max-w-2xl mx-auto font-medium leading-relaxed">
-                Cung cấp giải pháp kiểm thử toàn diện & đưa app lên App Store/Google Play. <strong>Thanh toán 50% sau khi cài 12 testers đếm 14 ngày & 50% còn lại khi app live thành công!</strong>
+                {t('hero_sub2')}
               </p>
             </div>
 
@@ -101,7 +100,7 @@ export default function HomePage() {
                 className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-brand-blue hover:bg-blue-600 text-white font-extrabold text-sm transition-all shadow-brand-blue hover:scale-[1.02] flex items-center justify-center gap-2.5"
               >
                 <Rocket className="w-4 h-4" />
-                <span>Bắt Đầu Đăng Tải Ngay</span>
+                <span>{t('cta_publish_now')}</span>
               </button>
 
               <button
@@ -109,7 +108,7 @@ export default function HomePage() {
                 className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-slate-100 border border-slate-300 hover:bg-slate-200 text-slate-900 font-extrabold text-sm transition-all flex items-center justify-center gap-2 shadow-apple-sm"
               >
                 <TestTube className="w-4 h-4 text-brand-blue" />
-                <span>Kiểm Thử App Ngay</span>
+                <span>{t('cta_test_now')}</span>
               </button>
             </div>
 
@@ -161,6 +160,7 @@ export default function HomePage() {
             {[
               {
                 service: 'Testing' as const,
+                illustration: 'Testing' as const,
                 icon: <TestTube className="w-6 h-6 text-brand-blue" />,
                 iconBg: 'bg-blue-50 border-blue-200',
                 title: t('svc_testing_title'),
@@ -171,6 +171,7 @@ export default function HomePage() {
               },
               {
                 service: 'Publishing' as const,
+                illustration: 'Publishing' as const,
                 icon: <Rocket className="w-6 h-6 text-slate-900" />,
                 iconBg: 'bg-slate-100 border-slate-300',
                 title: t('svc_publishing_title'),
@@ -181,6 +182,7 @@ export default function HomePage() {
               },
               {
                 service: 'Promotion_5Star' as const,
+                illustration: 'Promotion' as const,
                 icon: <Star className="w-6 h-6 text-amber-500" />,
                 iconBg: 'bg-amber-50 border-amber-200',
                 title: '⭐️ Gói Đánh Giá 5 Sao (Tặng Kèm 10 Reviews)',
@@ -192,10 +194,15 @@ export default function HomePage() {
             ].map((svc, i) => (
               <GlassCard key={i} glow={svc.glow} className="flex flex-col justify-between h-full group card-shine border-slate-300">
                 <div className="space-y-4">
-                  <div className={`w-12 h-12 rounded-2xl border flex items-center justify-center ${svc.iconBg} transition-transform group-hover:scale-110 shadow-apple-sm`}>
-                    {svc.icon}
+                  <div className="overflow-hidden rounded-2xl border border-slate-200 shadow-apple-sm">
+                    <ServiceIllustration type={svc.illustration} />
                   </div>
-                  <h3 className="text-xl font-extrabold text-slate-900 font-display">{svc.title}</h3>
+                  <div className="flex items-center gap-2.5">
+                    <div className={`w-9 h-9 rounded-xl border flex items-center justify-center ${svc.iconBg} shrink-0 shadow-apple-sm`}>
+                      {svc.icon}
+                    </div>
+                    <h3 className="text-lg font-extrabold text-slate-900 font-display leading-tight">{svc.title}</h3>
+                  </div>
                   <p className="text-xs text-slate-800 leading-relaxed font-medium">{svc.desc}</p>
                   <ul className="space-y-2.5 pt-2">
                     {svc.features.map((f, j) => (
@@ -229,10 +236,10 @@ export default function HomePage() {
               Bảng Giá & Quy Trình Thanh Toán 2 Đợt
             </div>
             <h2 className="text-3xl sm:text-5xl font-extrabold font-display text-slate-900">
-              Bảng Giá Dịch Vụ Mới
+              {t('pricing_heading')}
             </h2>
             <p className="text-sm sm:text-base text-slate-800 max-w-xl mx-auto font-medium">
-              Thanh toán linh hoạt: <strong>50% sau khi kết nối 12 testers đếm 14 ngày & 50% còn lại khi app live trên Store.</strong>
+              {t('pricing_subheading')}
             </p>
           </div>
 
@@ -241,6 +248,7 @@ export default function HomePage() {
             <div className="bg-white rounded-2xl border border-slate-300 p-7 flex flex-col justify-between space-y-6 shadow-apple-sm card-shine">
               <div className="space-y-4">
                 <div className="space-y-1">
+                  <div className="overflow-hidden rounded-xl border border-slate-200 mb-2.5"><ServiceIllustration type="Publishing" /></div>
                   <p className="text-[11px] font-extrabold uppercase tracking-widest text-slate-700">Đăng Tải Google Play</p>
                   <div className="flex items-baseline gap-1.5">
                     <span className="text-5xl font-extrabold font-display text-slate-900">$50</span>
@@ -285,6 +293,7 @@ export default function HomePage() {
               </div>
               <div className="space-y-4 pt-2">
                 <div className="space-y-1">
+                  <div className="overflow-hidden rounded-xl border border-blue-200 mb-2.5"><ServiceIllustration type="Testing" /></div>
                   <p className="text-[11px] font-extrabold uppercase tracking-widest text-brand-blue">Gói Cả 2 Store</p>
                   <div className="flex items-baseline gap-1.5">
                     <span className="text-6xl font-extrabold font-display text-slate-900">$100</span>
@@ -325,6 +334,7 @@ export default function HomePage() {
             <div className="bg-white rounded-2xl border border-slate-300 p-7 flex flex-col justify-between space-y-6 shadow-apple-sm card-shine">
               <div className="space-y-4">
                 <div className="space-y-1">
+                  <div className="overflow-hidden rounded-xl border border-slate-200 mb-2.5"><ServiceIllustration type="Enterprise" /></div>
                   <p className="text-[11px] font-extrabold uppercase tracking-widest text-slate-900">Gói Doanh Nghiệp</p>
                   <div className="flex items-baseline gap-1.5">
                     <span className="text-4xl font-extrabold font-display text-slate-900">LIÊN HỆ</span>
@@ -366,13 +376,12 @@ export default function HomePage() {
       </main>
 
       {/* Footer */}
-      <Footer currentLang={currentLang} />
+      <Footer />
 
       {/* Modals */}
       <OrderModal
         isOpen={isOrderModalOpen}
         onClose={() => setIsOrderModalOpen(false)}
-        currentLang={currentLang}
         initialService={initialService}
       />
     </div>

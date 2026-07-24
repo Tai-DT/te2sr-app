@@ -1,18 +1,12 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { LANGUAGES, LanguageCode } from '@/lib/i18n/dictionaries';
+import { LANGUAGES } from '@/lib/i18n/dictionaries';
+import { useLanguage } from '@/lib/i18n/language-context';
 import { Globe, ChevronDown, Check } from 'lucide-react';
 
-interface LanguageSelectorProps {
-  currentLang: LanguageCode;
-  onLanguageChange: (lang: LanguageCode) => void;
-}
-
-export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
-  currentLang,
-  onLanguageChange,
-}) => {
+export const LanguageSelector: React.FC = () => {
+  const { lang: currentLang, setLang: onLanguageChange } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 

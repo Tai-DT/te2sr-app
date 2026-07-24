@@ -5,11 +5,11 @@ import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { GlassCard } from '@/components/GlassCard';
 import { OrderModal } from '@/components/OrderModal';
-import { LanguageCode } from '@/lib/i18n/dictionaries';
+import { useLanguage } from '@/lib/i18n/language-context';
 import { Rocket } from 'lucide-react';
 
 export default function PublishingServicePage() {
-  const [currentLang, setCurrentLang] = useState<LanguageCode>('vi');
+  useLanguage();
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
 
   const steps = [
@@ -21,7 +21,7 @@ export default function PublishingServicePage() {
 
   return (
     <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans">
-      <Navbar currentLang={currentLang} onLanguageChange={setCurrentLang} />
+      <Navbar />
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
         {/* Header */}
@@ -71,9 +71,9 @@ export default function PublishingServicePage() {
         </div>
       </main>
 
-      <Footer currentLang={currentLang} />
+      <Footer />
 
-      <OrderModal isOpen={isOrderModalOpen} onClose={() => setIsOrderModalOpen(false)} currentLang={currentLang} initialService="Publishing" />
+      <OrderModal isOpen={isOrderModalOpen} onClose={() => setIsOrderModalOpen(false)} initialService="Publishing" />
     </div>
   );
 }

@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { LanguageCode } from '@/lib/i18n/dictionaries';
+import { useLanguage } from '@/lib/i18n/language-context';
 import { useAuth } from '@/lib/auth';
 import { api, ApiError } from '@/lib/api-client';
 import { ChangePasswordCard } from '@/components/ChangePasswordCard';
@@ -33,7 +33,7 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; dot: string 
 const ALL_STATUSES: Order['status'][] = ['Pending', 'In Progress', 'Completed', 'Rejected'];
 
 export default function AdminPortalPage() {
-  const [currentLang, setCurrentLang] = useState<LanguageCode>('vi');
+  useLanguage();
   const { user, loading: authLoading, openAuthModal } = useAuth();
   const isAdmin = user?.role === 'admin';
 
@@ -162,7 +162,7 @@ export default function AdminPortalPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans">
-      <Navbar currentLang={currentLang} onLanguageChange={setCurrentLang} />
+      <Navbar />
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         {/* ─── PAGE HEADER ─── */}
@@ -683,7 +683,7 @@ export default function AdminPortalPage() {
         )}
       </main>
 
-      <Footer currentLang={currentLang} />
+      <Footer />
     </div>
   );
 }
