@@ -24,6 +24,13 @@ export const config = {
     .map((o) => o.trim())
     .filter(Boolean),
   port: parseInt(process.env.PORT || '8787', 10),
+
+  // Cloudflare Email Sending (optional — transactional email)
+  cloudflareAccountId: process.env.CLOUDFLARE_ACCOUNT_ID?.trim() || '',
+  cloudflareApiToken: process.env.CLOUDFLARE_API_TOKEN?.trim() || '',
+  mailFrom: process.env.MAIL_FROM?.trim() || 'admin@te2sr.com',
+  mailFromName: process.env.MAIL_FROM_NAME?.trim() || 'TE2SR',
+  mailAdmin: process.env.MAIL_ADMIN?.trim() || 'admin@te2sr.com',
 };
 
 export type AppConfig = typeof config;

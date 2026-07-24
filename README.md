@@ -101,6 +101,34 @@ Production: đặt `NEXT_PUBLIC_API_URL=https://te2sr.com` (hoặc domain backen
 | GET | `/api/reports` | user | Lịch sử báo cáo |
 | GET | `/api/admin/stats` | admin | Thống kê |
 
+## Email (Cloudflare Email Service)
+
+Backend gửi email giao dịch từ `admin@te2sr.com` qua **Cloudflare Email Sending REST API** (vì backend là Node, không phải Worker). Nếu chưa cấu hình, các lệnh gửi mail **tự bỏ qua** — không ảnh hưởng luồng đơn hàng. Kiểm tra bằng `GET /health` → `"mail": true/false`.
+
+Email tự động: **đơn mới** (xác nhận cho khách + báo `admin@te2sr.com`), **đổi trạng thái** (báo khách).
+
+### Gửi email (transactional)
+1. Đảm bảo domain `te2sr.com` đã nằm trong tài khoản Cloudflare.
+2. Onboard domain cho Email Sending (thêm sẵn bản ghi SPF/DKIM):
+   ```bash
+   npx wrangler email sending enable te2sr.com
+   ```
+   *(hoặc Dashboard → Email → Email Sending)*
+3. Tạo **API Token** (Dashboard → My Profile → API Tokens) có quyền **Email Sending → Send**. Điền vào `backend/.env`:
+   ```
+   CLOUDFLARE_ACCOUNT_ID=<account id>
+   CLOUDFLARE_API_TOKEN=<token>
+   MAIL_FROM=admin@te2sr.com
+   MAIL_ADMIN=admin@te2sr.com
+   ```
+4. Khởi động lại backend → `GET /health` phải trả `"mail": true`.
+
+### Nhận email tại admin@te2sr.com (Email Routing)
+1. Dashboard → `te2sr.com` → **Email → Email Routing → Enable** (tự thêm MX + TXT).
+2. Thêm địa chỉ tuỳ chỉnh `admin@te2sr.com` → **forward** tới hộp thư thật của bạn, rồi **xác minh** qua email Cloudflare gửi.
+
+> Email Sending chỉ dành cho email giao dịch (không dùng gửi hàng loạt/marketing).
+
 ## Bảo mật
 
 - `backend/.env`, `backend/certs/*.pem`, `.env.local` **đã được gitignore** — không commit.

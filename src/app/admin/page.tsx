@@ -7,6 +7,7 @@ import { LanguageCode } from '@/lib/i18n/dictionaries';
 import { useAuth } from '@/lib/auth';
 import { api, ApiError } from '@/lib/api-client';
 import { ChangePasswordCard } from '@/components/ChangePasswordCard';
+import { SOCIAL_LINKS } from '@/lib/social';
 import type { Order, OrderMessage } from '@/lib/types';
 import {
   LayoutDashboard, MessageSquare, Send, ShieldAlert, RefreshCw,
@@ -553,6 +554,17 @@ export default function AdminPortalPage() {
                         </div>
                       </div>
                       <div className="ml-auto px-2.5 py-1 rounded-lg bg-white border border-slate-300 text-[11px] text-brand-blue font-mono font-extrabold">{selectedOrder.id}</div>
+                    </div>
+
+                    {/* Quick contact channels */}
+                    <div className="flex items-center gap-2 px-5 py-2.5 border-b border-slate-200 bg-white">
+                      <span className="text-[11px] font-bold text-slate-500">Liên hệ nhanh:</span>
+                      <a href={SOCIAL_LINKS.zalo} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 text-[11px] font-extrabold hover:bg-blue-100 transition-colors">
+                        <span className="w-4 h-4 rounded bg-blue-500 text-white flex items-center justify-center text-[9px] font-bold">Z</span>Zalo
+                      </a>
+                      <a href={SOCIAL_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] font-extrabold hover:bg-emerald-100 transition-colors">
+                        <span className="w-4 h-4 rounded bg-emerald-500 text-white flex items-center justify-center text-[8px] font-bold">WA</span>WhatsApp
+                      </a>
                     </div>
 
                     <div className="h-96 overflow-y-auto space-y-4 p-5 bg-slate-50">

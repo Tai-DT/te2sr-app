@@ -11,6 +11,7 @@ import type { JwtPayload, Order, OrderStatus, Platform, ServiceType, Variables }
 import { hashPassword, isAdminEmail, optionalAuth, requireAdmin, requireAuth, signJwt, verifyPassword } from './auth';
 import * as db from './db';
 import { analyzeDesign } from './analyzer';
+import { isMailEnabled, newOrderAdminMail, orderConfirmationMail, orderStatusMail, sendMailAsync } from './mail';
 
 const app = new Hono<{ Variables: Variables }>();
 
@@ -46,7 +47,7 @@ const isEmail = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 
 // ── Health ────────────────────────────────────────────────────
 app.get('/', (c) => c.json({ service: 'TE2SR Backend', status: 'ok', docs: '/health' }));
-app.get('/health', (c) => c.json({ status: 'ok', service: 'te2sr-backend', time: db.nowIso() }));
+app.get('/health', (c) => c.json({ status: 'ok', service: 'te2sr-backend', time: db.nowIso(), mail: isMailEnabled() }));
 
 // ══════════════════════════════════════════════════════════════
 //  AUTH
@@ -206,6 +207,13 @@ app.post('/api/orders', optionalAuth, async (c) => {
       details: body.details ? String(body.details).trim() : '',
       packagePrice: priceFor(platform),
     });
+
+    // Transactional email (graceful no-op if not configured)
+    const conf = orderConfirmationMail(order);
+    sendMailAsync({ to: order.clientEmail, subject: conf.subject, html: conf.html, text: conf.text });
+    const adminMail = newOrderAdminMail(order);
+    sendMailAsync({ to: config.mailAdmin, subject: adminMail.subject, html: adminMail.html, text: adminMail.text });
+
     return c.json({ success: true, order });
   } catch {
     return c.json({ success: false, error: 'Tạo đơn hàng thất bại.' }, 500);
@@ -225,6 +233,8 @@ app.patch('/api/orders/:id/status', requireAdmin, async (c) => {
     if (!VALID_STATUSES.includes(status)) return c.json({ success: false, error: 'Trạng thái không hợp lệ.' }, 400);
     const order = await db.updateOrderStatus(c.req.param('id')!, status);
     if (!order) return c.json({ success: false, error: 'Không tìm thấy đơn hàng.' }, 404);
+    const st = orderStatusMail(order);
+    sendMailAsync({ to: order.clientEmail, subject: st.subject, html: st.html, text: st.text });
     return c.json({ success: true, order });
   } catch {
     return c.json({ success: false, error: 'Cập nhật trạng thái thất bại.' }, 500);

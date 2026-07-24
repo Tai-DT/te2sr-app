@@ -2,16 +2,10 @@
 
 import React, { useState } from 'react';
 import { MessageCircle, X, ExternalLink } from 'lucide-react';
+import { SOCIAL_LINKS as socialLinks } from '@/lib/social';
 
 export const FloatingSocialChat: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-
-  const socialLinks = {
-    zalo: process.env.NEXT_PUBLIC_ZALO_URL || 'https://zalo.me/0386830040',
-    whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_URL || 'https://wa.me/84386830040',
-    messenger: process.env.NEXT_PUBLIC_MESSENGER_URL || 'https://www.facebook.com/profile.php?id=61592140385376',
-    x: process.env.NEXT_PUBLIC_X_URL || 'https://x.com/_te2sr',
-  };
 
   const channels = [
     { key: 'zalo', href: socialLinks.zalo, label: 'Chat qua Zalo (Việt Nam)', badge: 'Z', badgeClass: 'bg-blue-500', wrap: 'bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-700' },
