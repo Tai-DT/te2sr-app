@@ -81,6 +81,590 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     admin_table_action: 'Thao Tác',
     
     footer_copy: '© 2026 TE2SR Platform. Bảo lưu mọi quyền.',
+    
+    home_pay_split_badge: "Thanh toán 50% cho 14 ngày kiểm thử + 50% khi app live",
+    
+    home_refund_commitment: "Hoàn tiền 100% nếu trượt cam kết",
+    
+    home_no_scam_apps: "KHÔNG nhận app lừa đảo / cờ bạc",
+    
+    home_trust_secure_dev: "Bảo mật 100% tài khoản Dev",
+    
+    home_trust_24h: "Xử lý trong 24h",
+    
+    home_trust_50_countries: "50+ Quốc gia",
+    
+    home_stat_apps_approved: "App Đã Duyệt Store",
+    
+    home_stat_reviews_gifted: "Đánh Giá 5★ Đã Tặng",
+    
+    home_stat_approval_rate: "Tỷ Lệ Đạt Duyệt Store",
+    
+    home_stat_languages: "Ngôn Ngữ Toàn Cầu",
+    
+    home_services_chip: "Dịch Vụ Trọng Tâm",
+    
+    home_services_subtitle: "Quy trình khép kín giúp ứng dụng đạt tỷ lệ duyệt 90%, chia 2 đợt thanh toán (50% - 50%) & kèm 10 đánh giá 5★ tặng riêng.",
+    
+    home_svc_testing_feat1: "TestFlight iOS & Android Internal",
+    
+    home_svc_testing_feat2: "12 Testers thực tế đếm 14 ngày",
+    
+    home_svc_testing_feat3: "Báo cáo Crash, Bug & UI/UX",
+    
+    home_svc_testing_feat4: "Fix lỗi giao diện nếu cần",
+    
+    home_svc_testing_cta: "Khám Phá Kiểm Thử",
+    
+    home_svc_publishing_feat1: "Apple & Google Developer Console",
+    
+    home_svc_publishing_feat2: "Tích hợp cổng thanh toán & API",
+    
+    home_svc_publishing_feat3: "Thanh toán 2 đợt (50% - 50%)",
+    
+    home_svc_publishing_feat4: "Tối ưu ASO chuẩn duyệt Store",
+    
+    home_svc_publishing_cta: "Đăng Tải App Ngay",
+    
+    home_svc_promo_title: "⭐️ Gói Đánh Giá 5 Sao (Tặng Kèm 10 Reviews)",
+    
+    home_svc_promo_desc: "Tất cả các gói dịch vụ đều được tặng kèm 10 đánh giá 5 sao thực tế giúp app xây dựng uy tín ban đầu trên Store.",
+    
+    home_svc_promo_feat1: "Tặng 10 Đánh Giá 5★ Người Dùng Thật",
+    
+    home_svc_promo_feat2: "Tối Ưu Keyword ASO Cơ Bản",
+    
+    home_svc_promo_feat3: "Đánh giá theo ngôn ngữ chỉ định",
+    
+    home_svc_promo_feat4: "Gói số lượng lớn sẽ ra mắt sau ⏳",
+    
+    home_svc_promo_cta: "Đăng Ký Nhận 10★",
+    
+    home_pricing_chip: "Bảng Giá & Quy Trình Thanh Toán 2 Đợt",
+    
+    home_price_gplay_label: "Đăng Tải Google Play",
+    
+    home_price_gplay_unit: "/ Android App",
+    
+    home_price_gplay_split: "Thanh toán 2 đợt ($25 + $25)",
+    
+    home_price_gplay_feat1: "Đưa app lên Google Play Console",
+    
+    home_price_gplay_feat2: "Cài 12 testers thực tế đếm 14 ngày",
+    
+    home_price_gift_10_reviews: "🎁 TẶNG 10 Đánh giá 5★ chất lượng",
+    
+    home_price_gplay_feat4: "Tối ưu Metadata ASO cơ bản",
+    
+    home_price_secure_account: "🔒 Bảo mật 100% an toàn tài khoản",
+    
+    home_price_refund_fail: "Hoàn tiền 100% nếu không đạt",
+    
+    home_price_gplay_btn: "Chọn Gói Google Play ($50)",
+    
+    home_price_popular: "⭐ PHỔ BIẾN NHẤT",
+    
+    home_price_both_label: "Gói Cả 2 Store",
+    
+    home_price_both_unit: "/ cả 2 stores",
+    
+    home_price_both_split: "Thanh toán 2 đợt ($50 + $50)",
+    
+    home_price_both_feat1: "Đăng tải CẢ 2 Store: Google Play & iOS App Store",
+    
+    home_price_both_feat2: "12 Testers Google Play (14 ngày) + TestFlight iOS",
+    
+    home_price_both_feat3: "🐞 BÁO LỖI & phân tích Crash log chi tiết",
+    
+    home_price_both_feat4: "💳 TÍCH HỢP CỔNG thanh toán & API",
+    
+    home_price_secure_dev: "🔒 Bảo mật 100% an toàn tài khoản Dev",
+    
+    home_price_both_btn: "Đăng Ký Cả 2 Store ($100)",
+    
+    home_price_ent_label: "Gói Doanh Nghiệp",
+    
+    home_price_ent_contact: "LIÊN HỆ",
+    
+    home_price_ent_unit: "/ gói tùy chỉnh",
+    
+    home_price_ent_consult: "Tư vấn 1-1 riêng với Kỹ sư Trưởng",
+    
+    home_price_ent_feat1: "Đăng tải Đa Ứng Dụng / Số Lượng Lớn",
+    
+    home_price_ent_feat2: "🛠️ TRỰC TIẾP FIX LỖI (Sửa code & giao diện)",
+    
+    home_price_ent_feat3: "🎨 KIỂM TRA UI/UX chuyên sâu tiêu chuẩn Apple/Google",
+    
+    home_price_ent_feat4: "🧪 FULL TEST với 20+ thiết bị thực tế",
+    
+    home_price_ent_feat5: "🐞 BÁO LỖI chi tiết & phân tích hiệu năng",
+    
+    home_price_ent_feat6: "🎁 TẶNG 10 Đánh giá 5★ theo ngôn ngữ chỉ định",
+    
+    home_price_ent_feat8: "Hợp đồng bảo mật NDA & Cam kết SLA",
+    
+    home_price_ent_btn: "Liên Hệ Tư Vấn Doanh Nghiệp",
+    
+    order_error_submit_failed: "Gửi yêu cầu thất bại. Vui lòng thử lại.",
+    
+    order_success_title: "Đã Gửi Yêu Cầu Thành Công!",
+    
+    order_your_order_id: "Mã đơn hàng của bạn:",
+    
+    order_payment_2step_title: "💳 Quy Trình Thanh Toán 2 Đợt (50% - 50%)",
+    
+    order_phase1_badge: "Đợt 1 (50%)",
+    
+    order_phase1_desc: "Thanh toán 50% sau khi cài 12 testers & nhận Link Kiểm Thử để bắt đầu đếm 14 ngày.",
+    
+    order_phase2_badge: "Đợt 2 (50%)",
+    
+    order_phase2_desc: "Thanh toán 50% còn lại sau khi app lên thành công (Duyệt live trên Store).",
+    
+    order_tester_guide_title: "🤖 Hướng Dẫn Kích Hoạt 12 Testers (14 Ngày)",
+    
+    order_tester_step1: "1. Thêm email Google Group vào mục Closed Testing (Kiểm thử kín) trong Google Play Console:",
+    
+    order_copied: "Đã sao chép",
+    
+    order_copy_email: "Sao chép Email",
+    
+    order_tester_step2: "2. Vui lòng gửi Link Kiểm Thử (Opt-in URL) trong khung chat với quản trị viên để đội ngũ testers TE2SR tiến hành cài đặt ngay!",
+    
+    order_moneyback_badge: "Cam kết HOÀN TIỀN 100% nếu không đáp ứng đúng yêu cầu dịch vụ.",
+    
+    order_payment_info_title: "💳 Thông Tin Thanh Toán Đợt 1 (50%)",
+    
+    order_manual_check_15m: "Đối soát thủ công 15 phút",
+    
+    order_timo_bank: "🇻🇳 Ngân Hàng Timo (Việt Nam)",
+    
+    order_account_number_label: "STK:",
+    
+    order_account_holder_label: "Chủ TK:",
+    
+    order_transfer_note_label: "Nội dung:",
+    
+    order_binance_pay: "🌐 Binance Pay / USDT (Quốc Tế)",
+    
+    order_binance_id_label: "Binance ID:",
+    
+    order_network_label: "Mạng:",
+    
+    order_memo_label: "Memo:",
+    
+    order_reconcile_prefix: "Sau khi thanh toán đợt 1, kỹ thuật viên sẽ đối soát đơn",
+    
+    order_reconcile_suffix: "và kích hoạt đếm 14 ngày ngay!",
+    
+    order_finish_view_progress: "Hoàn Tất & Xem Tiến Độ",
+    
+    order_register_service: "Đăng Ký Dịch Vụ TE2SR",
+    
+    order_form_subtitle: "Thanh toán 50% sau khi cài 12 testers đếm 14 ngày & 50% còn lại khi app live trên Store.",
+    
+    order_select_service_label: "Chọn Dịch Vụ Muốn Đăng Ký",
+    
+    order_service_testing: "Kiểm Thử QA",
+    
+    order_service_publishing: "Đăng Tải Store",
+    
+    order_service_promotion: "Tăng 5★ Boost",
+    
+    order_app_name_label: "Tên App / Dự Án",
+    
+    order_app_name_placeholder: "Ví dụ: CryptoPulse App",
+    
+    order_email_label: "Email Liên Hệ",
+    
+    order_testing_url_label: "Link Kiểm Thử (Google Play / TestFlight Opt-in URL)",
+    
+    order_testing_url_hint: "📌 Dán link tham gia kiểm thử kín để kỹ sư TE2SR vào test & tính 14 ngày ngay.",
+    
+    order_select_package_label: "Chọn Gói Đăng Tải",
+    
+    order_package_googleplay: "Gói Google Play ($50)",
+    
+    order_package_both: "Gói Cả 2 Store - Google Play & iOS ($100)",
+    
+    order_package_enterprise: "Gói Doanh Nghiệp / Đa Ứng Dụng (LIÊN HỆ)",
+    
+    order_target_countries_label: "Quốc Gia Mục Tiêu",
+    
+    order_target_countries_placeholder: "Ví dụ: Việt Nam, Mỹ, Nhật Bản",
+    
+    order_flexible_payment_title: "Thanh Toán Linh Hoạt 2 Đợt (50% - 50%):",
+    
+    order_flex_phase1: "Đợt 1 (50%): Thanh toán sau khi kết nối 12 testers & gửi link kiểm thử đếm 14 ngày.",
+    
+    order_flex_phase2: "Đợt 2 (50%): Thanh toán sau khi app live thành công trên Store.",
+    
+    order_closed_testing_group_title: "Google Play Closed Testing Group (12 Testers / 14 Ngày):",
+    
+    order_closed_testing_group_desc: "Thêm Google Group te2sr@googlegroups.com vào Google Play Console và gửi Link Kiểm Thử để kỹ sư TE2SR tham gia test.",
+    
+    order_details_label: "Ghi Chú Hoặc Yêu Cầu Đặc Biệt",
+    
+    order_details_placeholder: "Mô tả mục tiêu...",
+    
+    order_submitting: "Đang Gửi Dữ Liệu...",
+    
+    order_submit: "Gửi Yêu Cầu Ngay",
+    
+    auth_google_login_failed: "Đăng nhập Google thất bại.",
+    
+    auth_error_name_required: "Vui lòng nhập họ tên.",
+    
+    auth_error_password_min: "Mật khẩu tối thiểu 6 ký tự.",
+    
+    auth_error_generic: "Có lỗi xảy ra.",
+    
+    auth_title_register: "Đăng Ký Tài Khoản",
+    
+    auth_title_login: "Đăng Nhập",
+    
+    auth_subtitle: "Theo dõi tiến độ duyệt app, chat trực tiếp & xem báo cáo kiểm thử.",
+    
+    auth_google_config_note: "(Cấu hình NEXT_PUBLIC_GOOGLE_CLIENT_ID để bật đăng nhập Google)",
+    
+    auth_divider_email: "Hoặc dùng email",
+    
+    auth_label_name: "Họ và Tên",
+    
+    auth_placeholder_name: "Nguyễn Văn A",
+    
+    auth_label_email: "Email",
+    
+    auth_label_password: "Mật khẩu",
+    
+    auth_placeholder_password: "Tối thiểu 6 ký tự",
+    
+    auth_submit_register: "Tạo Tài Khoản",
+    
+    auth_submit_login: "Đăng Nhập",
+    
+    auth_switch_to_login: "Đã có tài khoản? Đăng nhập ngay",
+    
+    auth_switch_to_register: "Chưa có tài khoản? Đăng ký tại đây",
+    
+    pwd_title_change: "Đổi Mật Khẩu",
+    
+    pwd_title_set: "Đặt Mật Khẩu Đăng Nhập",
+    
+    pwd_desc_change: "Cập nhật mật khẩu tài khoản của bạn.",
+    
+    pwd_desc_set: "Tài khoản Google — đặt thêm mật khẩu để đăng nhập bằng email.",
+    
+    pwd_ph_current: "Mật khẩu hiện tại",
+    
+    pwd_ph_new: "Mật khẩu mới (≥ 6 ký tự)",
+    
+    pwd_ph_confirm: "Xác nhận mật khẩu mới",
+    
+    pwd_err_min: "Mật khẩu mới tối thiểu 6 ký tự.",
+    
+    pwd_err_mismatch: "Xác nhận mật khẩu không khớp.",
+    
+    pwd_success_change: "Đã đổi mật khẩu thành công.",
+    
+    pwd_success_set: "Đã đặt mật khẩu — giờ bạn có thể đăng nhập bằng email.",
+    
+    pwd_err_fail: "Đổi mật khẩu thất bại.",
+    
+    pwd_btn_change: "Đổi Mật Khẩu",
+    
+    pwd_btn_set: "Đặt Mật Khẩu",
+    
+    nb_admin_link: "Quản Lý Admin",
+    
+    nb_admin_panel_title: "Mở bảng điều khiển Admin",
+    
+    nb_admin_prefix: "Admin: ",
+    
+    nb_order_progress_title: "Theo dõi tiến độ đơn hàng",
+    
+    nb_logout_title: "Đăng xuất",
+    
+    nb_login: "Đăng Nhập",
+    
+    chat_header: "Hỗ Trợ Nhanh 24/7",
+    
+    chat_intro: "Chọn kênh liên hệ hỗ trợ trực tiếp từ chuyên viên TE2SR:",
+    
+    chat_channel_zalo: "Chat qua Zalo (Việt Nam)",
+    
+    chat_channel_whatsapp: "WhatsApp (Toàn cầu)",
+    
+    chat_channel_x: "X (Twitter) @_te2sr",
+    
+    chat_channel_messenger: "FB Messenger",
+    
+    chat_button_title: "Trò chuyện hỗ trợ",
+    
+    adm_active: "đang hoạt động",
+    
+    adm_analytics_by_service: "Phân Tích Theo Dịch Vụ",
+    
+    adm_auth_button: "Đăng Nhập / Đăng Ký",
+    
+    adm_auth_desc: "Đăng nhập để truy cập bảng điều khiển, theo dõi tiến độ đơn hàng & trao đổi trực tiếp với đội ngũ kỹ sư TE2SR.",
+    
+    adm_auth_title: "Khu Vực Yêu Cầu Xác Thực",
+    
+    adm_chat_no_order: "Chọn một đơn hàng ở tab \"Đơn Hàng\" để bắt đầu trao đổi.",
+    
+    adm_chat_title_admin: "Hỗ Trợ Khách Hàng",
+    
+    adm_chat_title_client: "Trao Đổi Với Kỹ Sư TE2SR",
+    
+    adm_collected: "đã thu",
+    
+    adm_contact_price: "Liên hệ",
+    
+    adm_copied: "Đã sao chép",
+    
+    adm_copy: "Sao chép",
+    
+    adm_copy_email: "Sao chép Email",
+    
+    adm_discuss_order: "Trao Đổi Về Đơn Hàng Này",
+    
+    adm_filter_all: "Tất Cả",
+    
+    adm_greeting: "Xin chào",
+    
+    adm_header_admin: "Admin Control Center",
+    
+    adm_header_client: "📦 Cổng Theo Dõi Dịch Vụ",
+    
+    adm_input_admin: "Trả lời khách hàng...",
+    
+    adm_input_client: "Nhắn tin với kỹ sư hỗ trợ...",
+    
+    adm_loading_session: "Đang tải phiên đăng nhập...",
+    
+    adm_needs_action: "Cần xử lý",
+    
+    adm_no_data: "Chưa có dữ liệu.",
+    
+    adm_no_messages: "Chưa có tin nhắn. Hãy gửi lời chào 👋",
+    
+    adm_no_orders: "Chưa có đơn hàng nào.",
+    
+    adm_no_orders_found: "Không tìm thấy đơn hàng nào",
+    
+    adm_notes: "Ghi chú:",
+    
+    adm_order_detail: "Chi Tiết Đơn",
+    
+    adm_payment_deposit: "Đợt 1 (50%)",
+    
+    adm_payment_final: "Đợt 2 (50%)",
+    
+    adm_payment_update_failed: "Cập nhật thanh toán thất bại.",
+    
+    adm_progress_title: "Tiến Độ Xử Lý",
+    
+    adm_quick_contact: "Liên hệ nhanh:",
+    
+    adm_recent_orders: "Đơn Hàng Gần Đây",
+    
+    adm_refresh: "Làm Mới",
+    
+    adm_role_admin: "Quản Trị Viên",
+    
+    adm_role_client: "Khách Hàng",
+    
+    adm_row_client_email: "Email Client",
+    
+    adm_row_countries: "Quốc Gia",
+    
+    adm_row_created: "Ngày Tạo",
+    
+    adm_row_order_id: "Mã Đơn",
+    
+    adm_row_platform: "Nền Tảng",
+    
+    adm_row_price: "Giá Gói",
+    
+    adm_row_service: "Dịch Vụ",
+    
+    adm_search_placeholder: "Tìm theo tên app hoặc mã đơn...",
+    
+    adm_select_order_detail: "Chọn một đơn hàng để xem chi tiết",
+    
+    adm_send_failed: "Gửi tin nhắn thất bại.",
+    
+    adm_stat_completed: "Hoàn Thành",
+    
+    adm_stat_in_progress: "Đang Xử Lý",
+    
+    adm_stat_pending: "Chờ Xác Nhận",
+    
+    adm_stat_revenue: "Doanh Thu (USD)",
+    
+    adm_stat_total_orders: "Tổng Đơn Hàng",
+    
+    adm_status_completed: "Hoàn Thành",
+    
+    adm_status_in_progress: "Đang Xử Lý",
+    
+    adm_status_pending: "Chờ Xử Lý",
+    
+    adm_status_rejected: "Từ Chối",
+    
+    adm_step_done: "Hoàn Tất",
+    
+    adm_step_processing: "Xử Lý",
+    
+    adm_step_received: "Nhận Đơn",
+    
+    adm_subtitle_guest: "Theo dõi tiến độ app & trao đổi trực tiếp với kỹ sư",
+    
+    adm_svc_design: "Thiết Kế AI",
+    
+    adm_svc_promotion: "Tăng 5★",
+    
+    adm_svc_publishing: "App Store",
+    
+    adm_svc_testing: "Kiểm Thử QA",
+    
+    adm_tab_analytics: "Thống Kê",
+    
+    adm_tab_chat: "Hỗ Trợ Chat",
+    
+    adm_tab_orders: "Đơn Hàng",
+    
+    adm_tab_overview: "Tổng Quan",
+    
+    adm_target_market: "Thị Trường Mục Tiêu",
+    
+    adm_tester_group_desc: "Thêm email này vào Closed Testing trên Google Play Console:",
+    
+    adm_tester_group_label: "Nhóm Tester:",
+    
+    adm_tester_group_title: "🤖 Nhóm Tester Google Play (12 Tester / 14 Ngày)",
+    
+    adm_testing_link: "Link kiểm thử:",
+    
+    adm_unit_orders: "đơn",
+    
+    adm_update_failed: "Cập nhật thất bại.",
+    
+    adm_view_all: "Xem tất cả",
+    
+    azr_level_critical: "Nghiêm trọng",
+    
+    azr_level_warning: "Cảnh báo",
+    
+    azr_level_recommendation: "Gợi ý",
+    
+    azr_err_no_image: "Vui lòng chọn một ảnh thiết kế trước.",
+    
+    azr_err_analyze_failed: "Phân tích thất bại. Vui lòng thử lại.",
+    
+    azr_badge: "Trình phân tích thiết kế UI/UX bằng AI",
+    
+    azr_upload_change: "Nhấp để chọn ảnh khác",
+    
+    azr_login_note: "Đăng nhập để lưu lại lịch sử báo cáo phân tích của bạn.",
+    
+    azr_analyzing: "Đang phân tích thiết kế...",
+    
+    azr_history_title: "Lịch sử phân tích",
+    
+    azr_suggestions_suffix: "gợi ý",
+    
+    azr_sub_layout: "Bố cục & Khoảng cách",
+    
+    azr_sub_typography: "Typography",
+    
+    azr_sub_contrast: "Màu sắc & Tương phản",
+    
+    azr_sub_accessibility: "Khả năng tiếp cận (A11y)",
+    
+    azr_reset_btn: "Phân tích ảnh khác",
+    
+    svct_badge: "Dịch Vụ Kiểm Thử App Chuyên Nghiệp",
+    
+    svct_h1: "Kiểm thử đa thiết bị iOS TestFlight & Android QA",
+    
+    svct_intro: "Phát hiện toàn bộ lỗi crash, tối ưu tốc độ phản hồi và đảm bảo ứng dụng tương thích hoàn hảo trên 20+ mẫu iPhone, iPad, Samsung, Google Pixel trước khi trình làng thế giới.",
+    
+    svct_cta: "Đăng Ký Kiểm Thử Ngay",
+    
+    svct_feature1_title: "Phân Phối TestFlight & Beta",
+    
+    svct_feature1_desc: "Quản lý danh sách 100+ tester thử nghiệm nội bộ, thu thập phản hồi và log lỗi crash realtime tự động.",
+    
+    svct_feature2_title: "Kiểm Thử Hiệu Năng & RAM",
+    
+    svct_feature2_desc: "Đo lường mức tiêu thụ pin, bộ nhớ RAM, dung lượng CPU và tốc độ render frame (60fps/120fps smoothness).",
+    
+    svct_feature3_title: "Báo Cáo Bug Chi Tiết",
+    
+    svct_feature3_desc: "Cung cấp file log, video các bước tái diễn lỗi và giải pháp fix từ các chuyên gia QA cấp cao.",
+    
+    svct_device_matrix_heading: "Danh Sách Thiết Bị Kiểm Thử Thực Tế",
+    
+    svcp_badge: "Dịch Vụ Đưa App Lên App Store & Google Play",
+    
+    svcp_h1: "Đưa Dự Án Lên Chợ Ứng Dụng Toàn Cầu",
+    
+    svcp_intro: "Hỗ trợ trọn gói từ chuẩn bị chứng chỉ Apple Certificate / Android Keystore, tối ưu từ khóa ASO metadata, đến khi ứng dụng chính thức xuất hiện trên App Store & Google Play.",
+    
+    svcp_cta: "Đăng Ký Đăng Tải Ngay",
+    
+    svcp_step1_title: "Chuẩn Bị Account & Cert",
+    
+    svcp_step1_desc: "Cấu hình Apple Developer ID, Google Play Console, Provisioning Profiles & Signings.",
+    
+    svcp_step2_title: "Tối Ưu Metadata ASO",
+    
+    svcp_step2_desc: "Viết Mô tả, Từ khóa và thiết kế Screenshots chuẩn kích thước 6.7\" & iPad Pro.",
+    
+    svcp_step3_title: "Nộp App & Review Cleared",
+    
+    svcp_step3_desc: "Gửi bản build và xử lý phản hồi trực tiếp với đội ngũ App Review của Apple/Google.",
+    
+    svcp_step4_title: "Live & Bảo Hành 100%",
+    
+    svcp_step4_desc: "Ứng dụng chính thức xuất hiện công khai trên 150+ quốc gia với lượt tải mở màn.",
+    
+    svcp_price_googleplay_note: "Thanh toán 2 đợt ($25 + $25)",
+    
+    svcp_price_bothstores_title: "Cả 2 Store",
+    
+    svcp_price_enterprise_title: "Doanh Nghiệp",
+    
+    svcp_price_enterprise_value: "Liên Hệ",
+    
+    svcp_price_enterprise_note: "Đa ứng dụng / số lượng lớn",
+    
+    svcr_badge: "Tăng Lượt Tải & Đánh Giá 5 Sao Uy Tín",
+    
+    svcr_h1: "Đưa App Vào Top Category & Đẩy Keyword ASO",
+    
+    svcr_intro: "Chiến dịch tăng 1,000 - 100,000 lượt tải từ người dùng thực tế tại Mỹ, Việt Nam, Nhật Bản, Hàn Quốc, Châu Âu... cùng 1,000+ đánh giá 5 sao tự nhiên giúp nâng uy tín app.",
+    
+    svcr_cta: "Bắt Đầu Chiến Dịch Tăng 5★",
+    
+    svcr_feature1_title: "Tăng Lượt Tải Tìm Kiếm (Keyword Installs)",
+    
+    svcr_feature1_desc: "Người dùng tìm từ khóa mục tiêu (ví dụ: \"crypto wallet\") trên App Store/Play Store và tải app của bạn để đẩy vị trí tìm kiếm lên Top 1-3.",
+    
+    svcr_feature2_title: "Xây Dựng 1,000+ Ratings 5 Sao",
+    
+    svcr_feature2_desc: "Nhận hàng trăm bình luận tích cực, dài từ 2-3 câu bằng ngôn ngữ địa phương (Việt, Anh, Nhật, Hàn, Pháp...) giúp giữ vị trí 4.8 - 5.0 điểm rating.",
+    
+    svcr_feature3_title: "Quảng Bá Theo Quốc Gia (Geo Targeting)",
+    
+    svcr_feature3_desc: "Lựa chọn tệp người dùng thực tại bất kỳ quốc gia nào trên thế giới để tăng tính tương thích cho chiến dịch quảng bá toàn cầu.",
+    
+    svcr_bonus_line1: "🎁 Mọi gói dịch vụ TE2SR đều được tặng kèm 10 đánh giá 5★ người dùng thật.",
+    
+    svcr_bonus_line2: "Gói tăng trưởng số lượng lớn sẽ ra mắt sau — liên hệ để được tư vấn sớm.",
   },
   en: {
     brand_name: 'TE2SR',
@@ -141,6 +725,590 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     admin_table_action: 'Actions',
     
     footer_copy: '© 2026 TE2SR Platform. All rights reserved.',
+    
+    home_pay_split_badge: "Pay 50% for the 14-day testing + 50% when the app goes live",
+    
+    home_refund_commitment: "100% refund if we miss our commitment",
+    
+    home_no_scam_apps: "We DON'T accept scam / gambling apps",
+    
+    home_trust_secure_dev: "100% secure Dev account",
+    
+    home_trust_24h: "Processed within 24h",
+    
+    home_trust_50_countries: "50+ countries",
+    
+    home_stat_apps_approved: "Apps Approved on Store",
+    
+    home_stat_reviews_gifted: "5★ Reviews Gifted",
+    
+    home_stat_approval_rate: "Store Approval Rate",
+    
+    home_stat_languages: "Global Languages",
+    
+    home_services_chip: "Core Services",
+    
+    home_services_subtitle: "An end-to-end process that gets your app a 90% approval rate, split into 2 payments (50% - 50%) with 10 free 5★ reviews included.",
+    
+    home_svc_testing_feat1: "TestFlight iOS & Android Internal",
+    
+    home_svc_testing_feat2: "12 real testers over 14 days",
+    
+    home_svc_testing_feat3: "Crash, Bug & UI/UX reports",
+    
+    home_svc_testing_feat4: "Fix UI issues if needed",
+    
+    home_svc_testing_cta: "Explore Testing",
+    
+    home_svc_publishing_feat1: "Apple & Google Developer Console",
+    
+    home_svc_publishing_feat2: "Payment gateway & API integration",
+    
+    home_svc_publishing_feat3: "Payment in 2 installments (50% - 50%)",
+    
+    home_svc_publishing_feat4: "ASO optimization to meet Store approval",
+    
+    home_svc_publishing_cta: "Publish App Now",
+    
+    home_svc_promo_title: "⭐️ 5-Star Review Package (10 Reviews Included)",
+    
+    home_svc_promo_desc: "Every service package includes 10 genuine 5-star reviews to help your app build initial credibility on the Store.",
+    
+    home_svc_promo_feat1: "10 free 5★ reviews from real users",
+    
+    home_svc_promo_feat2: "Basic ASO keyword optimization",
+    
+    home_svc_promo_feat3: "Reviews in your chosen language",
+    
+    home_svc_promo_feat4: "Bulk packages coming soon ⏳",
+    
+    home_svc_promo_cta: "Sign Up for 10★",
+    
+    home_pricing_chip: "Pricing & 2-Installment Payment Process",
+    
+    home_price_gplay_label: "Google Play Publishing",
+    
+    home_price_gplay_unit: "/ Android app",
+    
+    home_price_gplay_split: "Payment in 2 installments ($25 + $25)",
+    
+    home_price_gplay_feat1: "Publish the app to Google Play Console",
+    
+    home_price_gplay_feat2: "Set up 12 real testers over 14 days",
+    
+    home_price_gift_10_reviews: "🎁 10 quality 5★ reviews included",
+    
+    home_price_gplay_feat4: "Basic ASO metadata optimization",
+    
+    home_price_secure_account: "🔒 100% secure account protection",
+    
+    home_price_refund_fail: "100% refund if it doesn't pass",
+    
+    home_price_gplay_btn: "Choose Google Play Package ($50)",
+    
+    home_price_popular: "⭐ MOST POPULAR",
+    
+    home_price_both_label: "Both Stores Package",
+    
+    home_price_both_unit: "/ both stores",
+    
+    home_price_both_split: "Payment in 2 installments ($50 + $50)",
+    
+    home_price_both_feat1: "Publish to BOTH stores: Google Play & iOS App Store",
+    
+    home_price_both_feat2: "12 Google Play testers (14 days) + TestFlight iOS",
+    
+    home_price_both_feat3: "🐞 Bug reports & detailed crash log analysis",
+    
+    home_price_both_feat4: "💳 Payment gateway & API integration",
+    
+    home_price_secure_dev: "🔒 100% secure Dev account protection",
+    
+    home_price_both_btn: "Sign Up for Both Stores ($100)",
+    
+    home_price_ent_label: "Enterprise Package",
+    
+    home_price_ent_contact: "CONTACT US",
+    
+    home_price_ent_unit: "/ custom plan",
+    
+    home_price_ent_consult: "1-on-1 consultation with the Lead Engineer",
+    
+    home_price_ent_feat1: "Multi-app / bulk publishing",
+    
+    home_price_ent_feat2: "🛠️ Hands-on bug fixing (code & UI)",
+    
+    home_price_ent_feat3: "🎨 In-depth UI/UX review to Apple/Google standards",
+    
+    home_price_ent_feat4: "🧪 Full testing on 20+ real devices",
+    
+    home_price_ent_feat5: "🐞 Detailed bug reports & performance analysis",
+    
+    home_price_ent_feat6: "🎁 10 free 5★ reviews in your chosen language",
+    
+    home_price_ent_feat8: "NDA confidentiality agreement & SLA commitment",
+    
+    home_price_ent_btn: "Contact Us for Enterprise",
+    
+    order_error_submit_failed: "Failed to submit request. Please try again.",
+    
+    order_success_title: "Request Submitted Successfully!",
+    
+    order_your_order_id: "Your order ID:",
+    
+    order_payment_2step_title: "💳 2-Installment Payment Process (50% - 50%)",
+    
+    order_phase1_badge: "Phase 1 (50%)",
+    
+    order_phase1_desc: "Pay 50% after 12 testers are installed & the Testing Link is received to start the 14-day countdown.",
+    
+    order_phase2_badge: "Phase 2 (50%)",
+    
+    order_phase2_desc: "Pay the remaining 50% after the app is successfully published (approved live on the Store).",
+    
+    order_tester_guide_title: "🤖 Guide to Activating 12 Testers (14 Days)",
+    
+    order_tester_step1: "1. Add the Google Group email to the Closed Testing section in Google Play Console:",
+    
+    order_copied: "Copied",
+    
+    order_copy_email: "Copy Email",
+    
+    order_tester_step2: "2. Please send the Testing Link (Opt-in URL) in the chat with the admin so the TE2SR tester team can install it right away!",
+    
+    order_moneyback_badge: "100% MONEY-BACK guarantee if the service requirements are not met.",
+    
+    order_payment_info_title: "💳 Phase 1 Payment Information (50%)",
+    
+    order_manual_check_15m: "Manual check within 15 min",
+    
+    order_timo_bank: "🇻🇳 Timo Bank (Vietnam)",
+    
+    order_account_number_label: "Account No.:",
+    
+    order_account_holder_label: "Account holder:",
+    
+    order_transfer_note_label: "Transfer note:",
+    
+    order_binance_pay: "🌐 Binance Pay / USDT (International)",
+    
+    order_binance_id_label: "Binance ID:",
+    
+    order_network_label: "Network:",
+    
+    order_memo_label: "Memo:",
+    
+    order_reconcile_prefix: "After the Phase 1 payment, our technician will reconcile order",
+    
+    order_reconcile_suffix: "and immediately activate the 14-day countdown!",
+    
+    order_finish_view_progress: "Finish & View Progress",
+    
+    order_register_service: "Register for TE2SR Service",
+    
+    order_form_subtitle: "Pay 50% after 12 testers start the 14-day count & the remaining 50% when the app is live on the Store.",
+    
+    order_select_service_label: "Select the Service to Register",
+    
+    order_service_testing: "QA Testing",
+    
+    order_service_publishing: "Store Publishing",
+    
+    order_service_promotion: "5★ Boost",
+    
+    order_app_name_label: "App / Project Name",
+    
+    order_app_name_placeholder: "e.g. CryptoPulse App",
+    
+    order_email_label: "Contact Email",
+    
+    order_testing_url_label: "Testing Link (Google Play / TestFlight Opt-in URL)",
+    
+    order_testing_url_hint: "📌 Paste the closed testing opt-in link so TE2SR engineers can start testing & count the 14 days right away.",
+    
+    order_select_package_label: "Select Publishing Package",
+    
+    order_package_googleplay: "Google Play Package ($50)",
+    
+    order_package_both: "Both Stores Package - Google Play & iOS ($100)",
+    
+    order_package_enterprise: "Enterprise / Multi-App Package (CONTACT US)",
+    
+    order_target_countries_label: "Target Countries",
+    
+    order_target_countries_placeholder: "e.g. Vietnam, USA, Japan",
+    
+    order_flexible_payment_title: "Flexible 2-Installment Payment (50% - 50%):",
+    
+    order_flex_phase1: "Phase 1 (50%): Pay after connecting 12 testers & sending the testing link to start the 14-day count.",
+    
+    order_flex_phase2: "Phase 2 (50%): Pay after the app is successfully live on the Store.",
+    
+    order_closed_testing_group_title: "Google Play Closed Testing Group (12 Testers / 14 Days):",
+    
+    order_closed_testing_group_desc: "Add the Google Group te2sr@googlegroups.com to Google Play Console and send the Testing Link so TE2SR engineers can join the test.",
+    
+    order_details_label: "Notes or Special Requests",
+    
+    order_details_placeholder: "Describe your goals...",
+    
+    order_submitting: "Submitting Data...",
+    
+    order_submit: "Submit Request Now",
+    
+    auth_google_login_failed: "Google sign-in failed.",
+    
+    auth_error_name_required: "Please enter your full name.",
+    
+    auth_error_password_min: "Password must be at least 6 characters.",
+    
+    auth_error_generic: "Something went wrong.",
+    
+    auth_title_register: "Create Account",
+    
+    auth_title_login: "Sign In",
+    
+    auth_subtitle: "Track app review progress, chat directly & view testing reports.",
+    
+    auth_google_config_note: "(Set NEXT_PUBLIC_GOOGLE_CLIENT_ID to enable Google sign-in)",
+    
+    auth_divider_email: "Or use email",
+    
+    auth_label_name: "Full Name",
+    
+    auth_placeholder_name: "John Smith",
+    
+    auth_label_email: "Email",
+    
+    auth_label_password: "Password",
+    
+    auth_placeholder_password: "At least 6 characters",
+    
+    auth_submit_register: "Create Account",
+    
+    auth_submit_login: "Sign In",
+    
+    auth_switch_to_login: "Already have an account? Sign in now",
+    
+    auth_switch_to_register: "Don't have an account? Register here",
+    
+    pwd_title_change: "Change Password",
+    
+    pwd_title_set: "Set Login Password",
+    
+    pwd_desc_change: "Update your account password.",
+    
+    pwd_desc_set: "Google account — set a password to also sign in with email.",
+    
+    pwd_ph_current: "Current password",
+    
+    pwd_ph_new: "New password (≥ 6 characters)",
+    
+    pwd_ph_confirm: "Confirm new password",
+    
+    pwd_err_min: "New password must be at least 6 characters.",
+    
+    pwd_err_mismatch: "Password confirmation does not match.",
+    
+    pwd_success_change: "Password changed successfully.",
+    
+    pwd_success_set: "Password set — you can now sign in with email.",
+    
+    pwd_err_fail: "Failed to change password.",
+    
+    pwd_btn_change: "Change Password",
+    
+    pwd_btn_set: "Set Password",
+    
+    nb_admin_link: "Admin Management",
+    
+    nb_admin_panel_title: "Open Admin dashboard",
+    
+    nb_admin_prefix: "Admin: ",
+    
+    nb_order_progress_title: "Track order progress",
+    
+    nb_logout_title: "Log out",
+    
+    nb_login: "Log In",
+    
+    chat_header: "Quick Support 24/7",
+    
+    chat_intro: "Choose a channel to contact a TE2SR specialist directly:",
+    
+    chat_channel_zalo: "Chat via Zalo (Vietnam)",
+    
+    chat_channel_whatsapp: "WhatsApp (Global)",
+    
+    chat_channel_x: "X (Twitter) @_te2sr",
+    
+    chat_channel_messenger: "FB Messenger",
+    
+    chat_button_title: "Support chat",
+    
+    adm_active: "active",
+    
+    adm_analytics_by_service: "Analytics by Service",
+    
+    adm_auth_button: "Sign In / Sign Up",
+    
+    adm_auth_desc: "Sign in to access the dashboard, track order progress & chat directly with the TE2SR engineering team.",
+    
+    adm_auth_title: "Authentication Required",
+    
+    adm_chat_no_order: "Select an order in the \"Orders\" tab to start chatting.",
+    
+    adm_chat_title_admin: "Customer Support",
+    
+    adm_chat_title_client: "Chat with TE2SR Engineers",
+    
+    adm_collected: "collected",
+    
+    adm_contact_price: "Contact us",
+    
+    adm_copied: "Copied",
+    
+    adm_copy: "Copy",
+    
+    adm_copy_email: "Copy Email",
+    
+    adm_discuss_order: "Discuss This Order",
+    
+    adm_filter_all: "All",
+    
+    adm_greeting: "Hello",
+    
+    adm_header_admin: "Admin Control Center",
+    
+    adm_header_client: "📦 Service Tracking Portal",
+    
+    adm_input_admin: "Reply to customer...",
+    
+    adm_input_client: "Message the support engineer...",
+    
+    adm_loading_session: "Loading your session...",
+    
+    adm_needs_action: "Needs action",
+    
+    adm_no_data: "No data yet.",
+    
+    adm_no_messages: "No messages yet. Say hello 👋",
+    
+    adm_no_orders: "No orders yet.",
+    
+    adm_no_orders_found: "No orders found",
+    
+    adm_notes: "Notes:",
+    
+    adm_order_detail: "Order Details",
+    
+    adm_payment_deposit: "Phase 1 (50%)",
+    
+    adm_payment_final: "Phase 2 (50%)",
+    
+    adm_payment_update_failed: "Payment update failed.",
+    
+    adm_progress_title: "Processing Progress",
+    
+    adm_quick_contact: "Quick contact:",
+    
+    adm_recent_orders: "Recent Orders",
+    
+    adm_refresh: "Refresh",
+    
+    adm_role_admin: "Admin",
+    
+    adm_role_client: "Client",
+    
+    adm_row_client_email: "Client Email",
+    
+    adm_row_countries: "Countries",
+    
+    adm_row_created: "Created Date",
+    
+    adm_row_order_id: "Order ID",
+    
+    adm_row_platform: "Platform",
+    
+    adm_row_price: "Package Price",
+    
+    adm_row_service: "Service",
+    
+    adm_search_placeholder: "Search by app name or order ID...",
+    
+    adm_select_order_detail: "Select an order to view details",
+    
+    adm_send_failed: "Failed to send message.",
+    
+    adm_stat_completed: "Completed",
+    
+    adm_stat_in_progress: "In Progress",
+    
+    adm_stat_pending: "Awaiting Confirmation",
+    
+    adm_stat_revenue: "Revenue (USD)",
+    
+    adm_stat_total_orders: "Total Orders",
+    
+    adm_status_completed: "Completed",
+    
+    adm_status_in_progress: "In Progress",
+    
+    adm_status_pending: "Pending",
+    
+    adm_status_rejected: "Rejected",
+    
+    adm_step_done: "Done",
+    
+    adm_step_processing: "Processing",
+    
+    adm_step_received: "Received",
+    
+    adm_subtitle_guest: "Track app progress & chat directly with engineers",
+    
+    adm_svc_design: "AI Design",
+    
+    adm_svc_promotion: "5★ Boost",
+    
+    adm_svc_publishing: "App Store",
+    
+    adm_svc_testing: "QA Testing",
+    
+    adm_tab_analytics: "Analytics",
+    
+    adm_tab_chat: "Support Chat",
+    
+    adm_tab_orders: "Orders",
+    
+    adm_tab_overview: "Overview",
+    
+    adm_target_market: "Target Markets",
+    
+    adm_tester_group_desc: "Add this email to Closed Testing in the Google Play Console:",
+    
+    adm_tester_group_label: "Tester Group:",
+    
+    adm_tester_group_title: "🤖 Google Play Tester Group (12 Testers / 14 Days)",
+    
+    adm_testing_link: "Testing link:",
+    
+    adm_unit_orders: "orders",
+    
+    adm_update_failed: "Update failed.",
+    
+    adm_view_all: "View all",
+    
+    azr_level_critical: "Critical",
+    
+    azr_level_warning: "Warning",
+    
+    azr_level_recommendation: "Recommendation",
+    
+    azr_err_no_image: "Please select a design image first.",
+    
+    azr_err_analyze_failed: "Analysis failed. Please try again.",
+    
+    azr_badge: "AI UI/UX Design Analyzer",
+    
+    azr_upload_change: "Click to choose another image",
+    
+    azr_login_note: "Log in to save your analysis report history.",
+    
+    azr_analyzing: "Analyzing design...",
+    
+    azr_history_title: "Analysis history",
+    
+    azr_suggestions_suffix: "suggestions",
+    
+    azr_sub_layout: "Layout & Spacing",
+    
+    azr_sub_typography: "Typography",
+    
+    azr_sub_contrast: "Color & Contrast",
+    
+    azr_sub_accessibility: "Accessibility (A11y)",
+    
+    azr_reset_btn: "Analyze another image",
+    
+    svct_badge: "Professional App Testing Service",
+    
+    svct_h1: "iOS TestFlight & Android QA Multi-Device Testing",
+    
+    svct_intro: "Detect every crash, optimize response speed and ensure perfect app compatibility across 20+ iPhone, iPad, Samsung and Google Pixel models before you launch to the world.",
+    
+    svct_cta: "Register for Testing Now",
+    
+    svct_feature1_title: "TestFlight & Beta Distribution",
+    
+    svct_feature1_desc: "Manage a list of 100+ internal testers, automatically collecting feedback and crash logs in real time.",
+    
+    svct_feature2_title: "Performance & RAM Testing",
+    
+    svct_feature2_desc: "Measure battery drain, RAM usage, CPU load and frame render speed (60fps/120fps smoothness).",
+    
+    svct_feature3_title: "Detailed Bug Reports",
+    
+    svct_feature3_desc: "We provide log files, videos of the reproduction steps and fixes from senior QA experts.",
+    
+    svct_device_matrix_heading: "Real Testing Device Lineup",
+    
+    svcp_badge: "App Publishing Service for App Store & Google Play",
+    
+    svcp_h1: "Launch Your Project on Global App Stores",
+    
+    svcp_intro: "Full-service support from preparing your Apple Certificate / Android Keystore and optimizing ASO metadata keywords, all the way to your app officially appearing on the App Store & Google Play.",
+    
+    svcp_cta: "Register to Publish Now",
+    
+    svcp_step1_title: "Prepare Account & Certificates",
+    
+    svcp_step1_desc: "Configure Apple Developer ID, Google Play Console, provisioning profiles & signings.",
+    
+    svcp_step2_title: "Optimize ASO Metadata",
+    
+    svcp_step2_desc: "Write descriptions and keywords, and design screenshots in the correct 6.7\" & iPad Pro sizes.",
+    
+    svcp_step3_title: "Submit App & Clear Review",
+    
+    svcp_step3_desc: "Submit the build and handle feedback directly with Apple/Google's App Review team.",
+    
+    svcp_step4_title: "Live & 100% Warranty",
+    
+    svcp_step4_desc: "Your app goes officially public across 150+ countries with its first downloads.",
+    
+    svcp_price_googleplay_note: "Paid in 2 installments ($25 + $25)",
+    
+    svcp_price_bothstores_title: "Both Stores",
+    
+    svcp_price_enterprise_title: "Enterprise",
+    
+    svcp_price_enterprise_value: "Contact Us",
+    
+    svcp_price_enterprise_note: "Multiple apps / high volume",
+    
+    svcr_badge: "Trusted Install Boost & 5-Star Reviews",
+    
+    svcr_h1: "Get Your App into the Top Category & Boost ASO Keywords",
+    
+    svcr_intro: "A campaign that drives 1,000 - 100,000 installs from real users in the US, Vietnam, Japan, Korea, Europe and more, plus 1,000+ natural 5-star reviews to boost your app's credibility.",
+    
+    svcr_cta: "Start Your 5★ Boost Campaign",
+    
+    svcr_feature1_title: "Boost Keyword Installs",
+    
+    svcr_feature1_desc: "Real users search your target keyword (e.g. \"crypto wallet\") on the App Store/Play Store and install your app to push its search ranking into the Top 1-3.",
+    
+    svcr_feature2_title: "Build 1,000+ 5-Star Ratings",
+    
+    svcr_feature2_desc: "Receive hundreds of positive 2-3 sentence reviews in local languages (Vietnamese, English, Japanese, Korean, French...) to keep your rating at 4.8 - 5.0.",
+    
+    svcr_feature3_title: "Country-Level Promotion (Geo Targeting)",
+    
+    svcr_feature3_desc: "Choose real user segments in any country worldwide to maximize compatibility for your global promotion campaign.",
+    
+    svcr_bonus_line1: "🎁 Every TE2SR service package includes 10 free 5★ reviews from real users.",
+    
+    svcr_bonus_line2: "Large-scale growth packages are coming soon — contact us for early consultation.",
   },
   ja: {
     brand_name: 'TE2SR',
@@ -193,6 +1361,298 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     admin_table_date: '登録日',
     admin_table_action: '操作',
     footer_copy: '© 2026 TE2SR Platform. All rights reserved.',
+    home_pay_split_badge: "14日間の検証で50%＋アプリ公開時に50%をお支払い",
+    home_refund_commitment: "コミットメント未達の場合は100%返金",
+    home_no_scam_apps: "詐欺・ギャンブルアプリは受け付けません",
+    home_trust_secure_dev: "開発者アカウントを100%保護",
+    home_trust_24h: "24時間以内に対応",
+    home_trust_50_countries: "50カ国以上",
+    home_stat_apps_approved: "ストア承認済みアプリ",
+    home_stat_reviews_gifted: "プレゼントした5★レビュー",
+    home_stat_approval_rate: "ストア承認率",
+    home_stat_languages: "対応グローバル言語",
+    home_services_chip: "主要サービス",
+    home_services_subtitle: "アプリの承認率90%を実現するワンストップの流れ。支払いは2回（50%・50%）に分割、5★レビュー10件を無料でプレゼント。",
+    home_svc_testing_feat1: "TestFlight iOS＆Android Internal",
+    home_svc_testing_feat2: "実際のテスター12名で14日間",
+    home_svc_testing_feat3: "クラッシュ・バグ・UI/UXレポート",
+    home_svc_testing_feat4: "必要に応じてUIの不具合を修正",
+    home_svc_testing_cta: "検証を見る",
+    home_svc_publishing_feat1: "Apple＆Google Developer Console",
+    home_svc_publishing_feat2: "決済ゲートウェイ＆API連携",
+    home_svc_publishing_feat3: "2回払い（50%・50%）",
+    home_svc_publishing_feat4: "ストア承認基準に沿ったASO最適化",
+    home_svc_publishing_cta: "今すぐアプリを公開",
+    home_svc_promo_title: "⭐️ 5つ星レビューパッケージ（10レビュー付き）",
+    home_svc_promo_desc: "すべてのサービスパッケージに、アプリがストアで初期の信頼を築くための本物の5つ星レビュー10件が付いています。",
+    home_svc_promo_feat1: "実ユーザーによる5★レビュー10件をプレゼント",
+    home_svc_promo_feat2: "基本的なASOキーワード最適化",
+    home_svc_promo_feat3: "指定言語でのレビュー",
+    home_svc_promo_feat4: "大量パッケージは近日公開 ⏳",
+    home_svc_promo_cta: "10★を申し込む",
+    home_pricing_chip: "料金＆2回払いの流れ",
+    home_price_gplay_label: "Google Playへの公開",
+    home_price_gplay_unit: "/ Androidアプリ",
+    home_price_gplay_split: "2回払い（$25＋$25）",
+    home_price_gplay_feat1: "アプリをGoogle Play Consoleに公開",
+    home_price_gplay_feat2: "実際のテスター12名を14日間設定",
+    home_price_gift_10_reviews: "🎁 高品質な5★レビュー10件をプレゼント",
+    home_price_gplay_feat4: "基本的なASOメタデータ最適化",
+    home_price_secure_account: "🔒 アカウントを100%安全に保護",
+    home_price_refund_fail: "承認されない場合は100%返金",
+    home_price_gplay_btn: "Google Playパッケージを選ぶ（$50）",
+    home_price_popular: "⭐ 一番人気",
+    home_price_both_label: "両ストアパッケージ",
+    home_price_both_unit: "/ 両ストア",
+    home_price_both_split: "2回払い（$50＋$50）",
+    home_price_both_feat1: "両ストアに公開：Google Play＆iOS App Store",
+    home_price_both_feat2: "Google Playテスター12名（14日間）＋TestFlight iOS",
+    home_price_both_feat3: "🐞 バグ報告＆詳細なクラッシュログ分析",
+    home_price_both_feat4: "💳 決済ゲートウェイ＆API連携",
+    home_price_secure_dev: "🔒 開発者アカウントを100%安全に保護",
+    home_price_both_btn: "両ストアに申し込む（$100）",
+    home_price_ent_label: "エンタープライズパッケージ",
+    home_price_ent_contact: "お問い合わせ",
+    home_price_ent_unit: "/ カスタムプラン",
+    home_price_ent_consult: "リードエンジニアとの1対1コンサルティング",
+    home_price_ent_feat1: "複数アプリ／大量公開",
+    home_price_ent_feat2: "🛠️ 直接バグ修正（コード＆UI）",
+    home_price_ent_feat3: "🎨 Apple/Google基準の詳細なUI/UXレビュー",
+    home_price_ent_feat4: "🧪 実機20台以上でのフルテスト",
+    home_price_ent_feat5: "🐞 詳細なバグ報告＆パフォーマンス分析",
+    home_price_ent_feat6: "🎁 指定言語での5★レビュー10件をプレゼント",
+    home_price_ent_feat8: "NDA機密保持契約＆SLAコミットメント",
+    home_price_ent_btn: "エンタープライズのお問い合わせ",
+    order_error_submit_failed: "リクエストの送信に失敗しました。もう一度お試しください。",
+    order_success_title: "リクエストが正常に送信されました！",
+    order_your_order_id: "注文ID：",
+    order_payment_2step_title: "💳 2回分割払いプロセス（50% - 50%）",
+    order_phase1_badge: "第1回 (50%)",
+    order_phase1_desc: "12名のテスターを追加し、テストリンクを受け取って14日間のカウントを開始した後、50%を支払います。",
+    order_phase2_badge: "第2回 (50%)",
+    order_phase2_desc: "アプリの公開が成功した後（ストアでライブ承認後）、残りの50%を支払います。",
+    order_tester_guide_title: "🤖 12名のテスター有効化ガイド（14日間）",
+    order_tester_step1: "1. Google Play Console の Closed Testing（クローズドテスト）に Google グループのメールアドレスを追加してください：",
+    order_copied: "コピーしました",
+    order_copy_email: "メールをコピー",
+    order_tester_step2: "2. TE2SR のテスターチームがすぐにインストールできるよう、管理者とのチャットでテストリンク（Opt-in URL）を送信してください！",
+    order_moneyback_badge: "サービス要件を満たさない場合は100%返金を保証します。",
+    order_payment_info_title: "💳 第1回支払い情報（50%）",
+    order_manual_check_15m: "手動確認（15分以内）",
+    order_timo_bank: "🇻🇳 Timo 銀行（ベトナム）",
+    order_account_number_label: "口座番号：",
+    order_account_holder_label: "口座名義：",
+    order_transfer_note_label: "振込メモ：",
+    order_binance_pay: "🌐 Binance Pay / USDT（国際）",
+    order_binance_id_label: "Binance ID：",
+    order_network_label: "ネットワーク：",
+    order_memo_label: "メモ：",
+    order_reconcile_prefix: "第1回のお支払い後、技術者が注文",
+    order_reconcile_suffix: "を照合し、すぐに14日間のカウントを開始します！",
+    order_finish_view_progress: "完了して進捗を確認",
+    order_register_service: "TE2SR サービスに登録",
+    order_form_subtitle: "12名のテスターを追加して14日間のカウントを開始した後に50%、アプリがストアで公開されたら残りの50%を支払います。",
+    order_select_service_label: "登録するサービスを選択",
+    order_service_testing: "QA テスト",
+    order_service_publishing: "ストア公開",
+    order_service_promotion: "5★ ブースト",
+    order_app_name_label: "アプリ／プロジェクト名",
+    order_app_name_placeholder: "例：CryptoPulse App",
+    order_email_label: "連絡先メールアドレス",
+    order_testing_url_label: "テストリンク（Google Play / TestFlight Opt-in URL）",
+    order_testing_url_hint: "📌 クローズドテストの参加リンクを貼り付けると、TE2SR のエンジニアがテストを開始し、14日間のカウントをすぐに始めます。",
+    order_select_package_label: "公開パッケージを選択",
+    order_package_googleplay: "Google Play パッケージ（$50）",
+    order_package_both: "両ストアパッケージ - Google Play & iOS（$100）",
+    order_package_enterprise: "エンタープライズ／マルチアプリパッケージ（お問い合わせ）",
+    order_target_countries_label: "対象国",
+    order_target_countries_placeholder: "例：ベトナム、アメリカ、日本",
+    order_flexible_payment_title: "柔軟な2回分割払い（50% - 50%）：",
+    order_flex_phase1: "第1回 (50%)：12名のテスターを接続し、テストリンクを送信して14日間のカウントを開始した後に支払います。",
+    order_flex_phase2: "第2回 (50%)：アプリがストアで公開に成功した後に支払います。",
+    order_closed_testing_group_title: "Google Play クローズドテストグループ（12名のテスター／14日間）：",
+    order_closed_testing_group_desc: "Google グループ te2sr@googlegroups.com を Google Play Console に追加し、TE2SR のエンジニアがテストに参加できるようテストリンクを送信してください。",
+    order_details_label: "備考または特別なご要望",
+    order_details_placeholder: "目標を記入してください...",
+    order_submitting: "データを送信中...",
+    order_submit: "今すぐリクエストを送信",
+    auth_google_login_failed: "Googleログインに失敗しました。",
+    auth_error_name_required: "お名前を入力してください。",
+    auth_error_password_min: "パスワードは6文字以上で入力してください。",
+    auth_error_generic: "エラーが発生しました。",
+    auth_title_register: "アカウント登録",
+    auth_title_login: "ログイン",
+    auth_subtitle: "アプリ審査の進捗を確認し、直接チャットして、テストレポートを閲覧できます。",
+    auth_google_config_note: "(Googleログインを有効にするには NEXT_PUBLIC_GOOGLE_CLIENT_ID を設定してください)",
+    auth_divider_email: "またはメールを使用",
+    auth_label_name: "氏名",
+    auth_placeholder_name: "山田 太郎",
+    auth_label_email: "メールアドレス",
+    auth_label_password: "パスワード",
+    auth_placeholder_password: "6文字以上",
+    auth_submit_register: "アカウントを作成",
+    auth_submit_login: "ログイン",
+    auth_switch_to_login: "すでにアカウントをお持ちですか？今すぐログイン",
+    auth_switch_to_register: "アカウントをお持ちでない方はこちらで登録",
+    pwd_title_change: "パスワード変更",
+    pwd_title_set: "ログインパスワードを設定",
+    pwd_desc_change: "アカウントのパスワードを更新します。",
+    pwd_desc_set: "Google アカウント — メールでもログインできるようパスワードを設定します。",
+    pwd_ph_current: "現在のパスワード",
+    pwd_ph_new: "新しいパスワード（6文字以上）",
+    pwd_ph_confirm: "新しいパスワードを確認",
+    pwd_err_min: "新しいパスワードは6文字以上にしてください。",
+    pwd_err_mismatch: "パスワードの確認が一致しません。",
+    pwd_success_change: "パスワードを変更しました。",
+    pwd_success_set: "パスワードを設定しました — これでメールでログインできます。",
+    pwd_err_fail: "パスワードの変更に失敗しました。",
+    pwd_btn_change: "パスワードを変更",
+    pwd_btn_set: "パスワードを設定",
+    nb_admin_link: "管理者管理",
+    nb_admin_panel_title: "管理者ダッシュボードを開く",
+    nb_admin_prefix: "管理者: ",
+    nb_order_progress_title: "注文の進捗を確認",
+    nb_logout_title: "ログアウト",
+    nb_login: "ログイン",
+    chat_header: "24時間365日クイックサポート",
+    chat_intro: "TE2SRの専門スタッフに直接連絡するチャネルを選択してください:",
+    chat_channel_zalo: "Zaloでチャット (ベトナム)",
+    chat_channel_whatsapp: "WhatsApp (グローバル)",
+    chat_channel_x: "X (Twitter) @_te2sr",
+    chat_channel_messenger: "FB Messenger",
+    chat_button_title: "サポートチャット",
+    adm_active: "アクティブ",
+    adm_analytics_by_service: "サービス別分析",
+    adm_auth_button: "ログイン / 登録",
+    adm_auth_desc: "ログインしてダッシュボードにアクセスし、注文の進捗を追跡し、TE2SRのエンジニアチームと直接やり取りしましょう。",
+    adm_auth_title: "認証が必要です",
+    adm_chat_no_order: "「注文」タブで注文を選択してチャットを開始してください。",
+    adm_chat_title_admin: "カスタマーサポート",
+    adm_chat_title_client: "TE2SRエンジニアとチャット",
+    adm_collected: "回収済み",
+    adm_contact_price: "お問い合わせ",
+    adm_copied: "コピー済み",
+    adm_copy: "コピー",
+    adm_copy_email: "メールをコピー",
+    adm_discuss_order: "この注文について相談",
+    adm_filter_all: "すべて",
+    adm_greeting: "こんにちは",
+    adm_header_admin: "管理コントロールセンター",
+    adm_header_client: "📦 サービス追跡ポータル",
+    adm_input_admin: "顧客に返信...",
+    adm_input_client: "サポートエンジニアにメッセージ...",
+    adm_loading_session: "セッションを読み込み中...",
+    adm_needs_action: "要対応",
+    adm_no_data: "データがありません。",
+    adm_no_messages: "メッセージはまだありません。挨拶しましょう 👋",
+    adm_no_orders: "注文はまだありません。",
+    adm_no_orders_found: "注文が見つかりません",
+    adm_notes: "メモ:",
+    adm_order_detail: "注文の詳細",
+    adm_payment_deposit: "第1回 (50%)",
+    adm_payment_final: "第2回 (50%)",
+    adm_payment_update_failed: "支払いの更新に失敗しました。",
+    adm_progress_title: "処理の進捗",
+    adm_quick_contact: "クイック連絡:",
+    adm_recent_orders: "最近の注文",
+    adm_refresh: "更新",
+    adm_role_admin: "管理者",
+    adm_role_client: "顧客",
+    adm_row_client_email: "顧客メール",
+    adm_row_countries: "国",
+    adm_row_created: "作成日",
+    adm_row_order_id: "注文ID",
+    adm_row_platform: "プラットフォーム",
+    adm_row_price: "パッケージ料金",
+    adm_row_service: "サービス",
+    adm_search_placeholder: "アプリ名または注文IDで検索...",
+    adm_select_order_detail: "詳細を表示する注文を選択してください",
+    adm_send_failed: "メッセージの送信に失敗しました。",
+    adm_stat_completed: "完了",
+    adm_stat_in_progress: "処理中",
+    adm_stat_pending: "確認待ち",
+    adm_stat_revenue: "収益 (USD)",
+    adm_stat_total_orders: "総注文数",
+    adm_status_completed: "完了",
+    adm_status_in_progress: "処理中",
+    adm_status_pending: "保留中",
+    adm_status_rejected: "却下",
+    adm_step_done: "完了",
+    adm_step_processing: "処理",
+    adm_step_received: "受注",
+    adm_subtitle_guest: "アプリの進捗を追跡し、エンジニアと直接やり取り",
+    adm_svc_design: "AIデザイン",
+    adm_svc_promotion: "5★ブースト",
+    adm_svc_publishing: "App Store",
+    adm_svc_testing: "QAテスト",
+    adm_tab_analytics: "統計",
+    adm_tab_chat: "サポートチャット",
+    adm_tab_orders: "注文",
+    adm_tab_overview: "概要",
+    adm_target_market: "ターゲット市場",
+    adm_tester_group_desc: "このメールをGoogle Play ConsoleのClosed Testingに追加してください:",
+    adm_tester_group_label: "テスターグループ:",
+    adm_tester_group_title: "🤖 Google Playテスターグループ (12名 / 14日間)",
+    adm_testing_link: "テストリンク:",
+    adm_unit_orders: "件",
+    adm_update_failed: "更新に失敗しました。",
+    adm_view_all: "すべて表示",
+    azr_level_critical: "重大",
+    azr_level_warning: "警告",
+    azr_level_recommendation: "推奨",
+    azr_err_no_image: "先にデザイン画像を選択してください。",
+    azr_err_analyze_failed: "分析に失敗しました。もう一度お試しください。",
+    azr_badge: "AI UI/UXデザインアナライザー",
+    azr_upload_change: "クリックして別の画像を選択",
+    azr_login_note: "ログインすると分析レポートの履歴を保存できます。",
+    azr_analyzing: "デザインを分析中...",
+    azr_history_title: "分析履歴",
+    azr_suggestions_suffix: "件の提案",
+    azr_sub_layout: "レイアウトと余白",
+    azr_sub_typography: "タイポグラフィ",
+    azr_sub_contrast: "色とコントラスト",
+    azr_sub_accessibility: "アクセシビリティ (A11y)",
+    azr_reset_btn: "別の画像を分析",
+    svct_badge: "プロフェッショナルアプリ検証サービス",
+    svct_h1: "iOS TestFlight & Android QA マルチデバイス検証",
+    svct_intro: "世界にリリースする前に、すべてのクラッシュを検出し、応答速度を最適化し、20種類以上のiPhone、iPad、Samsung、Google Pixelで完全な互換性を保証します。",
+    svct_cta: "今すぐ検証を申し込む",
+    svct_feature1_title: "TestFlight & ベータ配信",
+    svct_feature1_desc: "100人以上の社内テスターのリストを管理し、フィードバックとクラッシュログをリアルタイムで自動収集します。",
+    svct_feature2_title: "パフォーマンス & RAM 検証",
+    svct_feature2_desc: "バッテリー消費、RAM使用量、CPU負荷、フレームレンダリング速度（60fps/120fpsの滑らかさ）を測定します。",
+    svct_feature3_title: "詳細なバグレポート",
+    svct_feature3_desc: "ログファイル、エラー再現手順の動画、上級QA専門家による修正方法を提供します。",
+    svct_device_matrix_heading: "実機検証デバイス一覧",
+    svcp_badge: "App Store・Google Play アプリ公開サービス",
+    svcp_h1: "あなたのプロジェクトを世界のアプリストアへ",
+    svcp_intro: "Apple Certificate / Android Keystore の準備、ASO メタデータのキーワード最適化から、アプリが App Store・Google Play に正式に公開されるまでをワンストップでサポートします。",
+    svcp_cta: "今すぐ公開を申し込む",
+    svcp_step1_title: "アカウントと証明書の準備",
+    svcp_step1_desc: "Apple Developer ID、Google Play Console、プロビジョニングプロファイルと署名を設定します。",
+    svcp_step2_title: "ASO メタデータの最適化",
+    svcp_step2_desc: "説明文・キーワードの作成と、6.7インチ・iPad Pro の規定サイズに合わせたスクリーンショットのデザインを行います。",
+    svcp_step3_title: "アプリ提出と審査通過",
+    svcp_step3_desc: "ビルドを提出し、Apple/Google の App Review チームと直接やり取りしてフィードバックに対応します。",
+    svcp_step4_title: "公開と100%保証",
+    svcp_step4_desc: "アプリが150か国以上で正式に公開され、初回ダウンロードを獲得します。",
+    svcp_price_googleplay_note: "2回分割払い（$25 + $25）",
+    svcp_price_bothstores_title: "両ストア",
+    svcp_price_enterprise_title: "法人・企業",
+    svcp_price_enterprise_value: "お問い合わせ",
+    svcp_price_enterprise_note: "複数アプリ / 大量案件",
+    svcr_badge: "信頼できるインストール増加＆5つ星レビュー",
+    svcr_h1: "アプリをトップカテゴリーへ、ASOキーワードを押し上げる",
+    svcr_intro: "米国、ベトナム、日本、韓国、欧州など実際のユーザーから1,000～100,000件のインストールを獲得し、さらに1,000件以上の自然な5つ星レビューでアプリの信頼性を高めるキャンペーンです。",
+    svcr_cta: "5★アップキャンペーンを始める",
+    svcr_feature1_title: "キーワードインストールを増やす",
+    svcr_feature1_desc: "実際のユーザーがApp Store／Play Storeでターゲットキーワード（例：「crypto wallet」）を検索してアプリをインストールし、検索順位をトップ1～3に押し上げます。",
+    svcr_feature2_title: "1,000件以上の5つ星評価を構築",
+    svcr_feature2_desc: "現地の言語（ベトナム語、英語、日本語、韓国語、フランス語など）で2～3文の好意的なレビューを数百件獲得し、評価を4.8～5.0に維持します。",
+    svcr_feature3_title: "国別プロモーション（ジオターゲティング）",
+    svcr_feature3_desc: "世界中のあらゆる国で実際のユーザー層を選択し、グローバルなプロモーションキャンペーンの適合性を高めます。",
+    svcr_bonus_line1: "🎁 すべてのTE2SRサービスパッケージには、実際のユーザーによる5★レビュー10件が無料で付いてきます。",
+    svcr_bonus_line2: "大規模グロースパッケージは近日公開予定です。お早めにご相談ください。",
   },
   ko: {
     brand_name: 'TE2SR',
@@ -245,6 +1705,298 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     admin_table_date: '생성일',
     admin_table_action: '작업',
     footer_copy: '© 2026 TE2SR Platform. All rights reserved.',
+    home_pay_split_badge: "14일 검증에 50% + 앱 출시 시 50% 결제",
+    home_refund_commitment: "약속 미이행 시 100% 환불",
+    home_no_scam_apps: "사기 / 도박 앱은 받지 않습니다",
+    home_trust_secure_dev: "개발자 계정 100% 보안",
+    home_trust_24h: "24시간 이내 처리",
+    home_trust_50_countries: "50개국 이상",
+    home_stat_apps_approved: "스토어 승인 앱",
+    home_stat_reviews_gifted: "증정한 5★ 리뷰",
+    home_stat_approval_rate: "스토어 승인율",
+    home_stat_languages: "글로벌 언어",
+    home_services_chip: "핵심 서비스",
+    home_services_subtitle: "앱 승인율 90%를 달성하는 원스톱 프로세스. 2회 결제(50% - 50%)로 나누고 5★ 리뷰 10개를 무료로 증정합니다.",
+    home_svc_testing_feat1: "TestFlight iOS & Android Internal",
+    home_svc_testing_feat2: "실제 테스터 12명, 14일간",
+    home_svc_testing_feat3: "크래시, 버그 & UI/UX 리포트",
+    home_svc_testing_feat4: "필요 시 UI 오류 수정",
+    home_svc_testing_cta: "테스트 살펴보기",
+    home_svc_publishing_feat1: "Apple & Google Developer Console",
+    home_svc_publishing_feat2: "결제 게이트웨이 & API 연동",
+    home_svc_publishing_feat3: "2회 분할 결제 (50% - 50%)",
+    home_svc_publishing_feat4: "스토어 승인 기준 ASO 최적화",
+    home_svc_publishing_cta: "지금 앱 게시하기",
+    home_svc_promo_title: "⭐️ 5성 리뷰 패키지 (리뷰 10개 증정)",
+    home_svc_promo_desc: "모든 서비스 패키지에는 앱이 스토어에서 초기 신뢰를 쌓도록 돕는 실제 5성 리뷰 10개가 포함됩니다.",
+    home_svc_promo_feat1: "실제 사용자 5★ 리뷰 10개 증정",
+    home_svc_promo_feat2: "기본 ASO 키워드 최적화",
+    home_svc_promo_feat3: "지정 언어로 작성된 리뷰",
+    home_svc_promo_feat4: "대량 패키지 곧 출시 예정 ⏳",
+    home_svc_promo_cta: "10★ 신청하기",
+    home_pricing_chip: "요금 & 2회 분할 결제 절차",
+    home_price_gplay_label: "Google Play 게시",
+    home_price_gplay_unit: "/ Android 앱",
+    home_price_gplay_split: "2회 분할 결제 ($25 + $25)",
+    home_price_gplay_feat1: "Google Play Console에 앱 게시",
+    home_price_gplay_feat2: "실제 테스터 12명 14일간 설정",
+    home_price_gift_10_reviews: "🎁 고품질 5★ 리뷰 10개 증정",
+    home_price_gplay_feat4: "기본 ASO 메타데이터 최적화",
+    home_price_secure_account: "🔒 계정 100% 안전 보안",
+    home_price_refund_fail: "통과하지 못하면 100% 환불",
+    home_price_gplay_btn: "Google Play 패키지 선택 ($50)",
+    home_price_popular: "⭐ 가장 인기",
+    home_price_both_label: "두 스토어 패키지",
+    home_price_both_unit: "/ 두 스토어",
+    home_price_both_split: "2회 분할 결제 ($50 + $50)",
+    home_price_both_feat1: "두 스토어 모두 게시: Google Play & iOS App Store",
+    home_price_both_feat2: "Google Play 테스터 12명 (14일) + TestFlight iOS",
+    home_price_both_feat3: "🐞 버그 리포트 & 상세 크래시 로그 분석",
+    home_price_both_feat4: "💳 결제 게이트웨이 & API 연동",
+    home_price_secure_dev: "🔒 개발자 계정 100% 안전 보안",
+    home_price_both_btn: "두 스토어 신청 ($100)",
+    home_price_ent_label: "엔터프라이즈 패키지",
+    home_price_ent_contact: "문의하기",
+    home_price_ent_unit: "/ 맞춤 플랜",
+    home_price_ent_consult: "리드 엔지니어와 1:1 상담",
+    home_price_ent_feat1: "다중 앱 / 대량 게시",
+    home_price_ent_feat2: "🛠️ 직접 버그 수정 (코드 & UI)",
+    home_price_ent_feat3: "🎨 Apple/Google 기준 심층 UI/UX 검토",
+    home_price_ent_feat4: "🧪 실제 기기 20대 이상 전체 테스트",
+    home_price_ent_feat5: "🐞 상세 버그 리포트 & 성능 분석",
+    home_price_ent_feat6: "🎁 지정 언어 5★ 리뷰 10개 증정",
+    home_price_ent_feat8: "NDA 기밀 유지 계약 & SLA 약속",
+    home_price_ent_btn: "엔터프라이즈 문의하기",
+    order_error_submit_failed: "요청 전송에 실패했습니다. 다시 시도해 주세요.",
+    order_success_title: "요청이 성공적으로 전송되었습니다!",
+    order_your_order_id: "주문 번호:",
+    order_payment_2step_title: "💳 2회 분할 결제 절차 (50% - 50%)",
+    order_phase1_badge: "1차 (50%)",
+    order_phase1_desc: "12명의 테스터를 설치하고 테스트 링크를 받아 14일 카운트를 시작한 후 50%를 결제합니다.",
+    order_phase2_badge: "2차 (50%)",
+    order_phase2_desc: "앱이 성공적으로 게시된 후(스토어에 라이브 승인) 나머지 50%를 결제합니다.",
+    order_tester_guide_title: "🤖 12명 테스터 활성화 가이드 (14일)",
+    order_tester_step1: "1. Google Play Console의 Closed Testing(비공개 테스트) 항목에 Google 그룹 이메일을 추가하세요:",
+    order_copied: "복사됨",
+    order_copy_email: "이메일 복사",
+    order_tester_step2: "2. TE2SR 테스터 팀이 바로 설치할 수 있도록 관리자와의 채팅으로 테스트 링크(Opt-in URL)를 보내주세요!",
+    order_moneyback_badge: "서비스 요구 사항을 충족하지 못하면 100% 환불을 보장합니다.",
+    order_payment_info_title: "💳 1차 결제 정보 (50%)",
+    order_manual_check_15m: "15분 이내 수동 확인",
+    order_timo_bank: "🇻🇳 Timo 은행 (베트남)",
+    order_account_number_label: "계좌번호:",
+    order_account_holder_label: "예금주:",
+    order_transfer_note_label: "이체 메모:",
+    order_binance_pay: "🌐 Binance Pay / USDT (국제)",
+    order_binance_id_label: "Binance ID:",
+    order_network_label: "네트워크:",
+    order_memo_label: "메모:",
+    order_reconcile_prefix: "1차 결제 후 기술자가 주문",
+    order_reconcile_suffix: "을(를) 대조하고 즉시 14일 카운트를 활성화합니다!",
+    order_finish_view_progress: "완료 및 진행 상황 보기",
+    order_register_service: "TE2SR 서비스 등록",
+    order_form_subtitle: "12명의 테스터로 14일 카운트를 시작한 후 50%, 앱이 스토어에 게시되면 나머지 50%를 결제합니다.",
+    order_select_service_label: "등록할 서비스 선택",
+    order_service_testing: "QA 테스트",
+    order_service_publishing: "스토어 게시",
+    order_service_promotion: "5★ 부스트",
+    order_app_name_label: "앱 / 프로젝트 이름",
+    order_app_name_placeholder: "예: CryptoPulse App",
+    order_email_label: "연락처 이메일",
+    order_testing_url_label: "테스트 링크 (Google Play / TestFlight Opt-in URL)",
+    order_testing_url_hint: "📌 비공개 테스트 참여 링크를 붙여넣으면 TE2SR 엔지니어가 바로 테스트를 시작하고 14일을 계산합니다.",
+    order_select_package_label: "게시 패키지 선택",
+    order_package_googleplay: "Google Play 패키지 ($50)",
+    order_package_both: "양대 스토어 패키지 - Google Play & iOS ($100)",
+    order_package_enterprise: "엔터프라이즈 / 멀티 앱 패키지 (문의)",
+    order_target_countries_label: "대상 국가",
+    order_target_countries_placeholder: "예: 베트남, 미국, 일본",
+    order_flexible_payment_title: "유연한 2회 분할 결제 (50% - 50%):",
+    order_flex_phase1: "1차 (50%): 12명의 테스터를 연결하고 테스트 링크를 보내 14일 카운트를 시작한 후 결제합니다.",
+    order_flex_phase2: "2차 (50%): 앱이 스토어에 성공적으로 게시된 후 결제합니다.",
+    order_closed_testing_group_title: "Google Play 비공개 테스트 그룹 (12명 테스터 / 14일):",
+    order_closed_testing_group_desc: "Google 그룹 te2sr@googlegroups.com을 Google Play Console에 추가하고 TE2SR 엔지니어가 테스트에 참여할 수 있도록 테스트 링크를 보내주세요.",
+    order_details_label: "메모 또는 특별 요청",
+    order_details_placeholder: "목표를 설명해 주세요...",
+    order_submitting: "데이터 전송 중...",
+    order_submit: "지금 요청 보내기",
+    auth_google_login_failed: "Google 로그인에 실패했습니다.",
+    auth_error_name_required: "이름을 입력해 주세요.",
+    auth_error_password_min: "비밀번호는 최소 6자 이상이어야 합니다.",
+    auth_error_generic: "오류가 발생했습니다.",
+    auth_title_register: "계정 만들기",
+    auth_title_login: "로그인",
+    auth_subtitle: "앱 심사 진행 상황을 추적하고, 실시간으로 채팅하며, 테스트 보고서를 확인하세요.",
+    auth_google_config_note: "(Google 로그인을 사용하려면 NEXT_PUBLIC_GOOGLE_CLIENT_ID를 설정하세요)",
+    auth_divider_email: "또는 이메일 사용",
+    auth_label_name: "이름",
+    auth_placeholder_name: "홍길동",
+    auth_label_email: "이메일",
+    auth_label_password: "비밀번호",
+    auth_placeholder_password: "최소 6자",
+    auth_submit_register: "계정 만들기",
+    auth_submit_login: "로그인",
+    auth_switch_to_login: "이미 계정이 있으신가요? 지금 로그인하세요",
+    auth_switch_to_register: "계정이 없으신가요? 여기서 가입하세요",
+    pwd_title_change: "비밀번호 변경",
+    pwd_title_set: "로그인 비밀번호 설정",
+    pwd_desc_change: "계정 비밀번호를 업데이트하세요.",
+    pwd_desc_set: "Google 계정 — 이메일로도 로그인할 수 있도록 비밀번호를 설정하세요.",
+    pwd_ph_current: "현재 비밀번호",
+    pwd_ph_new: "새 비밀번호 (6자 이상)",
+    pwd_ph_confirm: "새 비밀번호 확인",
+    pwd_err_min: "새 비밀번호는 최소 6자 이상이어야 합니다.",
+    pwd_err_mismatch: "비밀번호 확인이 일치하지 않습니다.",
+    pwd_success_change: "비밀번호가 변경되었습니다.",
+    pwd_success_set: "비밀번호가 설정되었습니다 — 이제 이메일로 로그인할 수 있습니다.",
+    pwd_err_fail: "비밀번호 변경에 실패했습니다.",
+    pwd_btn_change: "비밀번호 변경",
+    pwd_btn_set: "비밀번호 설정",
+    nb_admin_link: "관리자 관리",
+    nb_admin_panel_title: "관리자 대시보드 열기",
+    nb_admin_prefix: "관리자: ",
+    nb_order_progress_title: "주문 진행 상황 확인",
+    nb_logout_title: "로그아웃",
+    nb_login: "로그인",
+    chat_header: "24/7 빠른 지원",
+    chat_intro: "TE2SR 전문가와 직접 연락할 채널을 선택하세요:",
+    chat_channel_zalo: "Zalo로 채팅 (베트남)",
+    chat_channel_whatsapp: "WhatsApp (글로벌)",
+    chat_channel_x: "X (Twitter) @_te2sr",
+    chat_channel_messenger: "FB Messenger",
+    chat_button_title: "지원 채팅",
+    adm_active: "활성",
+    adm_analytics_by_service: "서비스별 분석",
+    adm_auth_button: "로그인 / 회원가입",
+    adm_auth_desc: "로그인하여 대시보드에 접속하고 주문 진행 상황을 추적하며 TE2SR 엔지니어 팀과 직접 소통하세요.",
+    adm_auth_title: "인증이 필요합니다",
+    adm_chat_no_order: "\"주문\" 탭에서 주문을 선택하여 대화를 시작하세요.",
+    adm_chat_title_admin: "고객 지원",
+    adm_chat_title_client: "TE2SR 엔지니어와 대화",
+    adm_collected: "수금됨",
+    adm_contact_price: "문의",
+    adm_copied: "복사됨",
+    adm_copy: "복사",
+    adm_copy_email: "이메일 복사",
+    adm_discuss_order: "이 주문에 대해 문의",
+    adm_filter_all: "전체",
+    adm_greeting: "안녕하세요",
+    adm_header_admin: "관리자 제어 센터",
+    adm_header_client: "📦 서비스 추적 포털",
+    adm_input_admin: "고객에게 답장...",
+    adm_input_client: "지원 엔지니어에게 메시지...",
+    adm_loading_session: "세션을 불러오는 중...",
+    adm_needs_action: "처리 필요",
+    adm_no_data: "데이터가 없습니다.",
+    adm_no_messages: "아직 메시지가 없습니다. 인사를 건네보세요 👋",
+    adm_no_orders: "아직 주문이 없습니다.",
+    adm_no_orders_found: "주문을 찾을 수 없습니다",
+    adm_notes: "메모:",
+    adm_order_detail: "주문 상세",
+    adm_payment_deposit: "1차 (50%)",
+    adm_payment_final: "2차 (50%)",
+    adm_payment_update_failed: "결제 업데이트에 실패했습니다.",
+    adm_progress_title: "처리 진행 상황",
+    adm_quick_contact: "빠른 연락:",
+    adm_recent_orders: "최근 주문",
+    adm_refresh: "새로고침",
+    adm_role_admin: "관리자",
+    adm_role_client: "고객",
+    adm_row_client_email: "고객 이메일",
+    adm_row_countries: "국가",
+    adm_row_created: "생성일",
+    adm_row_order_id: "주문 번호",
+    adm_row_platform: "플랫폼",
+    adm_row_price: "패키지 가격",
+    adm_row_service: "서비스",
+    adm_search_placeholder: "앱 이름 또는 주문 번호로 검색...",
+    adm_select_order_detail: "상세 정보를 보려면 주문을 선택하세요",
+    adm_send_failed: "메시지 전송에 실패했습니다.",
+    adm_stat_completed: "완료",
+    adm_stat_in_progress: "진행 중",
+    adm_stat_pending: "확인 대기",
+    adm_stat_revenue: "매출 (USD)",
+    adm_stat_total_orders: "총 주문",
+    adm_status_completed: "완료",
+    adm_status_in_progress: "진행 중",
+    adm_status_pending: "대기 중",
+    adm_status_rejected: "거부됨",
+    adm_step_done: "완료",
+    adm_step_processing: "처리",
+    adm_step_received: "접수",
+    adm_subtitle_guest: "앱 진행 상황을 추적하고 엔지니어와 직접 소통하세요",
+    adm_svc_design: "AI 디자인",
+    adm_svc_promotion: "5★ 부스트",
+    adm_svc_publishing: "App Store",
+    adm_svc_testing: "QA 테스트",
+    adm_tab_analytics: "통계",
+    adm_tab_chat: "지원 채팅",
+    adm_tab_orders: "주문",
+    adm_tab_overview: "개요",
+    adm_target_market: "목표 시장",
+    adm_tester_group_desc: "이 이메일을 Google Play Console의 비공개 테스트에 추가하세요:",
+    adm_tester_group_label: "테스터 그룹:",
+    adm_tester_group_title: "🤖 Google Play 테스터 그룹 (테스터 12명 / 14일)",
+    adm_testing_link: "테스트 링크:",
+    adm_unit_orders: "건",
+    adm_update_failed: "업데이트에 실패했습니다.",
+    adm_view_all: "모두 보기",
+    azr_level_critical: "심각",
+    azr_level_warning: "경고",
+    azr_level_recommendation: "권장",
+    azr_err_no_image: "먼저 디자인 이미지를 선택하세요.",
+    azr_err_analyze_failed: "분석에 실패했습니다. 다시 시도해 주세요.",
+    azr_badge: "AI UI/UX 디자인 분석기",
+    azr_upload_change: "클릭하여 다른 이미지 선택",
+    azr_login_note: "로그인하면 분석 보고서 기록을 저장할 수 있습니다.",
+    azr_analyzing: "디자인 분석 중...",
+    azr_history_title: "분석 기록",
+    azr_suggestions_suffix: "개 제안",
+    azr_sub_layout: "레이아웃 및 간격",
+    azr_sub_typography: "타이포그래피",
+    azr_sub_contrast: "색상 및 대비",
+    azr_sub_accessibility: "접근성 (A11y)",
+    azr_reset_btn: "다른 이미지 분석",
+    svct_badge: "전문 앱 테스트 서비스",
+    svct_h1: "iOS TestFlight & Android QA 멀티 디바이스 테스트",
+    svct_intro: "전 세계에 출시하기 전에 모든 크래시를 발견하고 응답 속도를 최적화하며 20종 이상의 iPhone, iPad, Samsung, Google Pixel에서 완벽한 호환성을 보장합니다.",
+    svct_cta: "지금 테스트 신청하기",
+    svct_feature1_title: "TestFlight & 베타 배포",
+    svct_feature1_desc: "100명 이상의 내부 tester 목록을 관리하고 피드백과 크래시 로그를 실시간으로 자동 수집합니다.",
+    svct_feature2_title: "성능 & RAM 테스트",
+    svct_feature2_desc: "배터리 소모, RAM 사용량, CPU 부하 및 프레임 렌더링 속도(60fps/120fps 부드러움)를 측정합니다.",
+    svct_feature3_title: "상세한 버그 리포트",
+    svct_feature3_desc: "로그 파일, 오류 재현 단계 영상, 그리고 시니어 QA 전문가의 수정 방안을 제공합니다.",
+    svct_device_matrix_heading: "실제 테스트 기기 목록",
+    svcp_badge: "App Store & Google Play 앱 등록 서비스",
+    svcp_h1: "당신의 프로젝트를 글로벌 앱 마켓으로",
+    svcp_intro: "Apple Certificate / Android Keystore 준비, ASO 메타데이터 키워드 최적화부터 앱이 App Store & Google Play에 정식 출시될 때까지 원스톱으로 지원합니다.",
+    svcp_cta: "지금 등록 신청하기",
+    svcp_step1_title: "계정 및 인증서 준비",
+    svcp_step1_desc: "Apple Developer ID, Google Play Console, 프로비저닝 프로파일 및 서명을 구성합니다.",
+    svcp_step2_title: "ASO 메타데이터 최적화",
+    svcp_step2_desc: "설명, 키워드를 작성하고 6.7\" 및 iPad Pro 규격에 맞는 스크린샷을 디자인합니다.",
+    svcp_step3_title: "앱 제출 및 심사 통과",
+    svcp_step3_desc: "빌드를 제출하고 Apple/Google App Review 팀과 직접 피드백을 처리합니다.",
+    svcp_step4_title: "출시 및 100% 보증",
+    svcp_step4_desc: "앱이 150개 이상의 국가에 정식 공개되며 첫 다운로드를 시작합니다.",
+    svcp_price_googleplay_note: "2회 분할 결제 ($25 + $25)",
+    svcp_price_bothstores_title: "두 스토어 모두",
+    svcp_price_enterprise_title: "기업",
+    svcp_price_enterprise_value: "문의하기",
+    svcp_price_enterprise_note: "다수 앱 / 대량",
+    svcr_badge: "신뢰할 수 있는 다운로드 증가 및 5성 평가",
+    svcr_h1: "앱을 카테고리 상위로, ASO 키워드 순위 상승",
+    svcr_intro: "미국, 베트남, 일본, 한국, 유럽 등 실제 사용자로부터 1,000~100,000회 다운로드를 유도하고, 1,000개 이상의 자연스러운 5성 평가로 앱 신뢰도를 높이는 캠페인입니다.",
+    svcr_cta: "5★ 부스트 캠페인 시작하기",
+    svcr_feature1_title: "키워드 검색 다운로드 증가",
+    svcr_feature1_desc: "실제 사용자가 App Store/Play Store에서 목표 키워드(예: \"crypto wallet\")를 검색해 앱을 다운로드하여 검색 순위를 상위 1~3위로 끌어올립니다.",
+    svcr_feature2_title: "1,000개 이상의 5성 평가 구축",
+    svcr_feature2_desc: "현지 언어(베트남어, 영어, 일본어, 한국어, 프랑스어 등)로 된 2~3문장의 긍정적인 리뷰 수백 개를 받아 평점을 4.8~5.0으로 유지합니다.",
+    svcr_feature3_title: "국가별 프로모션 (지오 타게팅)",
+    svcr_feature3_desc: "전 세계 어느 국가에서든 실제 사용자층을 선택하여 글로벌 프로모션 캠페인의 적합성을 높입니다.",
+    svcr_bonus_line1: "🎁 모든 TE2SR 서비스 패키지에는 실제 사용자의 5★ 평가 10개가 무료로 포함됩니다.",
+    svcr_bonus_line2: "대규모 성장 패키지는 곧 출시됩니다 — 조기 상담을 원하시면 문의해 주세요.",
   },
   fr: {
     brand_name: 'TE2SR',
@@ -297,6 +2049,298 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     admin_table_date: 'Date de Création',
     admin_table_action: 'Actions',
     footer_copy: '© 2026 TE2SR Platform. Tous droits réservés.',
+    home_pay_split_badge: "Payez 50 % pour le test de 14 jours + 50 % à la mise en ligne",
+    home_refund_commitment: "Remboursement à 100 % en cas de non-respect de l'engagement",
+    home_no_scam_apps: "Nous n'acceptons PAS les applis d'arnaque / de jeux d'argent",
+    home_trust_secure_dev: "Compte développeur 100 % sécurisé",
+    home_trust_24h: "Traité sous 24 h",
+    home_trust_50_countries: "Plus de 50 pays",
+    home_stat_apps_approved: "Applis approuvées sur le Store",
+    home_stat_reviews_gifted: "Avis 5★ offerts",
+    home_stat_approval_rate: "Taux d'approbation Store",
+    home_stat_languages: "Langues mondiales",
+    home_services_chip: "Services essentiels",
+    home_services_subtitle: "Un processus de bout en bout qui garantit 90 % d'approbation, en 2 paiements (50 % - 50 %) et 10 avis 5★ offerts.",
+    home_svc_testing_feat1: "TestFlight iOS et Android Internal",
+    home_svc_testing_feat2: "12 testeurs réels pendant 14 jours",
+    home_svc_testing_feat3: "Rapports de plantages, bugs et UI/UX",
+    home_svc_testing_feat4: "Correction des problèmes d'interface si nécessaire",
+    home_svc_testing_cta: "Découvrir le test",
+    home_svc_publishing_feat1: "Apple et Google Developer Console",
+    home_svc_publishing_feat2: "Intégration de la passerelle de paiement et de l'API",
+    home_svc_publishing_feat3: "Paiement en 2 fois (50 % - 50 %)",
+    home_svc_publishing_feat4: "Optimisation ASO aux normes d'approbation du Store",
+    home_svc_publishing_cta: "Publier l'appli maintenant",
+    home_svc_promo_title: "⭐️ Pack d'avis 5 étoiles (10 avis offerts)",
+    home_svc_promo_desc: "Chaque pack de services inclut 10 véritables avis 5 étoiles pour aider votre appli à gagner en crédibilité sur le Store.",
+    home_svc_promo_feat1: "10 avis 5★ offerts par de vrais utilisateurs",
+    home_svc_promo_feat2: "Optimisation de base des mots-clés ASO",
+    home_svc_promo_feat3: "Avis dans la langue de votre choix",
+    home_svc_promo_feat4: "Forfaits en gros bientôt disponibles ⏳",
+    home_svc_promo_cta: "S'inscrire pour 10★",
+    home_pricing_chip: "Tarifs et processus de paiement en 2 fois",
+    home_price_gplay_label: "Publication sur Google Play",
+    home_price_gplay_unit: "/ appli Android",
+    home_price_gplay_split: "Paiement en 2 fois (25 $ + 25 $)",
+    home_price_gplay_feat1: "Publier l'appli sur Google Play Console",
+    home_price_gplay_feat2: "Mise en place de 12 testeurs réels pendant 14 jours",
+    home_price_gift_10_reviews: "🎁 10 avis 5★ de qualité offerts",
+    home_price_gplay_feat4: "Optimisation de base des métadonnées ASO",
+    home_price_secure_account: "🔒 Compte protégé à 100 %",
+    home_price_refund_fail: "Remboursement à 100 % en cas d'échec",
+    home_price_gplay_btn: "Choisir le forfait Google Play (50 $)",
+    home_price_popular: "⭐ LE PLUS POPULAIRE",
+    home_price_both_label: "Forfait 2 stores",
+    home_price_both_unit: "/ les 2 stores",
+    home_price_both_split: "Paiement en 2 fois (50 $ + 50 $)",
+    home_price_both_feat1: "Publication sur les 2 stores : Google Play et iOS App Store",
+    home_price_both_feat2: "12 testeurs Google Play (14 jours) + TestFlight iOS",
+    home_price_both_feat3: "🐞 Rapports de bugs et analyse détaillée des logs de plantage",
+    home_price_both_feat4: "💳 Intégration de la passerelle de paiement et de l'API",
+    home_price_secure_dev: "🔒 Compte développeur protégé à 100 %",
+    home_price_both_btn: "S'inscrire pour les 2 stores (100 $)",
+    home_price_ent_label: "Forfait Entreprise",
+    home_price_ent_contact: "NOUS CONTACTER",
+    home_price_ent_unit: "/ formule sur mesure",
+    home_price_ent_consult: "Consultation en tête-à-tête avec l'ingénieur en chef",
+    home_price_ent_feat1: "Publication multi-applis / en gros",
+    home_price_ent_feat2: "🛠️ Correction directe des bugs (code et interface)",
+    home_price_ent_feat3: "🎨 Analyse UI/UX approfondie aux normes Apple/Google",
+    home_price_ent_feat4: "🧪 Test complet sur plus de 20 appareils réels",
+    home_price_ent_feat5: "🐞 Rapports de bugs détaillés et analyse des performances",
+    home_price_ent_feat6: "🎁 10 avis 5★ offerts dans la langue de votre choix",
+    home_price_ent_feat8: "Accord de confidentialité NDA et engagement SLA",
+    home_price_ent_btn: "Nous contacter pour l'offre Entreprise",
+    order_error_submit_failed: "Échec de l'envoi de la demande. Veuillez réessayer.",
+    order_success_title: "Demande envoyée avec succès !",
+    order_your_order_id: "Votre numéro de commande :",
+    order_payment_2step_title: "💳 Processus de paiement en 2 versements (50 % - 50 %)",
+    order_phase1_badge: "Versement 1 (50 %)",
+    order_phase1_desc: "Payez 50 % après l'installation des 12 testeurs et la réception du lien de test pour démarrer le compte à rebours de 14 jours.",
+    order_phase2_badge: "Versement 2 (50 %)",
+    order_phase2_desc: "Payez les 50 % restants une fois l'application publiée avec succès (approuvée en ligne sur le Store).",
+    order_tester_guide_title: "🤖 Guide d'activation des 12 testeurs (14 jours)",
+    order_tester_step1: "1. Ajoutez l'e-mail du groupe Google à la section Closed Testing (test fermé) dans la Google Play Console :",
+    order_copied: "Copié",
+    order_copy_email: "Copier l'e-mail",
+    order_tester_step2: "2. Veuillez envoyer le lien de test (Opt-in URL) dans le chat avec l'administrateur afin que l'équipe de testeurs TE2SR puisse l'installer immédiatement !",
+    order_moneyback_badge: "Garantie de REMBOURSEMENT à 100 % si les exigences du service ne sont pas satisfaites.",
+    order_payment_info_title: "💳 Informations de paiement du versement 1 (50 %)",
+    order_manual_check_15m: "Vérification manuelle sous 15 min",
+    order_timo_bank: "🇻🇳 Banque Timo (Vietnam)",
+    order_account_number_label: "N° de compte :",
+    order_account_holder_label: "Titulaire du compte :",
+    order_transfer_note_label: "Libellé :",
+    order_binance_pay: "🌐 Binance Pay / USDT (International)",
+    order_binance_id_label: "Binance ID :",
+    order_network_label: "Réseau :",
+    order_memo_label: "Mémo :",
+    order_reconcile_prefix: "Après le paiement du versement 1, notre technicien rapprochera la commande",
+    order_reconcile_suffix: "et activera immédiatement le compte à rebours de 14 jours !",
+    order_finish_view_progress: "Terminer et voir la progression",
+    order_register_service: "Inscription au service TE2SR",
+    order_form_subtitle: "Payez 50 % après le démarrage du compte de 14 jours par les 12 testeurs et les 50 % restants lorsque l'application est en ligne sur le Store.",
+    order_select_service_label: "Sélectionnez le service à souscrire",
+    order_service_testing: "Test QA",
+    order_service_publishing: "Publication sur le Store",
+    order_service_promotion: "Boost 5★",
+    order_app_name_label: "Nom de l'app / du projet",
+    order_app_name_placeholder: "ex. CryptoPulse App",
+    order_email_label: "E-mail de contact",
+    order_testing_url_label: "Lien de test (Google Play / TestFlight Opt-in URL)",
+    order_testing_url_hint: "📌 Collez le lien d'inscription au test fermé pour que les ingénieurs TE2SR commencent le test et comptent les 14 jours immédiatement.",
+    order_select_package_label: "Sélectionnez le forfait de publication",
+    order_package_googleplay: "Forfait Google Play (50 $)",
+    order_package_both: "Forfait 2 stores - Google Play & iOS (100 $)",
+    order_package_enterprise: "Forfait entreprise / multi-applications (NOUS CONTACTER)",
+    order_target_countries_label: "Pays cibles",
+    order_target_countries_placeholder: "ex. Vietnam, États-Unis, Japon",
+    order_flexible_payment_title: "Paiement flexible en 2 versements (50 % - 50 %) :",
+    order_flex_phase1: "Versement 1 (50 %) : payez après avoir connecté 12 testeurs et envoyé le lien de test pour lancer le compte de 14 jours.",
+    order_flex_phase2: "Versement 2 (50 %) : payez une fois l'application publiée avec succès sur le Store.",
+    order_closed_testing_group_title: "Groupe de test fermé Google Play (12 testeurs / 14 jours) :",
+    order_closed_testing_group_desc: "Ajoutez le groupe Google te2sr@googlegroups.com à la Google Play Console et envoyez le lien de test pour que les ingénieurs TE2SR participent au test.",
+    order_details_label: "Remarques ou demandes spéciales",
+    order_details_placeholder: "Décrivez vos objectifs...",
+    order_submitting: "Envoi des données...",
+    order_submit: "Envoyer la demande maintenant",
+    auth_google_login_failed: "La connexion Google a échoué.",
+    auth_error_name_required: "Veuillez saisir votre nom complet.",
+    auth_error_password_min: "Le mot de passe doit comporter au moins 6 caractères.",
+    auth_error_generic: "Une erreur s'est produite.",
+    auth_title_register: "Créer un compte",
+    auth_title_login: "Se connecter",
+    auth_subtitle: "Suivez l'avancement de la revue de l'app, discutez en direct et consultez les rapports de test.",
+    auth_google_config_note: "(Définissez NEXT_PUBLIC_GOOGLE_CLIENT_ID pour activer la connexion Google)",
+    auth_divider_email: "Ou utilisez l'e-mail",
+    auth_label_name: "Nom complet",
+    auth_placeholder_name: "Jean Dupont",
+    auth_label_email: "E-mail",
+    auth_label_password: "Mot de passe",
+    auth_placeholder_password: "Au moins 6 caractères",
+    auth_submit_register: "Créer un compte",
+    auth_submit_login: "Se connecter",
+    auth_switch_to_login: "Vous avez déjà un compte ? Connectez-vous maintenant",
+    auth_switch_to_register: "Vous n'avez pas de compte ? Inscrivez-vous ici",
+    pwd_title_change: "Changer le mot de passe",
+    pwd_title_set: "Définir le mot de passe de connexion",
+    pwd_desc_change: "Mettez à jour le mot de passe de votre compte.",
+    pwd_desc_set: "Compte Google — définissez un mot de passe pour vous connecter aussi par e-mail.",
+    pwd_ph_current: "Mot de passe actuel",
+    pwd_ph_new: "Nouveau mot de passe (≥ 6 caractères)",
+    pwd_ph_confirm: "Confirmer le nouveau mot de passe",
+    pwd_err_min: "Le nouveau mot de passe doit comporter au moins 6 caractères.",
+    pwd_err_mismatch: "La confirmation du mot de passe ne correspond pas.",
+    pwd_success_change: "Mot de passe modifié avec succès.",
+    pwd_success_set: "Mot de passe défini — vous pouvez maintenant vous connecter par e-mail.",
+    pwd_err_fail: "Échec du changement de mot de passe.",
+    pwd_btn_change: "Changer le mot de passe",
+    pwd_btn_set: "Définir le mot de passe",
+    nb_admin_link: "Gestion admin",
+    nb_admin_panel_title: "Ouvrir le tableau de bord admin",
+    nb_admin_prefix: "Admin : ",
+    nb_order_progress_title: "Suivre l'avancement de la commande",
+    nb_logout_title: "Se déconnecter",
+    nb_login: "Se connecter",
+    chat_header: "Assistance rapide 24/7",
+    chat_intro: "Choisissez un canal pour contacter directement un spécialiste TE2SR :",
+    chat_channel_zalo: "Discuter via Zalo (Vietnam)",
+    chat_channel_whatsapp: "WhatsApp (Mondial)",
+    chat_channel_x: "X (Twitter) @_te2sr",
+    chat_channel_messenger: "FB Messenger",
+    chat_button_title: "Chat d'assistance",
+    adm_active: "actifs",
+    adm_analytics_by_service: "Analyse par service",
+    adm_auth_button: "Connexion / Inscription",
+    adm_auth_desc: "Connectez-vous pour accéder au tableau de bord, suivre l'avancement des commandes et échanger directement avec l'équipe d'ingénieurs TE2SR.",
+    adm_auth_title: "Authentification requise",
+    adm_chat_no_order: "Sélectionnez une commande dans l'onglet « Commandes » pour commencer à discuter.",
+    adm_chat_title_admin: "Support client",
+    adm_chat_title_client: "Discuter avec les ingénieurs TE2SR",
+    adm_collected: "encaissé",
+    adm_contact_price: "Nous contacter",
+    adm_copied: "Copié",
+    adm_copy: "Copier",
+    adm_copy_email: "Copier l'e-mail",
+    adm_discuss_order: "Discuter de cette commande",
+    adm_filter_all: "Tous",
+    adm_greeting: "Bonjour",
+    adm_header_admin: "Centre de contrôle admin",
+    adm_header_client: "📦 Portail de suivi des services",
+    adm_input_admin: "Répondre au client...",
+    adm_input_client: "Écrire à l'ingénieur support...",
+    adm_loading_session: "Chargement de votre session...",
+    adm_needs_action: "Action requise",
+    adm_no_data: "Aucune donnée.",
+    adm_no_messages: "Aucun message. Dites bonjour 👋",
+    adm_no_orders: "Aucune commande.",
+    adm_no_orders_found: "Aucune commande trouvée",
+    adm_notes: "Notes :",
+    adm_order_detail: "Détails de la commande",
+    adm_payment_deposit: "Étape 1 (50 %)",
+    adm_payment_final: "Étape 2 (50 %)",
+    adm_payment_update_failed: "Échec de la mise à jour du paiement.",
+    adm_progress_title: "Progression du traitement",
+    adm_quick_contact: "Contact rapide :",
+    adm_recent_orders: "Commandes récentes",
+    adm_refresh: "Actualiser",
+    adm_role_admin: "Administrateur",
+    adm_role_client: "Client",
+    adm_row_client_email: "E-mail du client",
+    adm_row_countries: "Pays",
+    adm_row_created: "Date de création",
+    adm_row_order_id: "N° de commande",
+    adm_row_platform: "Plateforme",
+    adm_row_price: "Prix du forfait",
+    adm_row_service: "Service",
+    adm_search_placeholder: "Rechercher par nom d'app ou n° de commande...",
+    adm_select_order_detail: "Sélectionnez une commande pour voir les détails",
+    adm_send_failed: "Échec de l'envoi du message.",
+    adm_stat_completed: "Terminées",
+    adm_stat_in_progress: "En cours",
+    adm_stat_pending: "En attente de confirmation",
+    adm_stat_revenue: "Revenus (USD)",
+    adm_stat_total_orders: "Total des commandes",
+    adm_status_completed: "Terminé",
+    adm_status_in_progress: "En cours",
+    adm_status_pending: "En attente",
+    adm_status_rejected: "Rejeté",
+    adm_step_done: "Terminé",
+    adm_step_processing: "Traitement",
+    adm_step_received: "Reçue",
+    adm_subtitle_guest: "Suivez l'avancement de l'app et échangez directement avec les ingénieurs",
+    adm_svc_design: "Design IA",
+    adm_svc_promotion: "Boost 5★",
+    adm_svc_publishing: "App Store",
+    adm_svc_testing: "Test QA",
+    adm_tab_analytics: "Statistiques",
+    adm_tab_chat: "Chat d'assistance",
+    adm_tab_orders: "Commandes",
+    adm_tab_overview: "Aperçu",
+    adm_target_market: "Marchés cibles",
+    adm_tester_group_desc: "Ajoutez cet e-mail au test fermé dans la Google Play Console :",
+    adm_tester_group_label: "Groupe de testeurs :",
+    adm_tester_group_title: "🤖 Groupe de testeurs Google Play (12 testeurs / 14 jours)",
+    adm_testing_link: "Lien de test :",
+    adm_unit_orders: "commandes",
+    adm_update_failed: "Échec de la mise à jour.",
+    adm_view_all: "Tout voir",
+    azr_level_critical: "Critique",
+    azr_level_warning: "Avertissement",
+    azr_level_recommendation: "Recommandation",
+    azr_err_no_image: "Veuillez d'abord sélectionner une image de design.",
+    azr_err_analyze_failed: "L'analyse a échoué. Veuillez réessayer.",
+    azr_badge: "Analyseur de design UI/UX par IA",
+    azr_upload_change: "Cliquez pour choisir une autre image",
+    azr_login_note: "Connectez-vous pour enregistrer l'historique de vos rapports d'analyse.",
+    azr_analyzing: "Analyse du design...",
+    azr_history_title: "Historique des analyses",
+    azr_suggestions_suffix: "suggestions",
+    azr_sub_layout: "Mise en page et espacement",
+    azr_sub_typography: "Typographie",
+    azr_sub_contrast: "Couleur et contraste",
+    azr_sub_accessibility: "Accessibilité (A11y)",
+    azr_reset_btn: "Analyser une autre image",
+    svct_badge: "Service professionnel de test d'applications",
+    svct_h1: "Tests multi-appareils iOS TestFlight & Android QA",
+    svct_intro: "Détectez tous les plantages, optimisez la vitesse de réponse et garantissez une compatibilité parfaite sur plus de 20 modèles d'iPhone, iPad, Samsung et Google Pixel avant de lancer votre app dans le monde entier.",
+    svct_cta: "S'inscrire au test maintenant",
+    svct_feature1_title: "Distribution TestFlight & bêta",
+    svct_feature1_desc: "Gérez une liste de plus de 100 testers internes, en collectant automatiquement les retours et les logs de plantage en temps réel.",
+    svct_feature2_title: "Test des performances et de la RAM",
+    svct_feature2_desc: "Mesurez la consommation de batterie, l'utilisation de la RAM, la charge CPU et la vitesse de rendu des images (fluidité 60 fps/120 fps).",
+    svct_feature3_title: "Rapports de bugs détaillés",
+    svct_feature3_desc: "Nous fournissons les fichiers de logs, des vidéos des étapes de reproduction et les correctifs de nos experts QA seniors.",
+    svct_device_matrix_heading: "Liste des appareils de test réels",
+    svcp_badge: "Service de publication d'app sur l'App Store et Google Play",
+    svcp_h1: "Lancez votre projet sur les stores d'applications mondiaux",
+    svcp_intro: "Un accompagnement complet, de la préparation de votre certificat Apple / keystore Android à l'optimisation des mots-clés des métadonnées ASO, jusqu'à la publication officielle de votre app sur l'App Store et Google Play.",
+    svcp_cta: "Inscrivez-vous pour publier maintenant",
+    svcp_step1_title: "Préparation du compte et des certificats",
+    svcp_step1_desc: "Configuration de l'Apple Developer ID, de la Google Play Console, des profils de provisionnement et des signatures.",
+    svcp_step2_title: "Optimisation des métadonnées ASO",
+    svcp_step2_desc: "Rédaction des descriptions et mots-clés, et conception de captures d'écran aux formats 6,7\" et iPad Pro.",
+    svcp_step3_title: "Soumission de l'app et validation de la revue",
+    svcp_step3_desc: "Envoi de la build et traitement des retours directement avec l'équipe App Review d'Apple/Google.",
+    svcp_step4_title: "En ligne et garantie 100 %",
+    svcp_step4_desc: "Votre app est officiellement publique dans plus de 150 pays, avec ses premiers téléchargements.",
+    svcp_price_googleplay_note: "Paiement en 2 fois ($25 + $25)",
+    svcp_price_bothstores_title: "Les deux stores",
+    svcp_price_enterprise_title: "Entreprise",
+    svcp_price_enterprise_value: "Nous contacter",
+    svcp_price_enterprise_note: "Applications multiples / gros volume",
+    svcr_badge: "Boost d'installations fiable et avis 5 étoiles",
+    svcr_h1: "Propulsez votre app en top catégorie et boostez vos mots-clés ASO",
+    svcr_intro: "Une campagne qui génère 1 000 à 100 000 installations d'utilisateurs réels aux États-Unis, au Vietnam, au Japon, en Corée, en Europe et ailleurs, ainsi que plus de 1 000 avis 5 étoiles naturels pour renforcer la crédibilité de votre app.",
+    svcr_cta: "Lancer votre campagne 5★",
+    svcr_feature1_title: "Augmenter les installations par mots-clés",
+    svcr_feature1_desc: "De vrais utilisateurs recherchent votre mot-clé cible (par ex. « crypto wallet ») sur l'App Store/Play Store et installent votre app pour propulser son classement dans le Top 1-3.",
+    svcr_feature2_title: "Créer plus de 1 000 notes 5 étoiles",
+    svcr_feature2_desc: "Recevez des centaines d'avis positifs de 2 à 3 phrases dans les langues locales (vietnamien, anglais, japonais, coréen, français...) pour maintenir votre note entre 4,8 et 5,0.",
+    svcr_feature3_title: "Promotion par pays (ciblage géographique)",
+    svcr_feature3_desc: "Choisissez des segments d'utilisateurs réels dans n'importe quel pays du monde pour maximiser la compatibilité de votre campagne de promotion mondiale.",
+    svcr_bonus_line1: "🎁 Chaque forfait de service TE2SR inclut 10 avis 5★ offerts de vrais utilisateurs.",
+    svcr_bonus_line2: "Les forfaits de croissance à grande échelle arrivent bientôt — contactez-nous pour un conseil anticipé.",
   },
   de: {
     brand_name: 'TE2SR',
@@ -349,6 +2393,298 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     admin_table_date: 'Erstellt am',
     admin_table_action: 'Aktionen',
     footer_copy: '© 2026 TE2SR Platform. Alle Rechte vorbehalten.',
+    home_pay_split_badge: "50 % für das 14-Tage-Testing + 50 % beim Live-Gang der App",
+    home_refund_commitment: "100 % Rückerstattung bei Nichteinhaltung der Zusage",
+    home_no_scam_apps: "KEINE Betrugs- / Glücksspiel-Apps",
+    home_trust_secure_dev: "100 % sicheres Entwicklerkonto",
+    home_trust_24h: "Bearbeitung innerhalb von 24 Std.",
+    home_trust_50_countries: "Über 50 Länder",
+    home_stat_apps_approved: "Im Store freigegebene Apps",
+    home_stat_reviews_gifted: "Geschenkte 5★-Bewertungen",
+    home_stat_approval_rate: "Store-Freigabequote",
+    home_stat_languages: "Globale Sprachen",
+    home_services_chip: "Kernleistungen",
+    home_services_subtitle: "Ein durchgängiger Prozess für 90 % Freigabequote, aufgeteilt in 2 Zahlungen (50 % - 50 %) inklusive 10 gratis 5★-Bewertungen.",
+    home_svc_testing_feat1: "TestFlight iOS & Android Internal",
+    home_svc_testing_feat2: "12 echte Tester über 14 Tage",
+    home_svc_testing_feat3: "Crash-, Bug- & UI/UX-Berichte",
+    home_svc_testing_feat4: "Behebung von UI-Fehlern bei Bedarf",
+    home_svc_testing_cta: "Testing entdecken",
+    home_svc_publishing_feat1: "Apple & Google Developer Console",
+    home_svc_publishing_feat2: "Integration von Zahlungsgateway & API",
+    home_svc_publishing_feat3: "Zahlung in 2 Raten (50 % - 50 %)",
+    home_svc_publishing_feat4: "ASO-Optimierung nach Store-Freigabestandards",
+    home_svc_publishing_cta: "App jetzt veröffentlichen",
+    home_svc_promo_title: "⭐️ 5-Sterne-Bewertungspaket (10 Bewertungen inklusive)",
+    home_svc_promo_desc: "Jedes Servicepaket enthält 10 echte 5-Sterne-Bewertungen, damit deine App auf dem Store erstes Vertrauen aufbaut.",
+    home_svc_promo_feat1: "10 gratis 5★-Bewertungen von echten Nutzern",
+    home_svc_promo_feat2: "Grundlegende ASO-Keyword-Optimierung",
+    home_svc_promo_feat3: "Bewertungen in der gewünschten Sprache",
+    home_svc_promo_feat4: "Großmengen-Pakete folgen in Kürze ⏳",
+    home_svc_promo_cta: "10★ sichern",
+    home_pricing_chip: "Preise & Zahlungsprozess in 2 Raten",
+    home_price_gplay_label: "Google-Play-Veröffentlichung",
+    home_price_gplay_unit: "/ Android-App",
+    home_price_gplay_split: "Zahlung in 2 Raten ($25 + $25)",
+    home_price_gplay_feat1: "App in der Google Play Console veröffentlichen",
+    home_price_gplay_feat2: "12 echte Tester über 14 Tage einrichten",
+    home_price_gift_10_reviews: "🎁 10 hochwertige 5★-Bewertungen gratis",
+    home_price_gplay_feat4: "Grundlegende ASO-Metadaten-Optimierung",
+    home_price_secure_account: "🔒 100 % sicherer Kontoschutz",
+    home_price_refund_fail: "100 % Rückerstattung bei Nichtbestehen",
+    home_price_gplay_btn: "Google-Play-Paket wählen ($50)",
+    home_price_popular: "⭐ AM BELIEBTESTEN",
+    home_price_both_label: "Beide-Stores-Paket",
+    home_price_both_unit: "/ beide Stores",
+    home_price_both_split: "Zahlung in 2 Raten ($50 + $50)",
+    home_price_both_feat1: "Veröffentlichung in BEIDEN Stores: Google Play & iOS App Store",
+    home_price_both_feat2: "12 Google-Play-Tester (14 Tage) + TestFlight iOS",
+    home_price_both_feat3: "🐞 Fehlerberichte & detaillierte Crash-Log-Analyse",
+    home_price_both_feat4: "💳 Integration von Zahlungsgateway & API",
+    home_price_secure_dev: "🔒 100 % sicherer Schutz des Entwicklerkontos",
+    home_price_both_btn: "Für beide Stores anmelden ($100)",
+    home_price_ent_label: "Enterprise-Paket",
+    home_price_ent_contact: "KONTAKT",
+    home_price_ent_unit: "/ individueller Plan",
+    home_price_ent_consult: "1-zu-1-Beratung mit dem leitenden Ingenieur",
+    home_price_ent_feat1: "Multi-App- / Massenveröffentlichung",
+    home_price_ent_feat2: "🛠️ Direkte Fehlerbehebung (Code & UI)",
+    home_price_ent_feat3: "🎨 Tiefgehende UI/UX-Prüfung nach Apple/Google-Standards",
+    home_price_ent_feat4: "🧪 Vollständiges Testing auf 20+ echten Geräten",
+    home_price_ent_feat5: "🐞 Detaillierte Fehlerberichte & Leistungsanalyse",
+    home_price_ent_feat6: "🎁 10 gratis 5★-Bewertungen in der gewünschten Sprache",
+    home_price_ent_feat8: "NDA-Vertraulichkeitsvereinbarung & SLA-Zusage",
+    home_price_ent_btn: "Kontakt für Enterprise",
+    order_error_submit_failed: "Anfrage konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+    order_success_title: "Anfrage erfolgreich gesendet!",
+    order_your_order_id: "Ihre Bestellnummer:",
+    order_payment_2step_title: "💳 Zahlungsprozess in 2 Raten (50 % - 50 %)",
+    order_phase1_badge: "Rate 1 (50 %)",
+    order_phase1_desc: "Zahlen Sie 50 %, nachdem 12 Tester eingerichtet und der Testlink erhalten wurde, um den 14-Tage-Countdown zu starten.",
+    order_phase2_badge: "Rate 2 (50 %)",
+    order_phase2_desc: "Zahlen Sie die restlichen 50 %, nachdem die App erfolgreich veröffentlicht wurde (live im Store freigegeben).",
+    order_tester_guide_title: "🤖 Anleitung zur Aktivierung von 12 Testern (14 Tage)",
+    order_tester_step1: "1. Fügen Sie die Google-Gruppen-E-Mail im Bereich Closed Testing (geschlossener Test) in der Google Play Console hinzu:",
+    order_copied: "Kopiert",
+    order_copy_email: "E-Mail kopieren",
+    order_tester_step2: "2. Bitte senden Sie den Testlink (Opt-in-URL) im Chat mit dem Administrator, damit das TE2SR-Testerteam ihn sofort einrichten kann!",
+    order_moneyback_badge: "100 % GELD-ZURÜCK-Garantie, wenn die Serviceanforderungen nicht erfüllt werden.",
+    order_payment_info_title: "💳 Zahlungsinformationen Rate 1 (50 %)",
+    order_manual_check_15m: "Manuelle Prüfung in 15 Min.",
+    order_timo_bank: "🇻🇳 Timo Bank (Vietnam)",
+    order_account_number_label: "Kontonr.:",
+    order_account_holder_label: "Kontoinhaber:",
+    order_transfer_note_label: "Verwendungszweck:",
+    order_binance_pay: "🌐 Binance Pay / USDT (International)",
+    order_binance_id_label: "Binance-ID:",
+    order_network_label: "Netzwerk:",
+    order_memo_label: "Memo:",
+    order_reconcile_prefix: "Nach der Zahlung von Rate 1 gleicht unser Techniker die Bestellung",
+    order_reconcile_suffix: "ab und aktiviert sofort den 14-Tage-Countdown!",
+    order_finish_view_progress: "Fertigstellen & Fortschritt ansehen",
+    order_register_service: "Für TE2SR-Service registrieren",
+    order_form_subtitle: "Zahlen Sie 50 %, nachdem 12 Tester den 14-Tage-Countdown gestartet haben, und die restlichen 50 %, wenn die App im Store live ist.",
+    order_select_service_label: "Wählen Sie den zu buchenden Service",
+    order_service_testing: "QA-Test",
+    order_service_publishing: "Store-Veröffentlichung",
+    order_service_promotion: "5★ Boost",
+    order_app_name_label: "App-/Projektname",
+    order_app_name_placeholder: "z. B. CryptoPulse App",
+    order_email_label: "Kontakt-E-Mail",
+    order_testing_url_label: "Testlink (Google Play / TestFlight Opt-in-URL)",
+    order_testing_url_hint: "📌 Fügen Sie den Opt-in-Link zum geschlossenen Test ein, damit die TE2SR-Ingenieure sofort mit dem Test beginnen und die 14 Tage zählen.",
+    order_select_package_label: "Veröffentlichungspaket auswählen",
+    order_package_googleplay: "Google-Play-Paket (50 $)",
+    order_package_both: "Beide-Stores-Paket - Google Play & iOS (100 $)",
+    order_package_enterprise: "Enterprise-/Multi-App-Paket (KONTAKT)",
+    order_target_countries_label: "Zielländer",
+    order_target_countries_placeholder: "z. B. Vietnam, USA, Japan",
+    order_flexible_payment_title: "Flexible Zahlung in 2 Raten (50 % - 50 %):",
+    order_flex_phase1: "Rate 1 (50 %): Zahlen Sie, nachdem 12 Tester verbunden und der Testlink gesendet wurde, um den 14-Tage-Countdown zu starten.",
+    order_flex_phase2: "Rate 2 (50 %): Zahlen Sie, nachdem die App erfolgreich im Store live ist.",
+    order_closed_testing_group_title: "Google Play Closed-Testing-Gruppe (12 Tester / 14 Tage):",
+    order_closed_testing_group_desc: "Fügen Sie die Google-Gruppe te2sr@googlegroups.com zur Google Play Console hinzu und senden Sie den Testlink, damit die TE2SR-Ingenieure am Test teilnehmen können.",
+    order_details_label: "Anmerkungen oder Sonderwünsche",
+    order_details_placeholder: "Beschreiben Sie Ihre Ziele...",
+    order_submitting: "Daten werden gesendet...",
+    order_submit: "Anfrage jetzt senden",
+    auth_google_login_failed: "Google-Anmeldung fehlgeschlagen.",
+    auth_error_name_required: "Bitte geben Sie Ihren vollständigen Namen ein.",
+    auth_error_password_min: "Das Passwort muss mindestens 6 Zeichen lang sein.",
+    auth_error_generic: "Ein Fehler ist aufgetreten.",
+    auth_title_register: "Konto erstellen",
+    auth_title_login: "Anmelden",
+    auth_subtitle: "Verfolgen Sie den App-Prüfungsfortschritt, chatten Sie direkt und sehen Sie Testberichte ein.",
+    auth_google_config_note: "(NEXT_PUBLIC_GOOGLE_CLIENT_ID festlegen, um die Google-Anmeldung zu aktivieren)",
+    auth_divider_email: "Oder E-Mail verwenden",
+    auth_label_name: "Vollständiger Name",
+    auth_placeholder_name: "Max Mustermann",
+    auth_label_email: "E-Mail",
+    auth_label_password: "Passwort",
+    auth_placeholder_password: "Mindestens 6 Zeichen",
+    auth_submit_register: "Konto erstellen",
+    auth_submit_login: "Anmelden",
+    auth_switch_to_login: "Sie haben bereits ein Konto? Jetzt anmelden",
+    auth_switch_to_register: "Noch kein Konto? Hier registrieren",
+    pwd_title_change: "Passwort ändern",
+    pwd_title_set: "Anmeldepasswort festlegen",
+    pwd_desc_change: "Aktualisieren Sie Ihr Kontopasswort.",
+    pwd_desc_set: "Google-Konto — legen Sie ein Passwort fest, um sich auch per E-Mail anzumelden.",
+    pwd_ph_current: "Aktuelles Passwort",
+    pwd_ph_new: "Neues Passwort (≥ 6 Zeichen)",
+    pwd_ph_confirm: "Neues Passwort bestätigen",
+    pwd_err_min: "Das neue Passwort muss mindestens 6 Zeichen lang sein.",
+    pwd_err_mismatch: "Die Passwortbestätigung stimmt nicht überein.",
+    pwd_success_change: "Passwort erfolgreich geändert.",
+    pwd_success_set: "Passwort festgelegt — Sie können sich jetzt per E-Mail anmelden.",
+    pwd_err_fail: "Passwortänderung fehlgeschlagen.",
+    pwd_btn_change: "Passwort ändern",
+    pwd_btn_set: "Passwort festlegen",
+    nb_admin_link: "Admin-Verwaltung",
+    nb_admin_panel_title: "Admin-Dashboard öffnen",
+    nb_admin_prefix: "Admin: ",
+    nb_order_progress_title: "Bestellfortschritt verfolgen",
+    nb_logout_title: "Abmelden",
+    nb_login: "Anmelden",
+    chat_header: "Schneller Support rund um die Uhr",
+    chat_intro: "Wählen Sie einen Kanal, um direkt einen TE2SR-Spezialisten zu kontaktieren:",
+    chat_channel_zalo: "Chat über Zalo (Vietnam)",
+    chat_channel_whatsapp: "WhatsApp (Global)",
+    chat_channel_x: "X (Twitter) @_te2sr",
+    chat_channel_messenger: "FB Messenger",
+    chat_button_title: "Support-Chat",
+    adm_active: "aktiv",
+    adm_analytics_by_service: "Analyse nach Service",
+    adm_auth_button: "Anmelden / Registrieren",
+    adm_auth_desc: "Melden Sie sich an, um auf das Dashboard zuzugreifen, den Auftragsfortschritt zu verfolgen und direkt mit dem TE2SR-Engineering-Team zu chatten.",
+    adm_auth_title: "Authentifizierung erforderlich",
+    adm_chat_no_order: "Wählen Sie eine Bestellung im Tab „Bestellungen\", um den Chat zu starten.",
+    adm_chat_title_admin: "Kundensupport",
+    adm_chat_title_client: "Chat mit TE2SR-Ingenieuren",
+    adm_collected: "eingenommen",
+    adm_contact_price: "Kontakt",
+    adm_copied: "Kopiert",
+    adm_copy: "Kopieren",
+    adm_copy_email: "E-Mail kopieren",
+    adm_discuss_order: "Diese Bestellung besprechen",
+    adm_filter_all: "Alle",
+    adm_greeting: "Hallo",
+    adm_header_admin: "Admin-Kontrollzentrum",
+    adm_header_client: "📦 Service-Tracking-Portal",
+    adm_input_admin: "Dem Kunden antworten...",
+    adm_input_client: "Nachricht an den Support-Ingenieur...",
+    adm_loading_session: "Sitzung wird geladen...",
+    adm_needs_action: "Aktion erforderlich",
+    adm_no_data: "Noch keine Daten.",
+    adm_no_messages: "Noch keine Nachrichten. Sag Hallo 👋",
+    adm_no_orders: "Noch keine Bestellungen.",
+    adm_no_orders_found: "Keine Bestellungen gefunden",
+    adm_notes: "Notizen:",
+    adm_order_detail: "Bestelldetails",
+    adm_payment_deposit: "Rate 1 (50 %)",
+    adm_payment_final: "Rate 2 (50 %)",
+    adm_payment_update_failed: "Zahlungsaktualisierung fehlgeschlagen.",
+    adm_progress_title: "Bearbeitungsfortschritt",
+    adm_quick_contact: "Schnellkontakt:",
+    adm_recent_orders: "Aktuelle Bestellungen",
+    adm_refresh: "Aktualisieren",
+    adm_role_admin: "Administrator",
+    adm_role_client: "Kunde",
+    adm_row_client_email: "Kunden-E-Mail",
+    adm_row_countries: "Länder",
+    adm_row_created: "Erstellungsdatum",
+    adm_row_order_id: "Bestell-ID",
+    adm_row_platform: "Plattform",
+    adm_row_price: "Paketpreis",
+    adm_row_service: "Service",
+    adm_search_placeholder: "Nach App-Name oder Bestell-ID suchen...",
+    adm_select_order_detail: "Wählen Sie eine Bestellung, um Details anzuzeigen",
+    adm_send_failed: "Nachricht konnte nicht gesendet werden.",
+    adm_stat_completed: "Abgeschlossen",
+    adm_stat_in_progress: "In Bearbeitung",
+    adm_stat_pending: "Warten auf Bestätigung",
+    adm_stat_revenue: "Umsatz (USD)",
+    adm_stat_total_orders: "Bestellungen gesamt",
+    adm_status_completed: "Abgeschlossen",
+    adm_status_in_progress: "In Bearbeitung",
+    adm_status_pending: "Ausstehend",
+    adm_status_rejected: "Abgelehnt",
+    adm_step_done: "Fertig",
+    adm_step_processing: "Bearbeitung",
+    adm_step_received: "Erhalten",
+    adm_subtitle_guest: "Verfolgen Sie den App-Fortschritt und chatten Sie direkt mit den Ingenieuren",
+    adm_svc_design: "KI-Design",
+    adm_svc_promotion: "5★ Boost",
+    adm_svc_publishing: "App Store",
+    adm_svc_testing: "QA-Test",
+    adm_tab_analytics: "Statistiken",
+    adm_tab_chat: "Support-Chat",
+    adm_tab_orders: "Bestellungen",
+    adm_tab_overview: "Übersicht",
+    adm_target_market: "Zielmärkte",
+    adm_tester_group_desc: "Fügen Sie diese E-Mail zum geschlossenen Test in der Google Play Console hinzu:",
+    adm_tester_group_label: "Tester-Gruppe:",
+    adm_tester_group_title: "🤖 Google Play Tester-Gruppe (12 Tester / 14 Tage)",
+    adm_testing_link: "Test-Link:",
+    adm_unit_orders: "Aufträge",
+    adm_update_failed: "Aktualisierung fehlgeschlagen.",
+    adm_view_all: "Alle anzeigen",
+    azr_level_critical: "Kritisch",
+    azr_level_warning: "Warnung",
+    azr_level_recommendation: "Empfehlung",
+    azr_err_no_image: "Bitte wählen Sie zuerst ein Design-Bild aus.",
+    azr_err_analyze_failed: "Analyse fehlgeschlagen. Bitte versuchen Sie es erneut.",
+    azr_badge: "KI-UI/UX-Design-Analyzer",
+    azr_upload_change: "Klicken, um ein anderes Bild zu wählen",
+    azr_login_note: "Melden Sie sich an, um Ihren Analyseberichtsverlauf zu speichern.",
+    azr_analyzing: "Design wird analysiert...",
+    azr_history_title: "Analyseverlauf",
+    azr_suggestions_suffix: "Vorschläge",
+    azr_sub_layout: "Layout & Abstände",
+    azr_sub_typography: "Typografie",
+    azr_sub_contrast: "Farbe & Kontrast",
+    azr_sub_accessibility: "Barrierefreiheit (A11y)",
+    azr_reset_btn: "Anderes Bild analysieren",
+    svct_badge: "Professioneller App-Testing-Service",
+    svct_h1: "iOS TestFlight & Android QA Multi-Device-Testing",
+    svct_intro: "Erkennen Sie alle Abstürze, optimieren Sie die Reaktionsgeschwindigkeit und stellen Sie perfekte Kompatibilität auf über 20 iPhone-, iPad-, Samsung- und Google-Pixel-Modellen sicher, bevor Sie weltweit launchen.",
+    svct_cta: "Jetzt zum Testing anmelden",
+    svct_feature1_title: "TestFlight- & Beta-Verteilung",
+    svct_feature1_desc: "Verwalten Sie eine Liste mit über 100 internen Testern und erfassen Sie Feedback und Crash-Logs automatisch in Echtzeit.",
+    svct_feature2_title: "Performance- & RAM-Test",
+    svct_feature2_desc: "Messen Sie Akkuverbrauch, RAM-Auslastung, CPU-Last und Frame-Rendering-Geschwindigkeit (60fps/120fps-Flüssigkeit).",
+    svct_feature3_title: "Detaillierte Bug-Reports",
+    svct_feature3_desc: "Wir liefern Log-Dateien, Videos der Reproduktionsschritte und Fixes von erfahrenen QA-Experten.",
+    svct_device_matrix_heading: "Liste der echten Testgeräte",
+    svcp_badge: "App-Veröffentlichungsservice für App Store & Google Play",
+    svcp_h1: "Bringen Sie Ihr Projekt in die globalen App-Stores",
+    svcp_intro: "Rundum-Betreuung von der Vorbereitung Ihres Apple-Zertifikats / Android-Keystores über die Optimierung der ASO-Metadaten-Keywords bis zur offiziellen Veröffentlichung Ihrer App im App Store & bei Google Play.",
+    svcp_cta: "Jetzt zur Veröffentlichung anmelden",
+    svcp_step1_title: "Konto & Zertifikate vorbereiten",
+    svcp_step1_desc: "Apple Developer ID, Google Play Console, Provisioning-Profile und Signaturen konfigurieren.",
+    svcp_step2_title: "ASO-Metadaten optimieren",
+    svcp_step2_desc: "Beschreibungen und Keywords schreiben sowie Screenshots in den Formaten 6,7\" & iPad Pro gestalten.",
+    svcp_step3_title: "App einreichen & Review bestehen",
+    svcp_step3_desc: "Build einreichen und Feedback direkt mit dem App-Review-Team von Apple/Google bearbeiten.",
+    svcp_step4_title: "Live & 100 % Garantie",
+    svcp_step4_desc: "Ihre App erscheint offiziell öffentlich in über 150 Ländern mit den ersten Downloads.",
+    svcp_price_googleplay_note: "Zahlung in 2 Raten ($25 + $25)",
+    svcp_price_bothstores_title: "Beide Stores",
+    svcp_price_enterprise_title: "Unternehmen",
+    svcp_price_enterprise_value: "Kontakt",
+    svcp_price_enterprise_note: "Mehrere Apps / große Mengen",
+    svcr_badge: "Vertrauenswürdiger Installations-Boost & 5-Sterne-Bewertungen",
+    svcr_h1: "Bringen Sie Ihre App in die Top-Kategorie & steigern Sie ASO-Keywords",
+    svcr_intro: "Eine Kampagne, die 1.000 bis 100.000 Installationen von echten Nutzern in den USA, Vietnam, Japan, Korea, Europa und mehr generiert, plus über 1.000 natürliche 5-Sterne-Bewertungen zur Steigerung der Glaubwürdigkeit Ihrer App.",
+    svcr_cta: "5★-Boost-Kampagne starten",
+    svcr_feature1_title: "Keyword-Installationen steigern",
+    svcr_feature1_desc: "Echte Nutzer suchen Ihr Ziel-Keyword (z. B. „crypto wallet“) im App Store/Play Store und installieren Ihre App, um ihr Suchranking in die Top 1-3 zu bringen.",
+    svcr_feature2_title: "Über 1.000 5-Sterne-Bewertungen aufbauen",
+    svcr_feature2_desc: "Erhalten Sie Hunderte positiver Bewertungen von 2-3 Sätzen in lokalen Sprachen (Vietnamesisch, Englisch, Japanisch, Koreanisch, Französisch...), um Ihre Bewertung bei 4,8 - 5,0 zu halten.",
+    svcr_feature3_title: "Länderspezifische Werbung (Geo-Targeting)",
+    svcr_feature3_desc: "Wählen Sie echte Nutzersegmente in jedem beliebigen Land weltweit, um die Kompatibilität Ihrer globalen Werbekampagne zu maximieren.",
+    svcr_bonus_line1: "🎁 Jedes TE2SR-Servicepaket enthält 10 kostenlose 5★-Bewertungen von echten Nutzern.",
+    svcr_bonus_line2: "Große Wachstumspakete kommen bald — kontaktieren Sie uns für eine frühzeitige Beratung.",
   },
   es: {
     brand_name: 'TE2SR',
@@ -401,6 +2737,298 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     admin_table_date: 'Fecha de Creación',
     admin_table_action: 'Acciones',
     footer_copy: '© 2026 TE2SR Platform. Todos los derechos reservados.',
+    home_pay_split_badge: "Paga 50 % por las pruebas de 14 días + 50 % cuando la app esté activa",
+    home_refund_commitment: "Reembolso del 100 % si no cumplimos el compromiso",
+    home_no_scam_apps: "NO aceptamos apps de estafa / apuestas",
+    home_trust_secure_dev: "Cuenta de desarrollador 100 % segura",
+    home_trust_24h: "Procesado en 24 h",
+    home_trust_50_countries: "Más de 50 países",
+    home_stat_apps_approved: "Apps aprobadas en la tienda",
+    home_stat_reviews_gifted: "Reseñas 5★ regaladas",
+    home_stat_approval_rate: "Tasa de aprobación en la tienda",
+    home_stat_languages: "Idiomas globales",
+    home_services_chip: "Servicios principales",
+    home_services_subtitle: "Un proceso integral que logra un 90 % de aprobación, dividido en 2 pagos (50 % - 50 %) y con 10 reseñas 5★ de regalo.",
+    home_svc_testing_feat1: "TestFlight iOS y Android Internal",
+    home_svc_testing_feat2: "12 testers reales durante 14 días",
+    home_svc_testing_feat3: "Informes de fallos, bugs y UI/UX",
+    home_svc_testing_feat4: "Corrección de errores de interfaz si es necesario",
+    home_svc_testing_cta: "Explorar las pruebas",
+    home_svc_publishing_feat1: "Apple y Google Developer Console",
+    home_svc_publishing_feat2: "Integración de pasarela de pago y API",
+    home_svc_publishing_feat3: "Pago en 2 plazos (50 % - 50 %)",
+    home_svc_publishing_feat4: "Optimización ASO según los estándares de aprobación de la tienda",
+    home_svc_publishing_cta: "Publicar la app ahora",
+    home_svc_promo_title: "⭐️ Paquete de reseñas de 5 estrellas (10 reseñas incluidas)",
+    home_svc_promo_desc: "Cada paquete de servicios incluye 10 reseñas reales de 5 estrellas para ayudar a tu app a ganar credibilidad inicial en la tienda.",
+    home_svc_promo_feat1: "10 reseñas 5★ de regalo de usuarios reales",
+    home_svc_promo_feat2: "Optimización básica de palabras clave ASO",
+    home_svc_promo_feat3: "Reseñas en el idioma que elijas",
+    home_svc_promo_feat4: "Paquetes por volumen próximamente ⏳",
+    home_svc_promo_cta: "Regístrate para 10★",
+    home_pricing_chip: "Precios y proceso de pago en 2 plazos",
+    home_price_gplay_label: "Publicación en Google Play",
+    home_price_gplay_unit: "/ app de Android",
+    home_price_gplay_split: "Pago en 2 plazos ($25 + $25)",
+    home_price_gplay_feat1: "Publicar la app en Google Play Console",
+    home_price_gplay_feat2: "Configurar 12 testers reales durante 14 días",
+    home_price_gift_10_reviews: "🎁 10 reseñas 5★ de calidad de regalo",
+    home_price_gplay_feat4: "Optimización básica de metadatos ASO",
+    home_price_secure_account: "🔒 Cuenta 100 % segura",
+    home_price_refund_fail: "Reembolso del 100 % si no se aprueba",
+    home_price_gplay_btn: "Elegir paquete de Google Play ($50)",
+    home_price_popular: "⭐ MÁS POPULAR",
+    home_price_both_label: "Paquete para ambas tiendas",
+    home_price_both_unit: "/ ambas tiendas",
+    home_price_both_split: "Pago en 2 plazos ($50 + $50)",
+    home_price_both_feat1: "Publicación en AMBAS tiendas: Google Play y iOS App Store",
+    home_price_both_feat2: "12 testers de Google Play (14 días) + TestFlight iOS",
+    home_price_both_feat3: "🐞 Informes de bugs y análisis detallado de registros de fallos",
+    home_price_both_feat4: "💳 Integración de pasarela de pago y API",
+    home_price_secure_dev: "🔒 Cuenta de desarrollador 100 % segura",
+    home_price_both_btn: "Registrarse para ambas tiendas ($100)",
+    home_price_ent_label: "Paquete Empresarial",
+    home_price_ent_contact: "CONTÁCTANOS",
+    home_price_ent_unit: "/ plan personalizado",
+    home_price_ent_consult: "Consulta 1 a 1 con el ingeniero principal",
+    home_price_ent_feat1: "Publicación de varias apps / por volumen",
+    home_price_ent_feat2: "🛠️ Corrección directa de errores (código e interfaz)",
+    home_price_ent_feat3: "🎨 Revisión UI/UX en profundidad según estándares de Apple/Google",
+    home_price_ent_feat4: "🧪 Prueba completa en más de 20 dispositivos reales",
+    home_price_ent_feat5: "🐞 Informes de bugs detallados y análisis de rendimiento",
+    home_price_ent_feat6: "🎁 10 reseñas 5★ de regalo en el idioma que elijas",
+    home_price_ent_feat8: "Acuerdo de confidencialidad (NDA) y compromiso de SLA",
+    home_price_ent_btn: "Contáctanos para Empresas",
+    order_error_submit_failed: "No se pudo enviar la solicitud. Inténtelo de nuevo.",
+    order_success_title: "¡Solicitud enviada con éxito!",
+    order_your_order_id: "Su número de pedido:",
+    order_payment_2step_title: "💳 Proceso de pago en 2 plazos (50 % - 50 %)",
+    order_phase1_badge: "Plazo 1 (50 %)",
+    order_phase1_desc: "Pague el 50 % después de instalar los 12 testers y recibir el enlace de prueba para iniciar la cuenta de 14 días.",
+    order_phase2_badge: "Plazo 2 (50 %)",
+    order_phase2_desc: "Pague el 50 % restante después de que la app se publique correctamente (aprobada en vivo en la Store).",
+    order_tester_guide_title: "🤖 Guía para activar 12 testers (14 días)",
+    order_tester_step1: "1. Añada el correo del grupo de Google a la sección Closed Testing (prueba cerrada) en Google Play Console:",
+    order_copied: "Copiado",
+    order_copy_email: "Copiar correo",
+    order_tester_step2: "2. Envíe el enlace de prueba (Opt-in URL) en el chat con el administrador para que el equipo de testers de TE2SR lo instale de inmediato.",
+    order_moneyback_badge: "Garantía de REEMBOLSO del 100 % si no se cumplen los requisitos del servicio.",
+    order_payment_info_title: "💳 Información de pago del plazo 1 (50 %)",
+    order_manual_check_15m: "Verificación manual en 15 min",
+    order_timo_bank: "🇻🇳 Banco Timo (Vietnam)",
+    order_account_number_label: "N.º de cuenta:",
+    order_account_holder_label: "Titular de la cuenta:",
+    order_transfer_note_label: "Concepto:",
+    order_binance_pay: "🌐 Binance Pay / USDT (Internacional)",
+    order_binance_id_label: "Binance ID:",
+    order_network_label: "Red:",
+    order_memo_label: "Memo:",
+    order_reconcile_prefix: "Tras el pago del plazo 1, nuestro técnico conciliará el pedido",
+    order_reconcile_suffix: "y activará de inmediato la cuenta de 14 días.",
+    order_finish_view_progress: "Finalizar y ver el progreso",
+    order_register_service: "Registrarse en el servicio TE2SR",
+    order_form_subtitle: "Pague el 50 % después de que 12 testers inicien la cuenta de 14 días y el 50 % restante cuando la app esté publicada en la Store.",
+    order_select_service_label: "Seleccione el servicio a contratar",
+    order_service_testing: "Pruebas QA",
+    order_service_publishing: "Publicación en la Store",
+    order_service_promotion: "Boost de 5★",
+    order_app_name_label: "Nombre de la app / proyecto",
+    order_app_name_placeholder: "p. ej. CryptoPulse App",
+    order_email_label: "Correo de contacto",
+    order_testing_url_label: "Enlace de prueba (Google Play / TestFlight Opt-in URL)",
+    order_testing_url_hint: "📌 Pegue el enlace de participación en la prueba cerrada para que los ingenieros de TE2SR empiecen a probar y cuenten los 14 días de inmediato.",
+    order_select_package_label: "Seleccione el paquete de publicación",
+    order_package_googleplay: "Paquete Google Play ($50)",
+    order_package_both: "Paquete ambas Stores - Google Play & iOS ($100)",
+    order_package_enterprise: "Paquete empresarial / multiapp (CONTÁCTENOS)",
+    order_target_countries_label: "Países objetivo",
+    order_target_countries_placeholder: "p. ej. Vietnam, EE. UU., Japón",
+    order_flexible_payment_title: "Pago flexible en 2 plazos (50 % - 50 %):",
+    order_flex_phase1: "Plazo 1 (50 %): pague tras conectar 12 testers y enviar el enlace de prueba para iniciar la cuenta de 14 días.",
+    order_flex_phase2: "Plazo 2 (50 %): pague una vez que la app esté publicada con éxito en la Store.",
+    order_closed_testing_group_title: "Grupo de prueba cerrada de Google Play (12 testers / 14 días):",
+    order_closed_testing_group_desc: "Añada el grupo de Google te2sr@googlegroups.com a Google Play Console y envíe el enlace de prueba para que los ingenieros de TE2SR se unan a la prueba.",
+    order_details_label: "Notas o solicitudes especiales",
+    order_details_placeholder: "Describa sus objetivos...",
+    order_submitting: "Enviando datos...",
+    order_submit: "Enviar solicitud ahora",
+    auth_google_login_failed: "Error al iniciar sesión con Google.",
+    auth_error_name_required: "Introduce tu nombre completo.",
+    auth_error_password_min: "La contraseña debe tener al menos 6 caracteres.",
+    auth_error_generic: "Se produjo un error.",
+    auth_title_register: "Crear cuenta",
+    auth_title_login: "Iniciar sesión",
+    auth_subtitle: "Sigue el progreso de la revisión de la app, chatea en directo y consulta los informes de prueba.",
+    auth_google_config_note: "(Configura NEXT_PUBLIC_GOOGLE_CLIENT_ID para habilitar el inicio de sesión con Google)",
+    auth_divider_email: "O usa el correo electrónico",
+    auth_label_name: "Nombre completo",
+    auth_placeholder_name: "Juan Pérez",
+    auth_label_email: "Correo electrónico",
+    auth_label_password: "Contraseña",
+    auth_placeholder_password: "Al menos 6 caracteres",
+    auth_submit_register: "Crear cuenta",
+    auth_submit_login: "Iniciar sesión",
+    auth_switch_to_login: "¿Ya tienes una cuenta? Inicia sesión ahora",
+    auth_switch_to_register: "¿No tienes una cuenta? Regístrate aquí",
+    pwd_title_change: "Cambiar contraseña",
+    pwd_title_set: "Establecer contraseña de acceso",
+    pwd_desc_change: "Actualiza la contraseña de tu cuenta.",
+    pwd_desc_set: "Cuenta de Google — establece una contraseña para acceder también con correo.",
+    pwd_ph_current: "Contraseña actual",
+    pwd_ph_new: "Nueva contraseña (≥ 6 caracteres)",
+    pwd_ph_confirm: "Confirmar nueva contraseña",
+    pwd_err_min: "La nueva contraseña debe tener al menos 6 caracteres.",
+    pwd_err_mismatch: "La confirmación de la contraseña no coincide.",
+    pwd_success_change: "Contraseña cambiada correctamente.",
+    pwd_success_set: "Contraseña establecida — ahora puedes acceder con tu correo.",
+    pwd_err_fail: "No se pudo cambiar la contraseña.",
+    pwd_btn_change: "Cambiar contraseña",
+    pwd_btn_set: "Establecer contraseña",
+    nb_admin_link: "Gestión de administrador",
+    nb_admin_panel_title: "Abrir el panel de administración",
+    nb_admin_prefix: "Admin: ",
+    nb_order_progress_title: "Seguir el progreso del pedido",
+    nb_logout_title: "Cerrar sesión",
+    nb_login: "Iniciar sesión",
+    chat_header: "Soporte rápido 24/7",
+    chat_intro: "Elige un canal para contactar directamente con un especialista de TE2SR:",
+    chat_channel_zalo: "Chatear por Zalo (Vietnam)",
+    chat_channel_whatsapp: "WhatsApp (Global)",
+    chat_channel_x: "X (Twitter) @_te2sr",
+    chat_channel_messenger: "FB Messenger",
+    chat_button_title: "Chat de soporte",
+    adm_active: "activos",
+    adm_analytics_by_service: "Análisis por servicio",
+    adm_auth_button: "Iniciar sesión / Registrarse",
+    adm_auth_desc: "Inicia sesión para acceder al panel, seguir el progreso de los pedidos y chatear directamente con el equipo de ingeniería de TE2SR.",
+    adm_auth_title: "Autenticación requerida",
+    adm_chat_no_order: "Selecciona un pedido en la pestaña \"Pedidos\" para empezar a chatear.",
+    adm_chat_title_admin: "Atención al cliente",
+    adm_chat_title_client: "Chatea con los ingenieros de TE2SR",
+    adm_collected: "cobrado",
+    adm_contact_price: "Contáctanos",
+    adm_copied: "Copiado",
+    adm_copy: "Copiar",
+    adm_copy_email: "Copiar correo",
+    adm_discuss_order: "Consultar sobre este pedido",
+    adm_filter_all: "Todos",
+    adm_greeting: "Hola",
+    adm_header_admin: "Centro de control de administrador",
+    adm_header_client: "📦 Portal de seguimiento de servicios",
+    adm_input_admin: "Responder al cliente...",
+    adm_input_client: "Enviar mensaje al ingeniero de soporte...",
+    adm_loading_session: "Cargando tu sesión...",
+    adm_needs_action: "Requiere acción",
+    adm_no_data: "Aún no hay datos.",
+    adm_no_messages: "Aún no hay mensajes. Saluda 👋",
+    adm_no_orders: "Aún no hay pedidos.",
+    adm_no_orders_found: "No se encontraron pedidos",
+    adm_notes: "Notas:",
+    adm_order_detail: "Detalles del pedido",
+    adm_payment_deposit: "Fase 1 (50 %)",
+    adm_payment_final: "Fase 2 (50 %)",
+    adm_payment_update_failed: "Error al actualizar el pago.",
+    adm_progress_title: "Progreso del procesamiento",
+    adm_quick_contact: "Contacto rápido:",
+    adm_recent_orders: "Pedidos recientes",
+    adm_refresh: "Actualizar",
+    adm_role_admin: "Administrador",
+    adm_role_client: "Cliente",
+    adm_row_client_email: "Correo del cliente",
+    adm_row_countries: "Países",
+    adm_row_created: "Fecha de creación",
+    adm_row_order_id: "ID del pedido",
+    adm_row_platform: "Plataforma",
+    adm_row_price: "Precio del paquete",
+    adm_row_service: "Servicio",
+    adm_search_placeholder: "Buscar por nombre de app o ID de pedido...",
+    adm_select_order_detail: "Selecciona un pedido para ver los detalles",
+    adm_send_failed: "Error al enviar el mensaje.",
+    adm_stat_completed: "Completados",
+    adm_stat_in_progress: "En curso",
+    adm_stat_pending: "En espera de confirmación",
+    adm_stat_revenue: "Ingresos (USD)",
+    adm_stat_total_orders: "Pedidos totales",
+    adm_status_completed: "Completado",
+    adm_status_in_progress: "En curso",
+    adm_status_pending: "Pendiente",
+    adm_status_rejected: "Rechazado",
+    adm_step_done: "Finalizado",
+    adm_step_processing: "Procesando",
+    adm_step_received: "Recibido",
+    adm_subtitle_guest: "Sigue el progreso de la app y chatea directamente con los ingenieros",
+    adm_svc_design: "Diseño IA",
+    adm_svc_promotion: "Impulso 5★",
+    adm_svc_publishing: "App Store",
+    adm_svc_testing: "Pruebas QA",
+    adm_tab_analytics: "Estadísticas",
+    adm_tab_chat: "Chat de soporte",
+    adm_tab_orders: "Pedidos",
+    adm_tab_overview: "Resumen",
+    adm_target_market: "Mercados objetivo",
+    adm_tester_group_desc: "Añade este correo a la prueba cerrada en la Google Play Console:",
+    adm_tester_group_label: "Grupo de testers:",
+    adm_tester_group_title: "🤖 Grupo de testers de Google Play (12 testers / 14 días)",
+    adm_testing_link: "Enlace de prueba:",
+    adm_unit_orders: "pedidos",
+    adm_update_failed: "Error al actualizar.",
+    adm_view_all: "Ver todo",
+    azr_level_critical: "Crítico",
+    azr_level_warning: "Advertencia",
+    azr_level_recommendation: "Recomendación",
+    azr_err_no_image: "Primero selecciona una imagen de diseño.",
+    azr_err_analyze_failed: "El análisis falló. Inténtalo de nuevo.",
+    azr_badge: "Analizador de diseño UI/UX con IA",
+    azr_upload_change: "Haz clic para elegir otra imagen",
+    azr_login_note: "Inicia sesión para guardar tu historial de informes de análisis.",
+    azr_analyzing: "Analizando el diseño...",
+    azr_history_title: "Historial de análisis",
+    azr_suggestions_suffix: "sugerencias",
+    azr_sub_layout: "Diseño y espaciado",
+    azr_sub_typography: "Tipografía",
+    azr_sub_contrast: "Color y contraste",
+    azr_sub_accessibility: "Accesibilidad (A11y)",
+    azr_reset_btn: "Analizar otra imagen",
+    svct_badge: "Servicio profesional de pruebas de apps",
+    svct_h1: "Pruebas multidispositivo iOS TestFlight y Android QA",
+    svct_intro: "Detecta todos los fallos, optimiza la velocidad de respuesta y garantiza una compatibilidad perfecta en más de 20 modelos de iPhone, iPad, Samsung y Google Pixel antes de lanzar tu app al mundo.",
+    svct_cta: "Regístrate para las pruebas ahora",
+    svct_feature1_title: "Distribución TestFlight y beta",
+    svct_feature1_desc: "Gestiona una lista de más de 100 testers internos, recopilando comentarios y registros de fallos en tiempo real de forma automática.",
+    svct_feature2_title: "Pruebas de rendimiento y RAM",
+    svct_feature2_desc: "Mide el consumo de batería, el uso de RAM, la carga de CPU y la velocidad de renderizado de fotogramas (fluidez de 60 fps/120 fps).",
+    svct_feature3_title: "Informes de errores detallados",
+    svct_feature3_desc: "Proporcionamos archivos de registro, vídeos de los pasos de reproducción y soluciones de expertos sénior en QA.",
+    svct_device_matrix_heading: "Lista de dispositivos de prueba reales",
+    svcp_badge: "Servicio de publicación de apps en App Store y Google Play",
+    svcp_h1: "Lleva tu proyecto a las tiendas de aplicaciones globales",
+    svcp_intro: "Soporte integral desde la preparación de tu certificado de Apple / keystore de Android y la optimización de palabras clave de los metadatos ASO, hasta que tu app aparezca oficialmente en la App Store y Google Play.",
+    svcp_cta: "Regístrate para publicar ahora",
+    svcp_step1_title: "Preparación de cuenta y certificados",
+    svcp_step1_desc: "Configuración de Apple Developer ID, Google Play Console, perfiles de aprovisionamiento y firmas.",
+    svcp_step2_title: "Optimización de metadatos ASO",
+    svcp_step2_desc: "Redacción de descripciones y palabras clave, y diseño de capturas de pantalla en los tamaños 6,7\" e iPad Pro.",
+    svcp_step3_title: "Envío de la app y aprobación de la revisión",
+    svcp_step3_desc: "Envío de la build y gestión de los comentarios directamente con el equipo de App Review de Apple/Google.",
+    svcp_step4_title: "Publicada y garantía del 100 %",
+    svcp_step4_desc: "Tu app se publica oficialmente en más de 150 países con sus primeras descargas.",
+    svcp_price_googleplay_note: "Pago en 2 cuotas ($25 + $25)",
+    svcp_price_bothstores_title: "Ambas tiendas",
+    svcp_price_enterprise_title: "Empresa",
+    svcp_price_enterprise_value: "Contáctanos",
+    svcp_price_enterprise_note: "Varias apps / gran volumen",
+    svcr_badge: "Aumento de descargas confiable y reseñas de 5 estrellas",
+    svcr_h1: "Lleva tu app al top de la categoría e impulsa las palabras clave ASO",
+    svcr_intro: "Una campaña que genera de 1.000 a 100.000 descargas de usuarios reales en EE. UU., Vietnam, Japón, Corea, Europa y más, además de más de 1.000 reseñas naturales de 5 estrellas para reforzar la credibilidad de tu app.",
+    svcr_cta: "Iniciar tu campaña de 5★",
+    svcr_feature1_title: "Aumenta las descargas por palabra clave",
+    svcr_feature1_desc: "Usuarios reales buscan tu palabra clave objetivo (p. ej. \"crypto wallet\") en la App Store/Play Store e instalan tu app para llevar su posición de búsqueda al Top 1-3.",
+    svcr_feature2_title: "Consigue más de 1.000 valoraciones de 5 estrellas",
+    svcr_feature2_desc: "Recibe cientos de reseñas positivas de 2 o 3 frases en idiomas locales (vietnamita, inglés, japonés, coreano, francés...) para mantener tu valoración en 4,8 - 5,0.",
+    svcr_feature3_title: "Promoción por país (segmentación geográfica)",
+    svcr_feature3_desc: "Elige segmentos de usuarios reales en cualquier país del mundo para maximizar la compatibilidad de tu campaña de promoción global.",
+    svcr_bonus_line1: "🎁 Cada paquete de servicios TE2SR incluye 10 reseñas de 5★ gratis de usuarios reales.",
+    svcr_bonus_line2: "Los paquetes de crecimiento a gran escala llegarán pronto — contáctanos para una consulta anticipada.",
   },
   zh: {
     brand_name: 'TE2SR',
@@ -453,6 +3081,298 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     admin_table_date: '创建日期',
     admin_table_action: '操作',
     footer_copy: '© 2026 TE2SR Platform. 保留所有权利。',
+    home_pay_split_badge: "14天测试付50%，应用上线再付50%",
+    home_refund_commitment: "未达成承诺100%退款",
+    home_no_scam_apps: "拒接诈骗 / 赌博类应用",
+    home_trust_secure_dev: "开发者账号100%安全",
+    home_trust_24h: "24小时内处理",
+    home_trust_50_countries: "50+ 个国家",
+    home_stat_apps_approved: "已上架应用",
+    home_stat_reviews_gifted: "已赠送5★评价",
+    home_stat_approval_rate: "上架通过率",
+    home_stat_languages: "全球语言",
+    home_services_chip: "核心服务",
+    home_services_subtitle: "端到端流程助力应用达到90%上架通过率，分2期付款（50% - 50%），并附赠10条5★评价。",
+    home_svc_testing_feat1: "TestFlight iOS 与 Android Internal",
+    home_svc_testing_feat2: "12名真实测试员，为期14天",
+    home_svc_testing_feat3: "崩溃、Bug 及 UI/UX 报告",
+    home_svc_testing_feat4: "如有需要修复界面问题",
+    home_svc_testing_cta: "了解测试服务",
+    home_svc_publishing_feat1: "Apple 与 Google Developer Console",
+    home_svc_publishing_feat2: "支付网关与 API 集成",
+    home_svc_publishing_feat3: "分2期付款（50% - 50%）",
+    home_svc_publishing_feat4: "符合上架标准的 ASO 优化",
+    home_svc_publishing_cta: "立即发布应用",
+    home_svc_promo_title: "⭐️ 五星评价套餐（赠送10条评价）",
+    home_svc_promo_desc: "所有服务套餐均附赠10条真实五星评价，帮助应用在商店建立初始信誉。",
+    home_svc_promo_feat1: "赠送10条真实用户5★评价",
+    home_svc_promo_feat2: "基础 ASO 关键词优化",
+    home_svc_promo_feat3: "按指定语言撰写评价",
+    home_svc_promo_feat4: "大批量套餐即将推出 ⏳",
+    home_svc_promo_cta: "申请获取10★",
+    home_pricing_chip: "价格与2期付款流程",
+    home_price_gplay_label: "Google Play 发布",
+    home_price_gplay_unit: "/ 安卓应用",
+    home_price_gplay_split: "分2期付款（$25 + $25）",
+    home_price_gplay_feat1: "将应用发布到 Google Play Console",
+    home_price_gplay_feat2: "配置12名真实测试员，为期14天",
+    home_price_gift_10_reviews: "🎁 赠送10条优质5★评价",
+    home_price_gplay_feat4: "基础 ASO 元数据优化",
+    home_price_secure_account: "🔒 账号100%安全保护",
+    home_price_refund_fail: "未通过则100%退款",
+    home_price_gplay_btn: "选择 Google Play 套餐（$50）",
+    home_price_popular: "⭐ 最受欢迎",
+    home_price_both_label: "双商店套餐",
+    home_price_both_unit: "/ 两大商店",
+    home_price_both_split: "分2期付款（$50 + $50）",
+    home_price_both_feat1: "发布至两大商店：Google Play 与 iOS App Store",
+    home_price_both_feat2: "12名 Google Play 测试员（14天）+ TestFlight iOS",
+    home_price_both_feat3: "🐞 缺陷报告与详细崩溃日志分析",
+    home_price_both_feat4: "💳 支付网关与 API 集成",
+    home_price_secure_dev: "🔒 开发者账号100%安全保护",
+    home_price_both_btn: "订购双商店套餐（$100）",
+    home_price_ent_label: "企业套餐",
+    home_price_ent_contact: "联系我们",
+    home_price_ent_unit: "/ 定制方案",
+    home_price_ent_consult: "与首席工程师一对一咨询",
+    home_price_ent_feat1: "多应用 / 批量发布",
+    home_price_ent_feat2: "🛠️ 直接修复缺陷（代码与界面）",
+    home_price_ent_feat3: "🎨 按 Apple/Google 标准深度审查 UI/UX",
+    home_price_ent_feat4: "🧪 20+ 台真实设备全面测试",
+    home_price_ent_feat5: "🐞 详细缺陷报告与性能分析",
+    home_price_ent_feat6: "🎁 赠送10条指定语言的5★评价",
+    home_price_ent_feat8: "NDA 保密协议与 SLA 承诺",
+    home_price_ent_btn: "咨询企业方案",
+    order_error_submit_failed: "请求提交失败。请重试。",
+    order_success_title: "请求提交成功！",
+    order_your_order_id: "您的订单编号：",
+    order_payment_2step_title: "💳 分两期付款流程（50% - 50%）",
+    order_phase1_badge: "第一期 (50%)",
+    order_phase1_desc: "在配置好 12 名 tester 并收到测试链接开始 14 天倒计时后支付 50%。",
+    order_phase2_badge: "第二期 (50%)",
+    order_phase2_desc: "在应用成功上架（在商店审核通过并上线）后支付剩余 50%。",
+    order_tester_guide_title: "🤖 激活 12 名 tester 指南（14 天）",
+    order_tester_step1: "1. 在 Google Play Console 的 Closed Testing（封闭测试）中添加 Google Group 邮箱：",
+    order_copied: "已复制",
+    order_copy_email: "复制邮箱",
+    order_tester_step2: "2. 请在与管理员的聊天中发送测试链接（Opt-in URL），以便 TE2SR 的 tester 团队立即安装！",
+    order_moneyback_badge: "如未满足服务要求，承诺 100% 退款。",
+    order_payment_info_title: "💳 第一期付款信息（50%）",
+    order_manual_check_15m: "15 分钟内人工核对",
+    order_timo_bank: "🇻🇳 Timo 银行（越南）",
+    order_account_number_label: "账号：",
+    order_account_holder_label: "账户名：",
+    order_transfer_note_label: "转账备注：",
+    order_binance_pay: "🌐 Binance Pay / USDT（国际）",
+    order_binance_id_label: "Binance ID：",
+    order_network_label: "网络：",
+    order_memo_label: "备注：",
+    order_reconcile_prefix: "第一期付款后，技术人员将核对订单",
+    order_reconcile_suffix: "并立即启动 14 天倒计时！",
+    order_finish_view_progress: "完成并查看进度",
+    order_register_service: "注册 TE2SR 服务",
+    order_form_subtitle: "在 12 名 tester 开始 14 天倒计时后支付 50%，应用在商店上线后支付剩余 50%。",
+    order_select_service_label: "选择要注册的服务",
+    order_service_testing: "QA 测试",
+    order_service_publishing: "商店上架",
+    order_service_promotion: "5★ 提升",
+    order_app_name_label: "应用 / 项目名称",
+    order_app_name_placeholder: "例如：CryptoPulse App",
+    order_email_label: "联系邮箱",
+    order_testing_url_label: "测试链接（Google Play / TestFlight Opt-in URL）",
+    order_testing_url_hint: "📌 粘贴封闭测试参与链接，TE2SR 工程师即可立即开始测试并计算 14 天。",
+    order_select_package_label: "选择上架套餐",
+    order_package_googleplay: "Google Play 套餐（$50）",
+    order_package_both: "双商店套餐 - Google Play 和 iOS（$100）",
+    order_package_enterprise: "企业 / 多应用套餐（联系我们）",
+    order_target_countries_label: "目标国家",
+    order_target_countries_placeholder: "例如：越南、美国、日本",
+    order_flexible_payment_title: "灵活分两期付款（50% - 50%）：",
+    order_flex_phase1: "第一期 (50%)：连接 12 名 tester 并发送测试链接开始 14 天倒计时后付款。",
+    order_flex_phase2: "第二期 (50%)：应用成功在商店上线后付款。",
+    order_closed_testing_group_title: "Google Play 封闭测试群组（12 名 tester / 14 天）：",
+    order_closed_testing_group_desc: "将 Google Group te2sr@googlegroups.com 添加到 Google Play Console，并发送测试链接，让 TE2SR 工程师参与测试。",
+    order_details_label: "备注或特殊要求",
+    order_details_placeholder: "描述您的目标……",
+    order_submitting: "正在提交数据……",
+    order_submit: "立即提交请求",
+    auth_google_login_failed: "Google 登录失败。",
+    auth_error_name_required: "请输入您的姓名。",
+    auth_error_password_min: "密码至少需要 6 个字符。",
+    auth_error_generic: "发生错误。",
+    auth_title_register: "注册账户",
+    auth_title_login: "登录",
+    auth_subtitle: "跟踪应用审核进度、实时聊天并查看测试报告。",
+    auth_google_config_note: "(设置 NEXT_PUBLIC_GOOGLE_CLIENT_ID 以启用 Google 登录)",
+    auth_divider_email: "或使用邮箱",
+    auth_label_name: "姓名",
+    auth_placeholder_name: "张三",
+    auth_label_email: "邮箱",
+    auth_label_password: "密码",
+    auth_placeholder_password: "至少 6 个字符",
+    auth_submit_register: "创建账户",
+    auth_submit_login: "登录",
+    auth_switch_to_login: "已有账户？立即登录",
+    auth_switch_to_register: "还没有账户？在此注册",
+    pwd_title_change: "修改密码",
+    pwd_title_set: "设置登录密码",
+    pwd_desc_change: "更新您的账户密码。",
+    pwd_desc_set: "Google 账户 — 设置密码以便也可用邮箱登录。",
+    pwd_ph_current: "当前密码",
+    pwd_ph_new: "新密码（≥ 6 个字符）",
+    pwd_ph_confirm: "确认新密码",
+    pwd_err_min: "新密码至少需要 6 个字符。",
+    pwd_err_mismatch: "确认密码不匹配。",
+    pwd_success_change: "密码修改成功。",
+    pwd_success_set: "密码已设置 — 现在您可以使用邮箱登录。",
+    pwd_err_fail: "修改密码失败。",
+    pwd_btn_change: "修改密码",
+    pwd_btn_set: "设置密码",
+    nb_admin_link: "管理员管理",
+    nb_admin_panel_title: "打开管理员控制面板",
+    nb_admin_prefix: "管理员: ",
+    nb_order_progress_title: "跟踪订单进度",
+    nb_logout_title: "退出登录",
+    nb_login: "登录",
+    chat_header: "24/7 快速支持",
+    chat_intro: "选择渠道直接联系 TE2SR 专家：",
+    chat_channel_zalo: "通过 Zalo 聊天 (越南)",
+    chat_channel_whatsapp: "WhatsApp (全球)",
+    chat_channel_x: "X (Twitter) @_te2sr",
+    chat_channel_messenger: "FB Messenger",
+    chat_button_title: "支持聊天",
+    adm_active: "进行中",
+    adm_analytics_by_service: "按服务分析",
+    adm_auth_button: "登录 / 注册",
+    adm_auth_desc: "登录以访问仪表板、跟踪订单进度并直接与 TE2SR 工程团队沟通。",
+    adm_auth_title: "需要身份验证",
+    adm_chat_no_order: "在\"订单\"选项卡中选择一个订单以开始沟通。",
+    adm_chat_title_admin: "客户支持",
+    adm_chat_title_client: "与 TE2SR 工程师沟通",
+    adm_collected: "已收",
+    adm_contact_price: "联系我们",
+    adm_copied: "已复制",
+    adm_copy: "复制",
+    adm_copy_email: "复制邮箱",
+    adm_discuss_order: "讨论此订单",
+    adm_filter_all: "全部",
+    adm_greeting: "你好",
+    adm_header_admin: "管理控制中心",
+    adm_header_client: "📦 服务跟踪门户",
+    adm_input_admin: "回复客户...",
+    adm_input_client: "给支持工程师发消息...",
+    adm_loading_session: "正在加载会话...",
+    adm_needs_action: "待处理",
+    adm_no_data: "暂无数据。",
+    adm_no_messages: "还没有消息。打个招呼吧 👋",
+    adm_no_orders: "暂无订单。",
+    adm_no_orders_found: "未找到订单",
+    adm_notes: "备注：",
+    adm_order_detail: "订单详情",
+    adm_payment_deposit: "第一期 (50%)",
+    adm_payment_final: "第二期 (50%)",
+    adm_payment_update_failed: "支付更新失败。",
+    adm_progress_title: "处理进度",
+    adm_quick_contact: "快速联系：",
+    adm_recent_orders: "最近订单",
+    adm_refresh: "刷新",
+    adm_role_admin: "管理员",
+    adm_role_client: "客户",
+    adm_row_client_email: "客户邮箱",
+    adm_row_countries: "国家/地区",
+    adm_row_created: "创建日期",
+    adm_row_order_id: "订单编号",
+    adm_row_platform: "平台",
+    adm_row_price: "套餐价格",
+    adm_row_service: "服务",
+    adm_search_placeholder: "按应用名称或订单编号搜索...",
+    adm_select_order_detail: "选择一个订单以查看详情",
+    adm_send_failed: "消息发送失败。",
+    adm_stat_completed: "已完成",
+    adm_stat_in_progress: "处理中",
+    adm_stat_pending: "待确认",
+    adm_stat_revenue: "营收 (USD)",
+    adm_stat_total_orders: "订单总数",
+    adm_status_completed: "已完成",
+    adm_status_in_progress: "处理中",
+    adm_status_pending: "待处理",
+    adm_status_rejected: "已拒绝",
+    adm_step_done: "完成",
+    adm_step_processing: "处理",
+    adm_step_received: "已接单",
+    adm_subtitle_guest: "跟踪应用进度并与工程师直接沟通",
+    adm_svc_design: "AI设计",
+    adm_svc_promotion: "5★助推",
+    adm_svc_publishing: "App Store",
+    adm_svc_testing: "QA测试",
+    adm_tab_analytics: "统计",
+    adm_tab_chat: "支持聊天",
+    adm_tab_orders: "订单",
+    adm_tab_overview: "概览",
+    adm_target_market: "目标市场",
+    adm_tester_group_desc: "将此邮箱添加到 Google Play Console 的封闭测试中：",
+    adm_tester_group_label: "测试员群组：",
+    adm_tester_group_title: "🤖 Google Play 测试员群组（12 名测试员 / 14 天）",
+    adm_testing_link: "测试链接：",
+    adm_unit_orders: "单",
+    adm_update_failed: "更新失败。",
+    adm_view_all: "查看全部",
+    azr_level_critical: "严重",
+    azr_level_warning: "警告",
+    azr_level_recommendation: "建议",
+    azr_err_no_image: "请先选择一张设计图片。",
+    azr_err_analyze_failed: "分析失败。请重试。",
+    azr_badge: "AI UI/UX 设计分析器",
+    azr_upload_change: "点击选择其他图片",
+    azr_login_note: "登录以保存您的分析报告历史记录。",
+    azr_analyzing: "正在分析设计...",
+    azr_history_title: "分析历史",
+    azr_suggestions_suffix: "条建议",
+    azr_sub_layout: "布局与间距",
+    azr_sub_typography: "排版",
+    azr_sub_contrast: "色彩与对比度",
+    azr_sub_accessibility: "无障碍 (A11y)",
+    azr_reset_btn: "分析其他图片",
+    svct_badge: "专业应用测试服务",
+    svct_h1: "iOS TestFlight 与 Android QA 多设备测试",
+    svct_intro: "在向全球发布之前，发现所有崩溃、优化响应速度，并确保应用在 20 多款 iPhone、iPad、Samsung 和 Google Pixel 机型上完美兼容。",
+    svct_cta: "立即申请测试",
+    svct_feature1_title: "TestFlight 与 Beta 分发",
+    svct_feature1_desc: "管理 100 多名内部 tester，自动实时收集反馈和崩溃日志。",
+    svct_feature2_title: "性能与内存测试",
+    svct_feature2_desc: "测量电量消耗、内存占用、CPU 负载和帧渲染速度（60fps/120fps 流畅度）。",
+    svct_feature3_title: "详细的缺陷报告",
+    svct_feature3_desc: "提供日志文件、错误复现步骤视频以及资深 QA 专家的修复方案。",
+    svct_device_matrix_heading: "实机测试设备清单",
+    svcp_badge: "App Store 和 Google Play 应用上架服务",
+    svcp_h1: "将您的项目推向全球应用商店",
+    svcp_intro: "提供从准备 Apple 证书 / Android 密钥库、优化 ASO 元数据关键词，到应用正式上架 App Store 和 Google Play 的全流程服务。",
+    svcp_cta: "立即报名上架",
+    svcp_step1_title: "准备账号与证书",
+    svcp_step1_desc: "配置 Apple Developer ID、Google Play Console、描述文件与签名。",
+    svcp_step2_title: "优化 ASO 元数据",
+    svcp_step2_desc: "撰写描述、关键词，并设计符合 6.7 英寸与 iPad Pro 尺寸的截图。",
+    svcp_step3_title: "提交应用并通过审核",
+    svcp_step3_desc: "提交构建版本，并直接与 Apple/Google 的 App Review 团队处理反馈。",
+    svcp_step4_title: "上线与 100% 保障",
+    svcp_step4_desc: "应用正式公开上线，覆盖 150+ 个国家并获得首批下载。",
+    svcp_price_googleplay_note: "分 2 期付款（$25 + $25）",
+    svcp_price_bothstores_title: "两个商店",
+    svcp_price_enterprise_title: "企业",
+    svcp_price_enterprise_value: "联系我们",
+    svcp_price_enterprise_note: "多应用 / 大批量",
+    svcr_badge: "可信的下载量提升与五星评价",
+    svcr_h1: "让你的应用进入品类榜首并提升 ASO 关键词排名",
+    svcr_intro: "一场为你带来 1,000 至 100,000 次真实用户下载的活动，覆盖美国、越南、日本、韩国、欧洲等地，并附赠 1,000+ 条自然的五星评价，提升应用可信度。",
+    svcr_cta: "启动 5★ 提升活动",
+    svcr_feature1_title: "提升关键词搜索下载量",
+    svcr_feature1_desc: "真实用户在 App Store/Play Store 搜索你的目标关键词（例如\"crypto wallet\"）并下载你的应用，将搜索排名推至前 1-3 名。",
+    svcr_feature2_title: "打造 1,000+ 五星评分",
+    svcr_feature2_desc: "获得数百条 2-3 句的正面评价，以本地语言撰写（越南语、英语、日语、韩语、法语等），帮助将评分保持在 4.8 - 5.0。",
+    svcr_feature3_title: "按国家推广（地理定向）",
+    svcr_feature3_desc: "在全球任意国家选择真实用户群体，最大化你的全球推广活动的适配性。",
+    svcr_bonus_line1: "🎁 每个 TE2SR 服务套餐均免费赠送 10 条真实用户的 5★ 评价。",
+    svcr_bonus_line2: "大规模增长套餐即将推出——欢迎联系我们提前咨询。",
   },
 };
 

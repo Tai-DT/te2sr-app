@@ -10,9 +10,9 @@ import type { DesignAnalysisReport, SuggestionLevel } from '@/lib/types';
 import { Sparkles, UploadCloud, Loader2, AlertCircle, CheckCircle2, RefreshCw, ImageIcon, Info, History } from 'lucide-react';
 
 const LEVEL_STYLE: Record<SuggestionLevel, { badge: string; dot: string; label: string }> = {
-  Critical: { badge: 'bg-red-50 border-red-200 text-red-800', dot: 'bg-red-500', label: 'Nghiêm trọng' },
-  Warning: { badge: 'bg-amber-50 border-amber-200 text-amber-800', dot: 'bg-amber-500', label: 'Cảnh báo' },
-  Recommendation: { badge: 'bg-blue-50 border-blue-200 text-brand-blue', dot: 'bg-brand-blue', label: 'Gợi ý' },
+  Critical: { badge: 'bg-red-50 border-red-200 text-red-800', dot: 'bg-red-500', label: 'azr_level_critical' },
+  Warning: { badge: 'bg-amber-50 border-amber-200 text-amber-800', dot: 'bg-amber-500', label: 'azr_level_warning' },
+  Recommendation: { badge: 'bg-blue-50 border-blue-200 text-brand-blue', dot: 'bg-brand-blue', label: 'azr_level_recommendation' },
 };
 
 function scoreColor(score: number): string {
@@ -95,7 +95,7 @@ export default function AnalyzerPage() {
   };
 
   const handleAnalyze = async () => {
-    if (!fileName) { setError('Vui lòng chọn một ảnh thiết kế trước.'); return; }
+    if (!fileName) { setError(t('azr_err_no_image')); return; }
     setAnalyzing(true);
     setError('');
     try {
@@ -103,7 +103,7 @@ export default function AnalyzerPage() {
       setReport(result);
       if (user) setHistory((prev) => [result, ...prev]);
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'Phân tích thất bại. Vui lòng thử lại.');
+      setError(err instanceof ApiError ? err.message : t('azr_err_analyze_failed'));
     } finally {
       setAnalyzing(false);
     }
@@ -126,7 +126,7 @@ export default function AnalyzerPage() {
         <div className="text-center space-y-3 max-w-2xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-violet-50 border border-violet-200 text-violet-700 text-xs font-extrabold">
             <Sparkles className="w-4 h-4" />
-            <span>AI UI/UX Design Analyzer</span>
+            <span>{t('azr_badge')}</span>
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold font-display text-slate-900">{t('analyzer_title')}</h1>
           <p className="text-sm text-slate-700 font-medium leading-relaxed">{t('analyzer_subtitle')}</p>
@@ -158,7 +158,7 @@ export default function AnalyzerPage() {
                   <p className="text-xs font-bold text-slate-700 flex items-center justify-center gap-1.5">
                     <ImageIcon className="w-3.5 h-3.5 text-brand-blue" />{fileName}
                   </p>
-                  <p className="text-[11px] text-slate-500 font-medium">Nhấp để chọn ảnh khác</p>
+                  <p className="text-[11px] text-slate-500 font-medium">{t('azr_upload_change')}</p>
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -180,7 +180,7 @@ export default function AnalyzerPage() {
             {!user && (
               <div className="flex items-start gap-2 p-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-600 text-[11px] font-semibold">
                 <Info className="w-4 h-4 shrink-0 mt-0.5 text-brand-blue" />
-                <span>Đăng nhập để lưu lại lịch sử báo cáo phân tích của bạn.</span>
+                <span>{t('azr_login_note')}</span>
               </div>
             )}
 
@@ -190,14 +190,14 @@ export default function AnalyzerPage() {
               className="w-full py-3.5 rounded-xl bg-brand-blue hover:bg-blue-600 text-white font-extrabold text-sm shadow-brand-blue transition-all flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {analyzing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-              <span>{analyzing ? 'Đang phân tích thiết kế...' : t('analyzer_btn_analyze')}</span>
+              <span>{analyzing ? t('azr_analyzing') : t('analyzer_btn_analyze')}</span>
             </button>
 
             {/* History (logged-in users) */}
             {user && history.length > 0 && (
               <div className="pt-4 space-y-2">
                 <h3 className="text-xs font-extrabold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                  <History className="w-3.5 h-3.5 text-brand-blue" /> Lịch sử phân tích ({history.length})
+                  <History className="w-3.5 h-3.5 text-brand-blue" /> {t('azr_history_title')} ({history.length})
                 </h3>
                 <div className="space-y-2">
                   {history.map((h) => (
@@ -209,7 +209,7 @@ export default function AnalyzerPage() {
                       <span className={`w-9 h-9 rounded-lg flex items-center justify-center text-xs font-extrabold font-display border shrink-0 ${scoreBadge(h.score)}`}>{h.score}</span>
                       <div className="min-w-0 flex-1">
                         <p className="text-xs font-bold text-slate-900 truncate group-hover:text-brand-blue">{h.fileName}</p>
-                        <p className="text-[11px] text-slate-500 font-medium">{new Date(h.createdAt).toLocaleString()} · {h.suggestions.length} gợi ý</p>
+                        <p className="text-[11px] text-slate-500 font-medium">{new Date(h.createdAt).toLocaleString()} · {h.suggestions.length} {t('azr_suggestions_suffix')}</p>
                       </div>
                     </button>
                   ))}
@@ -227,10 +227,10 @@ export default function AnalyzerPage() {
                 <p className="text-[11px] font-bold text-slate-500 font-mono">{report.fileName}</p>
               </div>
               <div className="space-y-4">
-                <SubScore label="Bố cục & Khoảng cách" value={report.layoutScore} />
-                <SubScore label="Typography" value={report.typographyScore} />
-                <SubScore label="Màu sắc & Tương phản" value={report.contrastScore} />
-                <SubScore label="Khả năng tiếp cận (A11y)" value={report.accessibilityScore} />
+                <SubScore label={t('azr_sub_layout')} value={report.layoutScore} />
+                <SubScore label={t('azr_sub_typography')} value={report.typographyScore} />
+                <SubScore label={t('azr_sub_contrast')} value={report.contrastScore} />
+                <SubScore label={t('azr_sub_accessibility')} value={report.accessibilityScore} />
               </div>
             </div>
 
@@ -247,7 +247,7 @@ export default function AnalyzerPage() {
                   <div key={i} className="bg-white rounded-2xl border border-slate-200 shadow-apple-sm p-5 space-y-2">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-extrabold border ${lv.badge}`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${lv.dot}`} />{lv.label}
+                        <span className={`w-1.5 h-1.5 rounded-full ${lv.dot}`} />{t(lv.label)}
                       </span>
                       <span className="px-2.5 py-1 rounded-full bg-slate-100 border border-slate-200 text-[11px] font-bold text-slate-700">{s.category}</span>
                     </div>
@@ -263,7 +263,7 @@ export default function AnalyzerPage() {
                 onClick={reset}
                 className="px-6 py-3 rounded-xl bg-slate-100 border border-slate-300 text-slate-900 font-extrabold text-xs hover:border-brand-blue hover:bg-white transition-all flex items-center gap-2"
               >
-                <RefreshCw className="w-4 h-4" /><span>Phân tích ảnh khác</span>
+                <RefreshCw className="w-4 h-4" /><span>{t('azr_reset_btn')}</span>
               </button>
             </div>
           </div>

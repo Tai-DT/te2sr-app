@@ -33,9 +33,29 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; dot: string 
 const ALL_STATUSES: Order['status'][] = ['Pending', 'In Progress', 'Completed', 'Rejected'];
 
 export default function AdminPortalPage() {
-  useLanguage();
+  const { t } = useLanguage();
   const { user, loading: authLoading, openAuthModal } = useAuth();
   const isAdmin = user?.role === 'admin';
+
+  // Translate module-scope SERVICE_LABELS / STATUS_CONFIG labels at the render site.
+  const svcLabel = (type: string) => {
+    const map: Record<string, string> = {
+      Testing: 'adm_svc_testing',
+      Publishing: 'adm_svc_publishing',
+      Promotion_5Star: 'adm_svc_promotion',
+      DesignAnalyzer: 'adm_svc_design',
+    };
+    return map[type] ? t(map[type]) : type;
+  };
+  const stsLabel = (status: string) => {
+    const map: Record<string, string> = {
+      Pending: 'adm_status_pending',
+      'In Progress': 'adm_status_in_progress',
+      Completed: 'adm_status_completed',
+      Rejected: 'adm_status_rejected',
+    };
+    return map[status] ? t(map[status]) : status;
+  };
 
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(false);
@@ -107,7 +127,7 @@ export default function AdminPortalPage() {
       setOrders((prev) => prev.map((o) => (o.id === orderId ? updated : o)));
       setSelectedOrder((prev) => (prev?.id === orderId ? updated : prev));
     } catch (err) {
-      alert(err instanceof ApiError ? err.message : 'Cập nhật thất bại.');
+      alert(err instanceof ApiError ? err.message : t('adm_update_failed'));
     }
   };
 
@@ -117,7 +137,7 @@ export default function AdminPortalPage() {
       setOrders((prev) => prev.map((o) => (o.id === orderId ? updated : o)));
       setSelectedOrder((prev) => (prev?.id === orderId ? updated : prev));
     } catch (err) {
-      alert(err instanceof ApiError ? err.message : 'Cập nhật thanh toán thất bại.');
+      alert(err instanceof ApiError ? err.message : t('adm_payment_update_failed'));
     }
   };
 
@@ -130,7 +150,7 @@ export default function AdminPortalPage() {
       setMessages((prev) => [...prev, msg]);
       setInputMessage('');
     } catch (err) {
-      alert(err instanceof ApiError ? err.message : 'Gửi tin nhắn thất bại.');
+      alert(err instanceof ApiError ? err.message : t('adm_send_failed'));
     } finally {
       setSending(false);
     }
@@ -154,10 +174,10 @@ export default function AdminPortalPage() {
   }, 0);
 
   const TABS = [
-    { id: 'overview', label: 'Tổng Quan', icon: LayoutDashboard },
-    { id: 'orders', label: 'Đơn Hàng', icon: Package },
-    { id: 'chat', label: 'Hỗ Trợ Chat', icon: MessageSquare },
-    { id: 'analytics', label: 'Thống Kê', icon: BarChart2 },
+    { id: 'overview', label: t('adm_tab_overview'), icon: LayoutDashboard },
+    { id: 'orders', label: t('adm_tab_orders'), icon: Package },
+    { id: 'chat', label: t('adm_tab_chat'), icon: MessageSquare },
+    { id: 'analytics', label: t('adm_tab_analytics'), icon: BarChart2 },
   ];
 
   return (
@@ -173,11 +193,11 @@ export default function AdminPortalPage() {
                 <LayoutDashboard className="w-4 h-4" />
               </div>
               <h1 className="text-xl sm:text-2xl font-extrabold font-display text-slate-900 tracking-tight">
-                {isAdmin ? 'Admin Control Center' : '📦 Cổng Theo Dõi Dịch Vụ'}
+                {isAdmin ? t('adm_header_admin') : t('adm_header_client')}
               </h1>
             </div>
             <p className="text-xs text-slate-700 pl-10 font-bold">
-              {user ? `Xin chào, ${user.name} · ${isAdmin ? 'Quản Trị Viên' : 'Khách Hàng'}` : 'Theo dõi tiến độ app & trao đổi trực tiếp với kỹ sư'}
+              {user ? `${t('adm_greeting')}, ${user.name} · ${isAdmin ? t('adm_role_admin') : t('adm_role_client')}` : t('adm_subtitle_guest')}
             </p>
           </div>
 
@@ -187,7 +207,7 @@ export default function AdminPortalPage() {
               className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs font-extrabold text-slate-900 hover:border-brand-blue hover:text-brand-blue shadow-apple-sm transition-all"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-brand-blue' : ''}`} />
-              <span>Làm Mới</span>
+              <span>{t('adm_refresh')}</span>
             </button>
           )}
         </div>
@@ -196,7 +216,7 @@ export default function AdminPortalPage() {
         {authLoading ? (
           <div className="bg-white rounded-3xl p-16 text-center border border-slate-300 shadow-apple-md">
             <Loader2 className="w-8 h-8 mx-auto animate-spin text-brand-blue" />
-            <p className="text-sm text-slate-600 font-semibold mt-3">Đang tải phiên đăng nhập...</p>
+            <p className="text-sm text-slate-600 font-semibold mt-3">{t('adm_loading_session')}</p>
           </div>
         ) : !user ? (
           <div className="bg-white rounded-3xl p-12 text-center space-y-6 border border-slate-300 shadow-apple-md">
@@ -209,16 +229,16 @@ export default function AdminPortalPage() {
               </div>
             </div>
             <div className="space-y-2">
-              <h3 className="text-xl font-extrabold text-slate-900">Khu Vực Yêu Cầu Xác Thực</h3>
+              <h3 className="text-xl font-extrabold text-slate-900">{t('adm_auth_title')}</h3>
               <p className="text-sm text-slate-800 max-w-sm mx-auto leading-relaxed font-semibold">
-                Đăng nhập để truy cập bảng điều khiển, theo dõi tiến độ đơn hàng & trao đổi trực tiếp với đội ngũ kỹ sư TE2SR.
+                {t('adm_auth_desc')}
               </p>
             </div>
             <button
               onClick={openAuthModal}
               className="px-8 py-3 rounded-2xl bg-brand-blue text-white font-extrabold text-sm shadow-brand-blue hover:bg-blue-600 transition-all"
             >
-              Đăng Nhập / Đăng Ký
+              {t('adm_auth_button')}
             </button>
           </div>
         ) : (
@@ -251,9 +271,9 @@ export default function AdminPortalPage() {
                       <Users className="w-5 h-5 text-amber-700" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-extrabold text-slate-900">🤖 Google Play Tester Group (12 Testers / 14 Ngày)</h4>
+                      <h4 className="text-xs font-extrabold text-slate-900">{t('adm_tester_group_title')}</h4>
                       <p className="text-[11px] text-slate-800 font-semibold">
-                        Thêm email này vào Closed Testing trên Google Play Console: <span className="font-mono font-extrabold text-brand-blue select-all">{googleGroupEmail}</span>
+                        {t('adm_tester_group_desc')} <span className="font-mono font-extrabold text-brand-blue select-all">{googleGroupEmail}</span>
                       </p>
                     </div>
                   </div>
@@ -262,16 +282,16 @@ export default function AdminPortalPage() {
                     className="px-3 py-1.5 rounded-xl bg-white border border-amber-300 text-amber-900 font-extrabold text-xs flex items-center gap-1.5 shrink-0 shadow-apple-sm hover:bg-amber-100 transition-colors"
                   >
                     {copiedGroup ? <Check className="w-3.5 h-3.5 text-emerald-700" /> : <Copy className="w-3.5 h-3.5" />}
-                    <span>{copiedGroup ? 'Đã sao chép' : 'Sao chép Email'}</span>
+                    <span>{copiedGroup ? t('adm_copied') : t('adm_copy_email')}</span>
                   </button>
                 </div>
 
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                   {[
-                    { label: 'Tổng Đơn Hàng', value: totalOrders, icon: Package, color: 'text-brand-blue', change: `${totalOrders} đơn` },
-                    { label: 'Đang Xử Lý', value: inProgress, icon: Activity, color: 'text-blue-700', change: `${inProgress} active` },
-                    { label: 'Hoàn Thành', value: completed, icon: CheckCircle2, color: 'text-emerald-700', change: `${Math.round((completed / Math.max(totalOrders, 1)) * 100)}%` },
-                    { label: isAdmin ? 'Doanh Thu (USD)' : 'Chờ Xác Nhận', value: isAdmin ? revenue : pending, icon: isAdmin ? DollarSign : Clock, color: 'text-amber-700', change: isAdmin ? 'đã thu' : 'Cần xử lý', prefix: isAdmin ? '$' : '' },
+                    { label: t('adm_stat_total_orders'), value: totalOrders, icon: Package, color: 'text-brand-blue', change: `${totalOrders} ${t('adm_unit_orders')}` },
+                    { label: t('adm_stat_in_progress'), value: inProgress, icon: Activity, color: 'text-blue-700', change: `${inProgress} ${t('adm_active')}` },
+                    { label: t('adm_stat_completed'), value: completed, icon: CheckCircle2, color: 'text-emerald-700', change: `${Math.round((completed / Math.max(totalOrders, 1)) * 100)}%` },
+                    { label: isAdmin ? t('adm_stat_revenue') : t('adm_stat_pending'), value: isAdmin ? revenue : pending, icon: isAdmin ? DollarSign : Clock, color: 'text-amber-700', change: isAdmin ? t('adm_collected') : t('adm_needs_action'), prefix: isAdmin ? '$' : '' },
                   ].map((stat, i) => {
                     const Icon = stat.icon;
                     return (
@@ -294,14 +314,14 @@ export default function AdminPortalPage() {
 
                 <div className="bg-white rounded-2xl border border-slate-300 shadow-apple-sm overflow-hidden">
                   <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-slate-50">
-                    <h2 className="text-sm font-extrabold text-slate-900">Đơn Hàng Gần Đây</h2>
+                    <h2 className="text-sm font-extrabold text-slate-900">{t('adm_recent_orders')}</h2>
                     <button onClick={() => setActiveTab('orders')} className="text-xs font-extrabold text-brand-blue hover:underline flex items-center gap-1">
-                      Xem tất cả <ChevronRight className="w-3.5 h-3.5" />
+                      {t('adm_view_all')} <ChevronRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
                   <div className="divide-y divide-slate-200">
                     {orders.length === 0 && !loading && (
-                      <div className="px-5 py-10 text-center text-slate-500 text-sm font-semibold">Chưa có đơn hàng nào.</div>
+                      <div className="px-5 py-10 text-center text-slate-500 text-sm font-semibold">{t('adm_no_orders')}</div>
                     )}
                     {orders.slice(0, 4).map((order) => {
                       const svc = SERVICE_LABELS[order.serviceType];
@@ -322,9 +342,9 @@ export default function AdminPortalPage() {
                             </div>
                           </div>
                           <div className="flex items-center gap-3">
-                            <span className={`hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold border ${svc?.color}`}>{svc?.label || order.serviceType}</span>
+                            <span className={`hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold border ${svc?.color}`}>{svcLabel(order.serviceType)}</span>
                             <span className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold border ${sts?.color}`}>
-                              <span className={`w-1.5 h-1.5 rounded-full ${sts?.dot}`} />{sts?.label}
+                              <span className={`w-1.5 h-1.5 rounded-full ${sts?.dot}`} />{stsLabel(order.status)}
                             </span>
                           </div>
                         </div>
@@ -347,7 +367,7 @@ export default function AdminPortalPage() {
                       <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-500" />
                       <input
                         type="text"
-                        placeholder="Tìm theo tên app hoặc mã đơn..."
+                        placeholder={t('adm_search_placeholder')}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 placeholder-slate-500 focus:outline-none focus:border-brand-blue shadow-apple-sm transition-colors"
@@ -358,8 +378,8 @@ export default function AdminPortalPage() {
                       onChange={(e) => setFilterStatus(e.target.value)}
                       className="px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 font-extrabold focus:outline-none focus:border-brand-blue shadow-apple-sm"
                     >
-                      <option value="all">Tất Cả</option>
-                      {ALL_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
+                      <option value="all">{t('adm_filter_all')}</option>
+                      {ALL_STATUSES.map((s) => <option key={s} value={s}>{stsLabel(s)}</option>)}
                     </select>
                   </div>
 
@@ -385,12 +405,12 @@ export default function AdminPortalPage() {
                                   <p className="text-[11px] text-slate-700 font-semibold mt-0.5">{order.id} · {order.clientEmail}</p>
                                 </div>
                                 <span className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold border shrink-0 ${sts?.color}`}>
-                                  <span className={`w-1.5 h-1.5 rounded-full ${sts?.dot}`} />{sts?.label}
+                                  <span className={`w-1.5 h-1.5 rounded-full ${sts?.dot}`} />{stsLabel(order.status)}
                                 </span>
                               </div>
                               <div className="flex items-center gap-2 flex-wrap">
                                 <span className={`flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-bold border ${svc?.color}`}>
-                                  {svc?.icon}<span>{svc?.label || order.serviceType}</span>
+                                  {svc?.icon}<span>{svcLabel(order.serviceType)}</span>
                                 </span>
                                 <span className="px-2.5 py-0.5 rounded-md bg-slate-100 text-[11px] text-slate-900 font-extrabold">{order.platform}</span>
                                 {order.packagePrice != null && <span className="px-2.5 py-0.5 rounded-md bg-emerald-50 border border-emerald-200 text-[11px] text-emerald-800 font-extrabold">${order.packagePrice}</span>}
@@ -405,7 +425,7 @@ export default function AdminPortalPage() {
                                       onClick={(e) => { e.stopPropagation(); handleUpdateStatus(order.id, s); }}
                                       className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold border transition-all ${order.status === s ? STATUS_CONFIG[s]?.color : 'bg-slate-100 border-slate-300 text-slate-800 hover:bg-slate-200'}`}
                                     >
-                                      {s}
+                                      {stsLabel(s)}
                                     </button>
                                   ))}
                                 </div>
@@ -419,7 +439,7 @@ export default function AdminPortalPage() {
                     {filteredOrders.length === 0 && (
                       <div className="text-center py-12 text-slate-600 bg-white rounded-2xl border border-slate-300 font-semibold">
                         <Package className="w-8 h-8 mx-auto mb-2 opacity-40" />
-                        <p className="text-sm">Không tìm thấy đơn hàng nào</p>
+                        <p className="text-sm">{t('adm_no_orders_found')}</p>
                       </div>
                     )}
                   </div>
@@ -431,9 +451,9 @@ export default function AdminPortalPage() {
                     <div className="bg-white rounded-2xl border border-slate-300 shadow-apple-sm overflow-hidden sticky top-20">
                       <div className="px-5 py-4 border-b border-slate-200 bg-slate-50 space-y-2">
                         <div className="flex items-center justify-between">
-                          <span className="text-[11px] font-extrabold text-brand-blue uppercase tracking-wider">Chi Tiết Đơn</span>
+                          <span className="text-[11px] font-extrabold text-brand-blue uppercase tracking-wider">{t('adm_order_detail')}</span>
                           <span className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold border ${STATUS_CONFIG[selectedOrder.status]?.color}`}>
-                            <span className={`w-1.5 h-1.5 rounded-full ${STATUS_CONFIG[selectedOrder.status]?.dot}`} />{STATUS_CONFIG[selectedOrder.status]?.label}
+                            <span className={`w-1.5 h-1.5 rounded-full ${STATUS_CONFIG[selectedOrder.status]?.dot}`} />{stsLabel(selectedOrder.status)}
                           </span>
                         </div>
                         <h3 className="text-base font-extrabold text-slate-900">{selectedOrder.appName}</h3>
@@ -441,13 +461,13 @@ export default function AdminPortalPage() {
 
                       <div className="px-5 py-4 space-y-3 text-xs border-b border-slate-200">
                         {[
-                          { label: 'Mã Đơn', value: selectedOrder.id },
-                          { label: 'Email Client', value: selectedOrder.clientEmail },
-                          { label: 'Nền Tảng', value: selectedOrder.platform },
-                          { label: 'Dịch Vụ', value: SERVICE_LABELS[selectedOrder.serviceType]?.label || selectedOrder.serviceType },
-                          { label: 'Giá Gói', value: selectedOrder.packagePrice != null ? `$${selectedOrder.packagePrice}` : 'Liên hệ' },
-                          { label: 'Ngày Tạo', value: selectedOrder.createdAt.slice(0, 10) },
-                          { label: 'Quốc Gia', value: selectedOrder.targetCountries.join(', ') },
+                          { label: t('adm_row_order_id'), value: selectedOrder.id },
+                          { label: t('adm_row_client_email'), value: selectedOrder.clientEmail },
+                          { label: t('adm_row_platform'), value: selectedOrder.platform },
+                          { label: t('adm_row_service'), value: svcLabel(selectedOrder.serviceType) },
+                          { label: t('adm_row_price'), value: selectedOrder.packagePrice != null ? `$${selectedOrder.packagePrice}` : t('adm_contact_price') },
+                          { label: t('adm_row_created'), value: selectedOrder.createdAt.slice(0, 10) },
+                          { label: t('adm_row_countries'), value: selectedOrder.targetCountries.join(', ') },
                         ].map((row, i) => (
                           <div key={i} className="flex justify-between items-start gap-2">
                             <span className="text-slate-700 shrink-0 font-bold">{row.label}</span>
@@ -458,8 +478,8 @@ export default function AdminPortalPage() {
                         {/* Payment status (admin can toggle) */}
                         <div className="grid grid-cols-2 gap-2 pt-1">
                           {([
-                            { field: 'paid_deposit' as const, label: 'Đợt 1 (50%)', paid: selectedOrder.paidDeposit },
-                            { field: 'paid_final' as const, label: 'Đợt 2 (50%)', paid: selectedOrder.paidFinal },
+                            { field: 'paid_deposit' as const, label: t('adm_payment_deposit'), paid: selectedOrder.paidDeposit },
+                            { field: 'paid_final' as const, label: t('adm_payment_final'), paid: selectedOrder.paidFinal },
                           ]).map((p) => (
                             <button
                               key={p.field}
@@ -479,10 +499,10 @@ export default function AdminPortalPage() {
                           <div className="p-3 bg-amber-50 border border-amber-300 rounded-xl space-y-1">
                             <div className="flex items-center justify-between">
                               <span className="font-extrabold text-amber-900 text-[11px] flex items-center gap-1">
-                                <Users className="w-3.5 h-3.5 text-amber-700" /> Tester Group:
+                                <Users className="w-3.5 h-3.5 text-amber-700" /> {t('adm_tester_group_label')}
                               </span>
                               <button onClick={handleCopyGroup} className="text-[10px] font-extrabold text-amber-800 underline">
-                                {copiedGroup ? 'Đã sao chép' : 'Sao chép'}
+                                {copiedGroup ? t('adm_copied') : t('adm_copy')}
                               </button>
                             </div>
                             <p className="font-mono text-[11px] font-bold text-brand-blue select-all">{googleGroupEmail}</p>
@@ -491,21 +511,21 @@ export default function AdminPortalPage() {
 
                         {selectedOrder.testingUrl && (
                           <div className="pt-1">
-                            <p className="text-slate-700 mb-1 font-bold">Link kiểm thử:</p>
+                            <p className="text-slate-700 mb-1 font-bold">{t('adm_testing_link')}</p>
                             <a href={selectedOrder.testingUrl} target="_blank" rel="noopener noreferrer" className="text-brand-blue font-semibold break-all hover:underline">{selectedOrder.testingUrl}</a>
                           </div>
                         )}
 
                         {selectedOrder.details && (
                           <div className="pt-2 border-t border-slate-200">
-                            <p className="text-slate-700 mb-1 font-bold">Ghi chú:</p>
+                            <p className="text-slate-700 mb-1 font-bold">{t('adm_notes')}</p>
                             <p className="text-slate-900 leading-relaxed font-medium">{selectedOrder.details}</p>
                           </div>
                         )}
                       </div>
 
                       <div className="px-5 py-4 space-y-3 border-b border-slate-200">
-                        <p className="text-[11px] font-extrabold text-slate-700 uppercase tracking-wider">Tiến Độ Xử Lý</p>
+                        <p className="text-[11px] font-extrabold text-slate-700 uppercase tracking-wider">{t('adm_progress_title')}</p>
                         <div className="flex items-center gap-1">
                           {['Pending', 'In Progress', 'Completed'].map((s, i) => {
                             const statuses = ['Pending', 'In Progress', 'Completed'];
@@ -522,7 +542,7 @@ export default function AdminPortalPage() {
                           })}
                         </div>
                         <div className="flex justify-between text-[10px] text-slate-800 font-bold">
-                          <span>Nhận Đơn</span><span>Xử Lý</span><span>Hoàn Tất</span>
+                          <span>{t('adm_step_received')}</span><span>{t('adm_step_processing')}</span><span>{t('adm_step_done')}</span>
                         </div>
                       </div>
 
@@ -531,14 +551,14 @@ export default function AdminPortalPage() {
                           onClick={() => setActiveTab('chat')}
                           className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-brand-blue text-white text-xs font-extrabold transition-all flex items-center justify-center gap-2 shadow-apple-sm"
                         >
-                          <MessageSquare className="w-4 h-4" /><span>Trao Đổi Về Đơn Hàng Này</span>
+                          <MessageSquare className="w-4 h-4" /><span>{t('adm_discuss_order')}</span>
                         </button>
                       </div>
                     </div>
                   ) : (
                     <div className="bg-white rounded-2xl border border-slate-300 p-8 text-center text-slate-700 font-semibold shadow-apple-sm">
                       <Package className="w-8 h-8 mx-auto mb-2 opacity-40" />
-                      <p className="text-sm">Chọn một đơn hàng để xem chi tiết</p>
+                      <p className="text-sm">{t('adm_select_order_detail')}</p>
                     </div>
                   )}
                 </div>
@@ -551,7 +571,7 @@ export default function AdminPortalPage() {
                 {!selectedOrder ? (
                   <div className="bg-white rounded-2xl border border-slate-300 p-10 text-center text-slate-600 font-semibold shadow-apple-sm">
                     <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-40" />
-                    <p className="text-sm">Chọn một đơn hàng ở tab "Đơn Hàng" để bắt đầu trao đổi.</p>
+                    <p className="text-sm">{t('adm_chat_no_order')}</p>
                   </div>
                 ) : (
                   <div className="bg-white rounded-2xl border border-slate-300 shadow-apple-sm overflow-hidden">
@@ -560,7 +580,7 @@ export default function AdminPortalPage() {
                         <MessageSquare className="w-4 h-4 text-white" />
                       </div>
                       <div>
-                        <p className="text-sm font-extrabold text-slate-900">{isAdmin ? 'Hỗ Trợ Khách Hàng' : 'Trao Đổi Với Kỹ Sư TE2SR'}</p>
+                        <p className="text-sm font-extrabold text-slate-900">{isAdmin ? t('adm_chat_title_admin') : t('adm_chat_title_client')}</p>
                         <div className="flex items-center gap-1.5 text-[11px] text-emerald-700 font-bold">
                           <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" /><span>{selectedOrder.appName}</span>
                         </div>
@@ -570,7 +590,7 @@ export default function AdminPortalPage() {
 
                     {/* Quick contact channels */}
                     <div className="flex items-center gap-2 px-5 py-2.5 border-b border-slate-200 bg-white">
-                      <span className="text-[11px] font-bold text-slate-500">Liên hệ nhanh:</span>
+                      <span className="text-[11px] font-bold text-slate-500">{t('adm_quick_contact')}</span>
                       <a href={SOCIAL_LINKS.zalo} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 text-[11px] font-extrabold hover:bg-blue-100 transition-colors">
                         <span className="w-4 h-4 rounded bg-blue-500 text-white flex items-center justify-center text-[9px] font-bold">Z</span>Zalo
                       </a>
@@ -585,7 +605,7 @@ export default function AdminPortalPage() {
                       ) : messages.length === 0 ? (
                         <div className="flex flex-col items-center justify-center h-full text-slate-400 text-xs font-semibold gap-2">
                           <MessageSquare className="w-6 h-6 opacity-40" />
-                          <span>Chưa có tin nhắn. Hãy gửi lời chào 👋</span>
+                          <span>{t('adm_no_messages')}</span>
                         </div>
                       ) : (
                         messages.map((msg) => {
@@ -613,7 +633,7 @@ export default function AdminPortalPage() {
                         type="text"
                         value={inputMessage}
                         onChange={(e) => setInputMessage(e.target.value)}
-                        placeholder={isAdmin ? 'Trả lời khách hàng...' : 'Nhắn tin với kỹ sư hỗ trợ...'}
+                        placeholder={isAdmin ? t('adm_input_admin') : t('adm_input_client')}
                         className="flex-1 px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 placeholder-slate-500 focus:outline-none focus:border-brand-blue focus:bg-white transition-colors"
                       />
                       <button type="submit" disabled={!inputMessage.trim() || sending} className="p-2.5 rounded-xl bg-brand-blue text-white shadow-brand-blue hover:bg-blue-600 transition-all disabled:opacity-50">
@@ -630,7 +650,7 @@ export default function AdminPortalPage() {
               <div className="space-y-6">
                 <div className="bg-white rounded-2xl border border-slate-300 p-6 shadow-apple-sm">
                   <h2 className="text-sm font-extrabold text-slate-900 mb-4 flex items-center gap-2">
-                    <BarChart2 className="w-4 h-4 text-brand-blue" /><span>Phân Tích Theo Dịch Vụ</span>
+                    <BarChart2 className="w-4 h-4 text-brand-blue" /><span>{t('adm_analytics_by_service')}</span>
                   </h2>
                   <div className="space-y-3">
                     {Object.entries(SERVICE_LABELS).map(([key, svc]) => {
@@ -639,8 +659,8 @@ export default function AdminPortalPage() {
                       return (
                         <div key={key} className="space-y-1.5">
                           <div className="flex items-center justify-between text-xs font-bold">
-                            <span className="flex items-center gap-1.5 text-slate-900">{svc.icon}<span>{svc.label}</span></span>
-                            <span className="text-slate-700">{count} đơn · {pct}%</span>
+                            <span className="flex items-center gap-1.5 text-slate-900">{svc.icon}<span>{svcLabel(key)}</span></span>
+                            <span className="text-slate-700">{count} {t('adm_unit_orders')} · {pct}%</span>
                           </div>
                           <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
                             <div className="h-full bg-brand-blue rounded-full transition-all duration-1000" style={{ width: `${pct}%` }} />
@@ -656,10 +676,10 @@ export default function AdminPortalPage() {
                     const count = orders.filter((o) => o.status === key).length;
                     return (
                       <div key={key} className="bg-white rounded-2xl p-5 border border-slate-300 text-center space-y-2 shadow-apple-sm">
-                        <span className="text-xs font-extrabold text-slate-800">{sts.label}</span>
+                        <span className="text-xs font-extrabold text-slate-800">{stsLabel(key)}</span>
                         <p className="text-3xl font-extrabold text-slate-900">{count}</p>
                         <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold border ${sts.color}`}>
-                          <span className={`w-1.5 h-1.5 rounded-full ${sts.dot}`} />{count} đơn
+                          <span className={`w-1.5 h-1.5 rounded-full ${sts.dot}`} />{count} {t('adm_unit_orders')}
                         </span>
                       </div>
                     );
@@ -668,13 +688,13 @@ export default function AdminPortalPage() {
 
                 <div className="bg-white rounded-2xl border border-slate-300 p-6 shadow-apple-sm">
                   <h2 className="text-sm font-extrabold text-slate-900 mb-4 flex items-center gap-2">
-                    <Globe className="w-4 h-4 text-brand-blue" /><span>Thị Trường Mục Tiêu</span>
+                    <Globe className="w-4 h-4 text-brand-blue" /><span>{t('adm_target_market')}</span>
                   </h2>
                   <div className="flex flex-wrap gap-2">
                     {Array.from(new Set(orders.flatMap((o) => o.targetCountries))).map((country) => (
                       <span key={country} className="px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-300 text-xs text-slate-900 font-extrabold">{country}</span>
                     ))}
-                    {orders.length === 0 && <span className="text-sm text-slate-500 font-semibold">Chưa có dữ liệu.</span>}
+                    {orders.length === 0 && <span className="text-sm text-slate-500 font-semibold">{t('adm_no_data')}</span>}
                   </div>
                 </div>
               </div>

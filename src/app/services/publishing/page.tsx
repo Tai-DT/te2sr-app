@@ -9,14 +9,14 @@ import { useLanguage } from '@/lib/i18n/language-context';
 import { Rocket } from 'lucide-react';
 
 export default function PublishingServicePage() {
-  useLanguage();
+  const { t } = useLanguage();
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
 
   const steps = [
-    { n: '01', title: 'Chuẩn Bị Account & Cert', desc: 'Cấu hình Apple Developer ID, Google Play Console, Provisioning Profiles & Signings.' },
-    { n: '02', title: 'Tối Ưu Metadata ASO', desc: 'Viết Mô tả, Từ khóa, thiết kế Screenshots chuẩn kích thước 6.7" & iPad Pro.' },
-    { n: '03', title: 'Nộp App & Review Cleared', desc: 'Gửi bản build và xử lý phản hồi trực tiếp với đội ngũ App Review của Apple/Google.' },
-    { n: '04', title: 'Live & Bảo Hành 100%', desc: 'Ứng dụng chính thức xuất hiện công khai trên 150+ quốc gia với lượt tải mở màn.' },
+    { n: '01', title: t('svcp_step1_title'), desc: t('svcp_step1_desc') },
+    { n: '02', title: t('svcp_step2_title'), desc: t('svcp_step2_desc') },
+    { n: '03', title: t('svcp_step3_title'), desc: t('svcp_step3_desc') },
+    { n: '04', title: t('svcp_step4_title'), desc: t('svcp_step4_desc') },
   ];
 
   return (
@@ -28,19 +28,19 @@ export default function PublishingServicePage() {
         <div className="text-center space-y-4 max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-brand-blue text-xs font-extrabold">
             <Rocket className="w-4 h-4" />
-            <span>Dịch Vụ Đưa App Lên App Store & Google Play</span>
+            <span>{t('svcp_badge')}</span>
           </div>
           <h1 className="text-3xl sm:text-5xl font-extrabold font-display text-slate-900 leading-tight">
-            Đưa Dự Án Lên Chợ Ứng Dụng Toàn Cầu
+            {t('svcp_h1')}
           </h1>
           <p className="text-slate-700 text-sm sm:text-base leading-relaxed font-medium">
-            Hỗ trợ trọn gói từ chuẩn bị chứng chỉ Apple Certificate / Android Keystore, tối ưu từ khóa ASO metadata, đến khi ứng dụng chính thức xuất hiện trên App Store & Google Play.
+            {t('svcp_intro')}
           </p>
           <button
             onClick={() => setIsOrderModalOpen(true)}
             className="px-6 py-3 rounded-xl bg-brand-blue hover:bg-blue-600 font-extrabold text-white text-sm shadow-brand-blue hover:scale-[1.02] transition-all"
           >
-            Đăng Ký Đăng Tải Ngay
+            {t('svcp_cta')}
           </button>
         </div>
 
@@ -58,9 +58,9 @@ export default function PublishingServicePage() {
         {/* Pricing hint */}
         <div className="bg-slate-50 border border-slate-200 rounded-3xl p-8 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center shadow-apple-sm">
           {[
-            { title: 'Google Play', price: '$50', note: 'Thanh toán 2 đợt ($25 + $25)' },
-            { title: 'Cả 2 Store', price: '$100', note: 'Google Play + iOS App Store' },
-            { title: 'Doanh Nghiệp', price: 'Liên Hệ', note: 'Đa ứng dụng / số lượng lớn' },
+            { title: 'Google Play', price: '$50', note: t('svcp_price_googleplay_note') },
+            { title: t('svcp_price_bothstores_title'), price: '$100', note: 'Google Play + iOS App Store' },
+            { title: t('svcp_price_enterprise_title'), price: t('svcp_price_enterprise_value'), note: t('svcp_price_enterprise_note') },
           ].map((p) => (
             <div key={p.title} className="bg-white rounded-2xl border border-slate-200 p-5 shadow-apple-sm">
               <p className="text-[11px] font-extrabold uppercase tracking-widest text-slate-600">{p.title}</p>

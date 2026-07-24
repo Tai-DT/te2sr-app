@@ -3,9 +3,11 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/lib/auth';
 import { api, ApiError } from '@/lib/api-client';
+import { useLanguage } from '@/lib/i18n/language-context';
 import { KeyRound, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export const ChangePasswordCard: React.FC = () => {
+  const { t } = useLanguage();
   const { user } = useAuth();
   const hasPassword = user?.authProvider === 'password';
 
@@ -18,15 +20,15 @@ export const ChangePasswordCard: React.FC = () => {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage(null);
-    if (newPassword.length < 6) { setMessage({ type: 'err', text: 'Mật khẩu mới tối thiểu 6 ký tự.' }); return; }
-    if (newPassword !== confirm) { setMessage({ type: 'err', text: 'Xác nhận mật khẩu không khớp.' }); return; }
+    if (newPassword.length < 6) { setMessage({ type: 'err', text: t('pwd_err_min') }); return; }
+    if (newPassword !== confirm) { setMessage({ type: 'err', text: t('pwd_err_mismatch') }); return; }
     setSubmitting(true);
     try {
       await api.changePassword(currentPassword, newPassword);
-      setMessage({ type: 'ok', text: hasPassword ? 'Đã đổi mật khẩu thành công.' : 'Đã đặt mật khẩu — giờ bạn có thể đăng nhập bằng email.' });
+      setMessage({ type: 'ok', text: hasPassword ? t('pwd_success_change') : t('pwd_success_set') });
       setCurrentPassword(''); setNewPassword(''); setConfirm('');
     } catch (err) {
-      setMessage({ type: 'err', text: err instanceof ApiError ? err.message : 'Đổi mật khẩu thất bại.' });
+      setMessage({ type: 'err', text: err instanceof ApiError ? err.message : t('pwd_err_fail') });
     } finally {
       setSubmitting(false);
     }
@@ -39,9 +41,9 @@ export const ChangePasswordCard: React.FC = () => {
           <KeyRound className="w-4 h-4 text-brand-blue" />
         </div>
         <div>
-          <h3 className="text-sm font-extrabold text-slate-900">{hasPassword ? 'Đổi Mật Khẩu' : 'Đặt Mật Khẩu Đăng Nhập'}</h3>
+          <h3 className="text-sm font-extrabold text-slate-900">{hasPassword ? t('pwd_title_change') : t('pwd_title_set')}</h3>
           <p className="text-[11px] text-slate-600 font-semibold">
-            {hasPassword ? 'Cập nhật mật khẩu tài khoản của bạn.' : 'Tài khoản Google — đặt thêm mật khẩu để đăng nhập bằng email.'}
+            {hasPassword ? t('pwd_desc_change') : t('pwd_desc_set')}
           </p>
         </div>
       </div>
@@ -53,7 +55,7 @@ export const ChangePasswordCard: React.FC = () => {
             required
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
-            placeholder="Mật khẩu hiện tại"
+            placeholder={t('pwd_ph_current')}
             className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 placeholder-slate-500 focus:outline-none focus:border-brand-blue focus:bg-white transition-all"
           />
         )}
@@ -63,7 +65,7 @@ export const ChangePasswordCard: React.FC = () => {
             required
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="Mật khẩu mới (≥ 6 ký tự)"
+            placeholder={t('pwd_ph_new')}
             className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 placeholder-slate-500 focus:outline-none focus:border-brand-blue focus:bg-white transition-all"
           />
           <input
@@ -71,7 +73,7 @@ export const ChangePasswordCard: React.FC = () => {
             required
             value={confirm}
             onChange={(e) => setConfirm(e.target.value)}
-            placeholder="Xác nhận mật khẩu mới"
+            placeholder={t('pwd_ph_confirm')}
             className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 placeholder-slate-500 focus:outline-none focus:border-brand-blue focus:bg-white transition-all"
           />
         </div>
@@ -91,7 +93,7 @@ export const ChangePasswordCard: React.FC = () => {
           className="px-5 py-2.5 rounded-xl bg-brand-blue hover:bg-blue-600 text-white text-xs font-extrabold shadow-apple-sm transition-all flex items-center gap-2 disabled:opacity-60"
         >
           {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <KeyRound className="w-4 h-4" />}
-          <span>{hasPassword ? 'Đổi Mật Khẩu' : 'Đặt Mật Khẩu'}</span>
+          <span>{hasPassword ? t('pwd_btn_change') : t('pwd_btn_set')}</span>
         </button>
       </form>
     </div>

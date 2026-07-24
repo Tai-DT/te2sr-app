@@ -9,7 +9,7 @@ import { useLanguage } from '@/lib/i18n/language-context';
 import { TestTube, Smartphone, Cpu, Bug, ShieldCheck } from 'lucide-react';
 
 export default function TestingServicePage() {
-  useLanguage();
+  const { t } = useLanguage();
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
 
   return (
@@ -21,28 +21,28 @@ export default function TestingServicePage() {
         <div className="text-center space-y-4 max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-brand-blue text-xs font-extrabold">
             <TestTube className="w-4 h-4" />
-            <span>Dịch Vụ Kiểm Thử App Chuyên Nghiệp</span>
+            <span>{t('svct_badge')}</span>
           </div>
           <h1 className="text-3xl sm:text-5xl font-extrabold font-display text-slate-900 leading-tight">
-            iOS TestFlight & Android QA Multi-Device Testing
+            {t('svct_h1')}
           </h1>
           <p className="text-slate-700 text-sm sm:text-base leading-relaxed font-medium">
-            Phát hiện toàn bộ lỗi crash, tối ưu tốc độ phản hồi và đảm bảo ứng dụng tương thích hoàn hảo trên 20+ mẫu iPhone, iPad, Samsung, Google Pixel trước khi trình làng thế giới.
+            {t('svct_intro')}
           </p>
           <button
             onClick={() => setIsOrderModalOpen(true)}
             className="px-6 py-3 rounded-xl bg-brand-blue hover:bg-blue-600 font-extrabold text-white text-sm shadow-brand-blue hover:scale-[1.02] transition-all"
           >
-            Đăng Ký Kiểm Thử Ngay
+            {t('svct_cta')}
           </button>
         </div>
 
         {/* Feature Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { icon: Smartphone, title: 'Phân Phối TestFlight & Beta', desc: 'Quản lý danh sách 100+ tester thử nghiệm nội bộ, thu thập phản hồi và log lỗi crash realtime tự động.' },
-            { icon: Cpu, title: 'Kiểm Thử Hiệu Năng & RAM', desc: 'Đo lường mức tiêu thụ pin, bộ nhớ RAM, dung lượng CPU và tốc độ render frame (60fps/120fps smoothness).' },
-            { icon: Bug, title: 'Báo Cáo Bug Chi Tiết', desc: 'Cung cấp file log, video các bước tái diễn lỗi và giải pháp fix từ các chuyên gia QA cấp cao.' },
+            { icon: Smartphone, title: t('svct_feature1_title'), desc: t('svct_feature1_desc') },
+            { icon: Cpu, title: t('svct_feature2_title'), desc: t('svct_feature2_desc') },
+            { icon: Bug, title: t('svct_feature3_title'), desc: t('svct_feature3_desc') },
           ].map((f, i) => {
             const Icon = f.icon;
             return (
@@ -61,7 +61,7 @@ export default function TestingServicePage() {
         <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-apple-md space-y-6">
           <h2 className="text-xl font-extrabold font-display text-slate-900 flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-brand-blue" />
-            <span>Danh Sách Thiết Bị Kiểm Thử Thực Tế</span>
+            <span>{t('svct_device_matrix_heading')}</span>
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
             {[

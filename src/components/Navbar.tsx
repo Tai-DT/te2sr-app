@@ -27,7 +27,7 @@ export const Navbar: React.FC = () => {
 
   // If user is Admin, dynamically append Admin Portal link to nav
   if (user?.role === 'admin') {
-    navLinks.push({ href: '/admin', label: 'Quản Lý Admin', icon: LayoutDashboard });
+    navLinks.push({ href: '/admin', label: t('nb_admin_link'), icon: LayoutDashboard });
   }
 
   return (
@@ -81,16 +81,16 @@ export const Navbar: React.FC = () => {
                   <Link
                     href="/admin"
                     className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900 text-white hover:bg-brand-blue text-xs font-bold shadow-apple-sm transition-all"
-                    title="Mở bảng điều khiển Admin"
+                    title={t('nb_admin_panel_title')}
                   >
                     <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-                    <span>Admin: {user.name}</span>
+                    <span>{t('nb_admin_prefix')}{user.name}</span>
                   </Link>
                 ) : (
                   <Link
                     href="/admin"
                     className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-100 border border-slate-200 text-xs font-bold text-slate-800 hover:border-brand-blue hover:text-brand-blue transition-all"
-                    title="Theo dõi tiến độ đơn hàng"
+                    title={t('nb_order_progress_title')}
                   >
                     <UserIcon className="w-3.5 h-3.5 text-brand-blue" />
                     <span>{user.name}</span>
@@ -100,7 +100,7 @@ export const Navbar: React.FC = () => {
                 <button
                   onClick={logout}
                   className="p-2 rounded-xl bg-slate-100 border border-slate-200 text-slate-500 hover:text-red-500 text-xs transition-colors"
-                  title="Đăng xuất"
+                  title={t('nb_logout_title')}
                 >
                   <LogOut className="w-4 h-4" />
                 </button>
@@ -111,7 +111,7 @@ export const Navbar: React.FC = () => {
                 className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-100 border border-slate-200 text-xs font-bold text-slate-800 hover:border-brand-blue hover:text-brand-blue transition-all"
               >
                 <UserIcon className="w-3.5 h-3.5 text-brand-blue" />
-                <span>Đăng Nhập</span>
+                <span>{t('nb_login')}</span>
               </button>
             )}
 
