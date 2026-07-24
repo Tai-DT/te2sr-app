@@ -1,9 +1,7 @@
 // ══════════════════════════════════════════════════════════════
-//  MySQL data-access layer — row mappers + typed queries (mysql2)
+//  Cloudflare D1 data-access layer — row mappers + typed queries
 // ══════════════════════════════════════════════════════════════
 
-import type { RowDataPacket } from 'mysql2';
-import { pool } from './pool';
 import type {
   DesignAnalysisReport,
   DesignSuggestion,
@@ -28,16 +26,6 @@ export const newUserId = () => `USR-${randomDigits(6)}`;
 export const newOrderId = () => `ORD-${randomDigits(5)}`;
 export const newMessageId = () => `MSG-${crypto.randomUUID()}`;
 export const newReportId = () => `RPT-${randomDigits(6)}`;
-
-// ── Low-level query helpers ───────────────────────────────────
-async function rows<T>(sql: string, params: unknown[] = []): Promise<T[]> {
-  const [result] = await pool.query<RowDataPacket[]>(sql, params);
-  return result as unknown as T[];
-}
-async function one<T>(sql: string, params: unknown[] = []): Promise<T | null> {
-  const result = await rows<T>(sql, params);
-  return result[0] ?? null;
-}
 
 // ── Row shapes (snake_case, as stored) ────────────────────────
 interface UserRow {
@@ -102,33 +90,33 @@ export interface NewUser {
   role: Role; avatar?: string; authProvider: string;
 }
 
-export async function createUser(u: NewUser): Promise<User> {
+export async function createUser(db: D1Database, u: NewUser): Promise<User> {
   const createdAt = nowIso();
-  await pool.query(
-    `INSERT INTO users (id, name, email, password_hash, \`role\`, avatar, auth_provider, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-    [u.id, u.name, u.email.toLowerCase(), u.passwordHash, u.role, u.avatar ?? null, u.authProvider, createdAt],
-  );
+  await db
+    .prepare(`INSERT INTO users (id, name, email, password_hash, role, avatar, auth_provider, created_at)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?)`)
+    .bind(u.id, u.name, u.email.toLowerCase(), u.passwordHash, u.role, u.avatar ?? null, u.authProvider, createdAt)
+    .run();
   return { id: u.id, name: u.name, email: u.email.toLowerCase(), role: u.role, avatar: u.avatar, authProvider: u.authProvider, createdAt };
 }
 
-export async function getUserByEmail(email: string): Promise<(User & { passwordHash: string | null }) | null> {
-  const row = await one<UserRow>(`SELECT * FROM users WHERE email = ?`, [email.toLowerCase()]);
+export async function getUserByEmail(db: D1Database, email: string): Promise<(User & { passwordHash: string | null }) | null> {
+  const row = await db.prepare(`SELECT * FROM users WHERE email = ?`).bind(email.toLowerCase()).first<UserRow>();
   if (!row) return null;
   return { ...rowToUser(row), passwordHash: row.password_hash };
 }
 
-export async function getUserById(id: string): Promise<User | null> {
-  const row = await one<UserRow>(`SELECT * FROM users WHERE id = ?`, [id]);
+export async function getUserById(db: D1Database, id: string): Promise<User | null> {
+  const row = await db.prepare(`SELECT * FROM users WHERE id = ?`).bind(id).first<UserRow>();
   return row ? rowToUser(row) : null;
 }
 
-export async function setUserRole(id: string, role: Role): Promise<void> {
-  await pool.query(`UPDATE users SET \`role\` = ? WHERE id = ?`, [role, id]);
+export async function setUserRole(db: D1Database, id: string, role: Role): Promise<void> {
+  await db.prepare(`UPDATE users SET role = ? WHERE id = ?`).bind(role, id).run();
 }
 
-export async function setUserPassword(id: string, passwordHash: string): Promise<void> {
-  await pool.query(`UPDATE users SET password_hash = ? WHERE id = ?`, [passwordHash, id]);
+export async function setUserPassword(db: D1Database, id: string, passwordHash: string): Promise<void> {
+  await db.prepare(`UPDATE users SET password_hash = ? WHERE id = ?`).bind(passwordHash, id).run();
 }
 
 // ── Orders ────────────────────────────────────────────────────
@@ -138,91 +126,93 @@ export interface NewOrder {
   testingUrl?: string | null; details?: string; packagePrice?: number | null;
 }
 
-export async function createOrder(o: NewOrder): Promise<Order> {
+export async function createOrder(db: D1Database, o: NewOrder): Promise<Order> {
   const ts = nowIso();
-  await pool.query(
-    `INSERT INTO orders
+  await db
+    .prepare(`INSERT INTO orders
       (id, user_id, app_name, client_email, platform, service_type, status, target_countries, testing_url, details, package_price, paid_deposit, paid_final, created_at, updated_at)
-     VALUES (?, ?, ?, ?, ?, ?, 'Pending', ?, ?, ?, ?, 0, 0, ?, ?)`,
-    [
+      VALUES (?, ?, ?, ?, ?, ?, 'Pending', ?, ?, ?, ?, 0, 0, ?, ?)`)
+    .bind(
       o.id, o.userId, o.appName, o.clientEmail.toLowerCase(), o.platform, o.serviceType,
       JSON.stringify(o.targetCountries ?? []), o.testingUrl ?? null, o.details ?? '', o.packagePrice ?? null, ts, ts,
-    ],
-  );
-  const row = await one<OrderRow>(`SELECT * FROM orders WHERE id = ?`, [o.id]);
+    )
+    .run();
+  const row = await db.prepare(`SELECT * FROM orders WHERE id = ?`).bind(o.id).first<OrderRow>();
   return rowToOrder(row!);
 }
 
-export async function listAllOrders(): Promise<Order[]> {
-  return (await rows<OrderRow>(`SELECT * FROM orders ORDER BY created_at DESC`)).map(rowToOrder);
+export async function listAllOrders(db: D1Database): Promise<Order[]> {
+  const { results } = await db.prepare(`SELECT * FROM orders ORDER BY created_at DESC`).all<OrderRow>();
+  return (results ?? []).map(rowToOrder);
 }
 
 /** Orders belonging to a user id OR matching their email (covers guest orders placed before login). */
-export async function listOrdersForUser(userId: string, email: string): Promise<Order[]> {
-  const result = await rows<OrderRow>(
-    `SELECT * FROM orders WHERE user_id = ? OR client_email = ? ORDER BY created_at DESC`,
-    [userId, email.toLowerCase()],
-  );
-  return result.map(rowToOrder);
+export async function listOrdersForUser(db: D1Database, userId: string, email: string): Promise<Order[]> {
+  const { results } = await db
+    .prepare(`SELECT * FROM orders WHERE user_id = ? OR client_email = ? ORDER BY created_at DESC`)
+    .bind(userId, email.toLowerCase())
+    .all<OrderRow>();
+  return (results ?? []).map(rowToOrder);
 }
 
-export async function getOrderById(id: string): Promise<Order | null> {
-  const row = await one<OrderRow>(`SELECT * FROM orders WHERE id = ?`, [id]);
+export async function getOrderById(db: D1Database, id: string): Promise<Order | null> {
+  const row = await db.prepare(`SELECT * FROM orders WHERE id = ?`).bind(id).first<OrderRow>();
   return row ? rowToOrder(row) : null;
 }
 
-export async function updateOrderStatus(id: string, status: OrderStatus): Promise<Order | null> {
-  await pool.query(`UPDATE orders SET status = ?, updated_at = ? WHERE id = ?`, [status, nowIso(), id]);
-  return getOrderById(id);
+export async function updateOrderStatus(db: D1Database, id: string, status: OrderStatus): Promise<Order | null> {
+  await db.prepare(`UPDATE orders SET status = ?, updated_at = ? WHERE id = ?`).bind(status, nowIso(), id).run();
+  return getOrderById(db, id);
 }
 
-export async function updateOrderPayment(id: string, field: 'paid_deposit' | 'paid_final', value: boolean): Promise<Order | null> {
-  // `field` is validated against a whitelist by the caller before it reaches here.
-  await pool.query(`UPDATE orders SET ${field} = ?, updated_at = ? WHERE id = ?`, [value ? 1 : 0, nowIso(), id]);
-  return getOrderById(id);
+export async function updateOrderPayment(db: D1Database, id: string, field: 'paid_deposit' | 'paid_final', value: boolean): Promise<Order | null> {
+  // `field` is validated against a whitelist by the caller.
+  await db.prepare(`UPDATE orders SET ${field} = ?, updated_at = ? WHERE id = ?`).bind(value ? 1 : 0, nowIso(), id).run();
+  return getOrderById(db, id);
 }
 
 // ── Messages ──────────────────────────────────────────────────
-export async function listMessages(orderId: string): Promise<OrderMessage[]> {
-  const result = await rows<MessageRow>(
-    `SELECT * FROM order_messages WHERE order_id = ? ORDER BY created_at ASC`,
-    [orderId],
-  );
-  return result.map(rowToMessage);
+export async function listMessages(db: D1Database, orderId: string): Promise<OrderMessage[]> {
+  const { results } = await db
+    .prepare(`SELECT * FROM order_messages WHERE order_id = ? ORDER BY created_at ASC`)
+    .bind(orderId)
+    .all<MessageRow>();
+  return (results ?? []).map(rowToMessage);
 }
 
-export async function addMessage(m: {
-  orderId: string; senderId: string | null; senderName: string; role: Role; text: string;
-}): Promise<OrderMessage> {
+export async function addMessage(
+  db: D1Database,
+  m: { orderId: string; senderId: string | null; senderName: string; role: Role; text: string },
+): Promise<OrderMessage> {
   const id = newMessageId();
   const createdAt = nowIso();
-  await pool.query(
-    `INSERT INTO order_messages (id, order_id, sender_id, sender_name, \`role\`, \`text\`, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    [id, m.orderId, m.senderId, m.senderName, m.role, m.text, createdAt],
-  );
+  await db
+    .prepare(`INSERT INTO order_messages (id, order_id, sender_id, sender_name, role, text, created_at)
+              VALUES (?, ?, ?, ?, ?, ?, ?)`)
+    .bind(id, m.orderId, m.senderId, m.senderName, m.role, m.text, createdAt)
+    .run();
   return { id, orderId: m.orderId, senderId: m.senderId, senderName: m.senderName, role: m.role, text: m.text, createdAt };
 }
 
 // ── Reports ───────────────────────────────────────────────────
-export async function saveReport(r: DesignAnalysisReport): Promise<void> {
-  await pool.query(
-    `INSERT INTO design_reports
+export async function saveReport(db: D1Database, r: DesignAnalysisReport): Promise<void> {
+  await db
+    .prepare(`INSERT INTO design_reports
       (id, user_id, file_name, score, layout_score, typography_score, contrast_score, accessibility_score, suggestions, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+    .bind(
       r.id, r.userId, r.fileName, r.score, r.layoutScore, r.typographyScore,
       r.contrastScore, r.accessibilityScore, JSON.stringify(r.suggestions), r.createdAt,
-    ],
-  );
+    )
+    .run();
 }
 
-export async function listReportsForUser(userId: string): Promise<DesignAnalysisReport[]> {
-  const result = await rows<ReportRow>(
-    `SELECT * FROM design_reports WHERE user_id = ? ORDER BY created_at DESC LIMIT 50`,
-    [userId],
-  );
-  return result.map(rowToReport);
+export async function listReportsForUser(db: D1Database, userId: string): Promise<DesignAnalysisReport[]> {
+  const { results } = await db
+    .prepare(`SELECT * FROM design_reports WHERE user_id = ? ORDER BY created_at DESC LIMIT 50`)
+    .bind(userId)
+    .all<ReportRow>();
+  return (results ?? []).map(rowToReport);
 }
 
 // ── Admin stats ───────────────────────────────────────────────
@@ -234,8 +224,8 @@ export interface AdminStats {
   estimatedRevenue: number;
 }
 
-export async function adminStats(): Promise<AdminStats> {
-  const orders = await listAllOrders();
+export async function adminStats(db: D1Database): Promise<AdminStats> {
+  const orders = await listAllOrders(db);
   const byStatus: Record<string, number> = {};
   const byService: Record<string, number> = {};
   let revenue = 0;
@@ -246,7 +236,7 @@ export async function adminStats(): Promise<AdminStats> {
     if (o.paidDeposit) revenue += price / 2;
     if (o.paidFinal) revenue += price / 2;
   }
-  const userCount = await one<{ n: number }>(`SELECT COUNT(*) AS n FROM users`);
+  const userCount = await db.prepare(`SELECT COUNT(*) AS n FROM users`).first<{ n: number }>();
   return {
     totalOrders: orders.length,
     byStatus,

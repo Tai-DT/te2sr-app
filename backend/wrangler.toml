@@ -1,0 +1,26 @@
+name = "te2sr-backend"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+
+# Serve the API at api.te2sr.com (zone already on Cloudflare)
+routes = [
+  { pattern = "api.te2sr.com", custom_domain = true }
+]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "te2sr-db"
+database_id = "b0efcf93-3122-4ab9-bc06-c3ad7d8f37e2"
+
+[vars]
+ADMIN_EMAILS = "taidt3004@gmail.com"
+GOOGLE_CLIENT_ID = "336845323505-eunvq0bip43e2h4to13vvp98j580e1vm.apps.googleusercontent.com"
+ALLOWED_ORIGINS = "https://te2sr.com,https://www.te2sr.com,https://te2sr.pages.dev,http://localhost:3000"
+MAIL_FROM = "admin@te2sr.com"
+MAIL_FROM_NAME = "TE2SR"
+MAIL_ADMIN = "admin@te2sr.com"
+CLOUDFLARE_ACCOUNT_ID = "538f170a4371858f97066cf05483b585"
+
+# Secrets (set via: wrangler secret put <NAME>):
+#   JWT_SECRET            — session signing key
+#   CLOUDFLARE_API_TOKEN  — Email Sending token (optional)

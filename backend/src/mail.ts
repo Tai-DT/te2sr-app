@@ -5,11 +5,16 @@
 //  they are skipped, and failures never break the request path.
 // ══════════════════════════════════════════════════════════════
 
-import { config } from './config';
-import type { Order } from './types';
+import type { Env, Order } from './types';
 
-export function isMailEnabled(): boolean {
-  return !!(config.cloudflareAccountId && config.cloudflareApiToken && config.mailFrom);
+/** The subset of Env the mailer reads. */
+export type MailEnv = Pick<Env, 'CLOUDFLARE_ACCOUNT_ID' | 'CLOUDFLARE_API_TOKEN' | 'MAIL_FROM' | 'MAIL_FROM_NAME' | 'MAIL_ADMIN'>;
+
+const mailFrom = (env: MailEnv) => env.MAIL_FROM || 'admin@te2sr.com';
+const mailAdmin = (env: MailEnv) => env.MAIL_ADMIN || 'admin@te2sr.com';
+
+export function isMailEnabled(env: MailEnv): boolean {
+  return !!(env.CLOUDFLARE_ACCOUNT_ID && env.CLOUDFLARE_API_TOKEN);
 }
 
 interface SendOpts {
@@ -20,18 +25,18 @@ interface SendOpts {
   replyTo?: string;
 }
 
-export async function sendMail(opts: SendOpts): Promise<{ ok: boolean; skipped?: boolean; error?: string }> {
-  if (!isMailEnabled()) return { ok: false, skipped: true };
+export async function sendMail(env: MailEnv, opts: SendOpts): Promise<{ ok: boolean; skipped?: boolean; error?: string }> {
+  if (!isMailEnabled(env)) return { ok: false, skipped: true };
   try {
     const res = await fetch(
-      `https://api.cloudflare.com/client/v4/accounts/${config.cloudflareAccountId}/email/sending/send`,
+      `https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}/email/sending/send`,
       {
         method: 'POST',
-        headers: { Authorization: `Bearer ${config.cloudflareApiToken}`, 'Content-Type': 'application/json' },
+        headers: { Authorization: `Bearer ${env.CLOUDFLARE_API_TOKEN}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
           to: opts.to,
-          from: { address: config.mailFrom, name: config.mailFromName },
-          reply_to: opts.replyTo || config.mailAdmin,
+          from: { address: mailFrom(env), name: env.MAIL_FROM_NAME || 'TE2SR' },
+          reply_to: opts.replyTo || mailAdmin(env),
           subject: opts.subject,
           html: opts.html,
           text: opts.text,
@@ -52,8 +57,8 @@ export async function sendMail(opts: SendOpts): Promise<{ ok: boolean; skipped?:
 }
 
 /** Fire-and-forget: never blocks or throws into the request path. */
-export function sendMailAsync(opts: SendOpts): void {
-  void sendMail(opts).catch(() => {});
+export function sendMailAsync(env: MailEnv, opts: SendOpts): void {
+  void sendMail(env, opts).catch(() => {});
 }
 
 // ── Templates ─────────────────────────────────────────────────

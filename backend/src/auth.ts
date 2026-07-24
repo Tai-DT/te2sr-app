@@ -4,8 +4,7 @@
 // ══════════════════════════════════════════════════════════════
 
 import type { Context, Next } from 'hono';
-import type { JwtPayload, Role, Variables } from './types';
-import { config } from './config';
+import type { Env, JwtPayload, Role, Variables } from './types';
 
 const enc = new TextEncoder();
 const dec = new TextDecoder();
@@ -102,12 +101,16 @@ export async function verifyJwt(token: string, secret: string): Promise<JwtPaylo
 }
 
 // ── Role helpers ──────────────────────────────────────────────
-export function isAdminEmail(email: string): boolean {
-  return config.adminEmails.includes(email.toLowerCase());
+export function isAdminEmail(email: string, env: Env): boolean {
+  const list = (env.ADMIN_EMAILS || '')
+    .split(',')
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+  return list.includes(email.toLowerCase());
 }
 
 // ── Hono middleware ───────────────────────────────────────────
-type Ctx = Context<{ Variables: Variables }>;
+type Ctx = Context<{ Bindings: Env; Variables: Variables }>;
 
 function bearer(c: Ctx): string | null {
   const header = c.req.header('Authorization') || '';
@@ -117,7 +120,7 @@ function bearer(c: Ctx): string | null {
 export async function requireAuth(c: Ctx, next: Next) {
   const token = bearer(c);
   if (!token) return c.json({ success: false, error: 'Yêu cầu đăng nhập.' }, 401);
-  const payload = await verifyJwt(token, config.jwtSecret);
+  const payload = await verifyJwt(token, c.env.JWT_SECRET);
   if (!payload) return c.json({ success: false, error: 'Phiên đăng nhập không hợp lệ hoặc đã hết hạn.' }, 401);
   c.set('user', payload);
   await next();
@@ -126,7 +129,7 @@ export async function requireAuth(c: Ctx, next: Next) {
 export async function requireAdmin(c: Ctx, next: Next) {
   const token = bearer(c);
   if (!token) return c.json({ success: false, error: 'Yêu cầu đăng nhập.' }, 401);
-  const payload = await verifyJwt(token, config.jwtSecret);
+  const payload = await verifyJwt(token, c.env.JWT_SECRET);
   if (!payload) return c.json({ success: false, error: 'Phiên đăng nhập không hợp lệ.' }, 401);
   if (payload.role !== 'admin') return c.json({ success: false, error: 'Chỉ quản trị viên mới có quyền này.' }, 403);
   c.set('user', payload);
@@ -137,7 +140,7 @@ export async function requireAdmin(c: Ctx, next: Next) {
 export async function optionalAuth(c: Ctx, next: Next) {
   const token = bearer(c);
   if (token) {
-    const payload = await verifyJwt(token, config.jwtSecret);
+    const payload = await verifyJwt(token, c.env.JWT_SECRET);
     if (payload) c.set('user', payload);
   }
   await next();

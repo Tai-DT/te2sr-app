@@ -1,13 +1,30 @@
 // ══════════════════════════════════════════════════════════════
-//  Shared domain types for the TE2SR backend (Node + Hono + MySQL)
+//  Shared domain + environment types for the TE2SR Worker (D1)
 // ══════════════════════════════════════════════════════════════
+
+export interface Env {
+  DB: D1Database;
+  /** HMAC secret for signing session JWTs (wrangler secret put JWT_SECRET). */
+  JWT_SECRET: string;
+  /** Google OAuth 2.0 web client id — validates id_token audience. */
+  GOOGLE_CLIENT_ID?: string;
+  /** Comma-separated emails auto-granted the admin role. */
+  ADMIN_EMAILS?: string;
+  /** Comma-separated allowed CORS origins, or `*`. */
+  ALLOWED_ORIGINS?: string;
+  /** Cloudflare Email Sending (optional transactional email). */
+  CLOUDFLARE_ACCOUNT_ID?: string;
+  CLOUDFLARE_API_TOKEN?: string;
+  MAIL_FROM?: string;
+  MAIL_FROM_NAME?: string;
+  MAIL_ADMIN?: string;
+}
 
 export type Role = 'client' | 'admin';
 export type Platform = 'iOS' | 'Android' | 'Both';
 export type ServiceType = 'Testing' | 'Publishing' | 'Promotion_5Star' | 'DesignAnalyzer';
 export type OrderStatus = 'Pending' | 'In Progress' | 'Completed' | 'Rejected';
 
-// ── Public (API-facing) shapes ────────────────────────────────
 export interface User {
   id: string;
   name: string;
@@ -74,9 +91,8 @@ export interface DesignAnalysisReport {
   createdAt: string;
 }
 
-// ── JWT ───────────────────────────────────────────────────────
 export interface JwtPayload {
-  sub: string; // user id
+  sub: string;
   email: string;
   role: Role;
   name: string;
@@ -84,7 +100,6 @@ export interface JwtPayload {
   exp: number;
 }
 
-// Hono context variable map
 export interface Variables {
   user: JwtPayload;
 }

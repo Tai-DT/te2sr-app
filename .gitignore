@@ -9,10 +9,12 @@ out/
 .env*.local
 .env
 backend/.env
+backend/.dev.vars
 backend/certs/*.pem
 
-# Wrangler (legacy Cloudflare backend)
+# Wrangler
 backend/.wrangler/
+.wrangler/
 
 # Temp screenshots
 *.png
