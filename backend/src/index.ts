@@ -63,10 +63,21 @@ app.post('/api/auth/register', async (c) => {
     if (!isEmail(email)) return c.json({ success: false, error: 'Email không hợp lệ.' }, 400);
     if (String(password).length < 6) return c.json({ success: false, error: 'Mật khẩu tối thiểu 6 ký tự.' }, 400);
 
+    // Chặn TRƯỚC khi tra DB: ADMIN_EMAILS nằm trong wrangler.toml (công khai)
+    // và không có bước xác minh email, nên nếu để đăng ký tự phục vụ cấp quyền
+    // admin thì bất kỳ ai cũng chiếm được — nhất là sau khi khởi tạo lại DB.
+    // Chủ tài khoản phải đăng nhập bằng Google, nơi Google xác thực email.
+    if (isAdminEmail(email, c.env)) {
+      return c.json({
+        success: false,
+        error: 'Địa chỉ email này là tài khoản quản trị. Vui lòng đăng nhập bằng Google.',
+      }, 403);
+    }
+
     const existing = await db.getUserByEmail(c.env.DB, email);
     if (existing) return c.json({ success: false, error: 'Email đã được đăng ký. Vui lòng đăng nhập.' }, 409);
 
-    const role = isAdminEmail(email, c.env) ? 'admin' : 'client';
+    const role = 'client';
     const passwordHash = await hashPassword(String(password));
     const user = await db.createUser(c.env.DB, {
       id: db.newUserId(), name: String(name).trim(), email, passwordHash, role, authProvider: 'password',

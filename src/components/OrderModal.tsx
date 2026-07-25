@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/lib/i18n/language-context';
 import { api, ApiError } from '@/lib/api-client';
 import type { Order, Platform, ServiceType } from '@/lib/types';
+import { PaymentPanel } from './PaymentPanel';
 import { X, CheckCircle2, Send, Rocket, TestTube, Star, BadgeDollarSign, AlertCircle, Users, Copy, Check, CreditCard, Link2, Globe, Code2, MessageSquare } from 'lucide-react';
 
 interface OrderModalProps {
@@ -172,51 +173,13 @@ export const OrderModal: React.FC<OrderModalProps> = ({
                 <span>{t('order_moneyback_badge')}</span>
               </div>
 
-              {/* Payment Information Gateways */}
-              <div className="bg-slate-50 border border-slate-300 rounded-2xl p-4 text-left space-y-3 text-xs">
-                <h4 className="font-extrabold text-slate-900 uppercase tracking-wider text-[11px] flex items-center justify-between">
-                  <span>{t('order_payment_info_title')}</span>
-                  <span className="text-[10px] text-amber-700 font-extrabold">{t('order_manual_check_15m')}</span>
-                </h4>
+              {/* Thông tin thanh toán — lấy từ src/lib/payment.ts, KHÔNG hardcode */}
+              <PaymentPanel
+                orderId={submittedOrder.id}
+                amountUsd={submittedOrder.packagePrice ? submittedOrder.packagePrice / 2 : null}
+                totalUsd={submittedOrder.packagePrice ?? null}
+              />
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
-                  {/* Timo Bank Vietnam */}
-                  <div className="p-3 bg-white border border-emerald-300 rounded-xl space-y-1">
-                    <div className="font-extrabold text-emerald-800 flex items-center gap-1.5">
-                      <span>{t('order_timo_bank')}</span>
-                    </div>
-                    <div className="text-[11px] text-slate-700 font-medium">
-                      {t('order_account_number_label')} <strong className="text-slate-900 font-mono font-extrabold">9007041001234</strong>
-                    </div>
-                    <div className="text-[11px] text-slate-700 font-medium">
-                      {t('order_account_holder_label')} <strong className="text-slate-900 font-extrabold">TE2SR PLATFORM CO</strong>
-                    </div>
-                    <div className="text-[10px] text-slate-600 pt-0.5">
-                      {t('order_transfer_note_label')} <span className="text-brand-blue font-mono font-extrabold">{submittedOrder.id} (50%)</span>
-                    </div>
-                  </div>
-
-                  {/* Binance Pay Global */}
-                  <div className="p-3 bg-white border border-amber-300 rounded-xl space-y-1">
-                    <div className="font-extrabold text-amber-800 flex items-center gap-1.5">
-                      <span>{t('order_binance_pay')}</span>
-                    </div>
-                    <div className="text-[11px] text-slate-700 font-medium">
-                      {t('order_binance_id_label')} <strong className="text-slate-900 font-mono font-extrabold">892100456</strong>
-                    </div>
-                    <div className="text-[11px] text-slate-700 font-medium">
-                      {t('order_network_label')} <strong className="text-slate-900 font-mono font-extrabold">USDT (TRC20 / BEP20)</strong>
-                    </div>
-                    <div className="text-[10px] text-slate-600 pt-0.5">
-                      {t('order_memo_label')} <span className="text-brand-blue font-mono font-extrabold">{submittedOrder.id} (50%)</span>
-                    </div>
-                  </div>
-                </div>
-
-                <p className="text-[10px] text-slate-700 text-center italic font-semibold pt-1">
-                  {t('order_reconcile_prefix')} <span className="text-brand-blue font-mono font-bold">{submittedOrder.id}</span> {t('order_reconcile_suffix')}
-                </p>
-              </div>
               </>
             )}
 
