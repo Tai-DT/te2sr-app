@@ -39,6 +39,24 @@ export const AuthModal: React.FC = () => {
 
   const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '';
 
+  // Google mở cửa sổ pop-up để chọn tài khoản. Nếu trình duyệt chặn, GSI chỉ
+  // ghi log rồi im lặng — người dùng bấm mà không thấy gì. Bọc window.open để
+  // phát hiện và báo rõ thay vì để hỏng âm thầm.
+  useEffect(() => {
+    if (!isOpen || typeof window === 'undefined') return;
+    const originalOpen = window.open;
+    window.open = function patchedOpen(this: Window, ...args: Parameters<typeof window.open>) {
+      const win = originalOpen.apply(this, args);
+      const url = String(args[0] ?? '');
+      if (url.includes('accounts.google.com') && (!win || win.closed)) {
+        setError(t('auth_google_popup_blocked'));
+        setSubmitting(false);
+      }
+      return win;
+    } as typeof window.open;
+    return () => { window.open = originalOpen; };
+  }, [isOpen, t]);
+
   // Render the official Google Identity button when the modal is open.
   useEffect(() => {
     if (!isOpen || !googleClientId) return;

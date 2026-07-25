@@ -329,6 +329,7 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     order_submit: "Gửi Yêu Cầu Ngay",
     
     auth_google_login_failed: "Đăng nhập Google thất bại.",
+    auth_google_popup_blocked: "Trình duyệt đã chặn cửa sổ đăng nhập Google. Hãy cho phép pop-up cho te2sr.com rồi thử lại, hoặc đăng nhập bằng email bên dưới.",
     
     auth_error_name_required: "Vui lòng nhập họ tên.",
     
@@ -989,6 +990,7 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     order_submit: "Submit Request Now",
     
     auth_google_login_failed: "Google sign-in failed.",
+    auth_google_popup_blocked: "Your browser blocked the Google sign-in window. Allow pop-ups for te2sr.com and try again, or sign in with email below.",
     
     auth_error_name_required: "Please enter your full name.",
     
@@ -1517,6 +1519,7 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     order_submitting: "データを送信中...",
     order_submit: "今すぐリクエストを送信",
     auth_google_login_failed: "Googleログインに失敗しました。",
+    auth_google_popup_blocked: "ブラウザが Google ログイン画面をブロックしました。te2sr.com のポップアップを許可して再試行するか、下のメールでログインしてください。",
     auth_error_name_required: "お名前を入力してください。",
     auth_error_password_min: "パスワードは6文字以上で入力してください。",
     auth_error_generic: "エラーが発生しました。",
@@ -1869,6 +1872,7 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     order_submitting: "데이터 전송 중...",
     order_submit: "지금 요청 보내기",
     auth_google_login_failed: "Google 로그인에 실패했습니다.",
+    auth_google_popup_blocked: "브라우저가 Google 로그인 창을 차단했습니다. te2sr.com의 팝업을 허용한 후 다시 시도하거나 아래 이메일로 로그인하세요.",
     auth_error_name_required: "이름을 입력해 주세요.",
     auth_error_password_min: "비밀번호는 최소 6자 이상이어야 합니다.",
     auth_error_generic: "오류가 발생했습니다.",
@@ -2221,6 +2225,7 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     order_submitting: "Envoi des données...",
     order_submit: "Envoyer la demande maintenant",
     auth_google_login_failed: "La connexion Google a échoué.",
+    auth_google_popup_blocked: "Votre navigateur a bloqué la fenêtre de connexion Google. Autorisez les pop-ups pour te2sr.com puis réessayez, ou connectez-vous par e-mail ci-dessous.",
     auth_error_name_required: "Veuillez saisir votre nom complet.",
     auth_error_password_min: "Le mot de passe doit comporter au moins 6 caractères.",
     auth_error_generic: "Une erreur s'est produite.",
@@ -2573,6 +2578,7 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     order_submitting: "Daten werden gesendet...",
     order_submit: "Anfrage jetzt senden",
     auth_google_login_failed: "Google-Anmeldung fehlgeschlagen.",
+    auth_google_popup_blocked: "Ihr Browser hat das Google-Anmeldefenster blockiert. Erlauben Sie Pop-ups für te2sr.com und versuchen Sie es erneut, oder melden Sie sich unten per E-Mail an.",
     auth_error_name_required: "Bitte geben Sie Ihren vollständigen Namen ein.",
     auth_error_password_min: "Das Passwort muss mindestens 6 Zeichen lang sein.",
     auth_error_generic: "Ein Fehler ist aufgetreten.",
@@ -2925,6 +2931,7 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     order_submitting: "Enviando datos...",
     order_submit: "Enviar solicitud ahora",
     auth_google_login_failed: "Error al iniciar sesión con Google.",
+    auth_google_popup_blocked: "Tu navegador bloqueó la ventana de inicio de sesión de Google. Permite las ventanas emergentes para te2sr.com e inténtalo de nuevo, o inicia sesión con correo abajo.",
     auth_error_name_required: "Introduce tu nombre completo.",
     auth_error_password_min: "La contraseña debe tener al menos 6 caracteres.",
     auth_error_generic: "Se produjo un error.",
@@ -3277,6 +3284,7 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     order_submitting: "正在提交数据……",
     order_submit: "立即提交请求",
     auth_google_login_failed: "Google 登录失败。",
+    auth_google_popup_blocked: "浏览器拦截了 Google 登录窗口。请允许 te2sr.com 的弹出窗口后重试，或使用下方的邮箱登录。",
     auth_error_name_required: "请输入您的姓名。",
     auth_error_password_min: "密码至少需要 6 个字符。",
     auth_error_generic: "发生错误。",
