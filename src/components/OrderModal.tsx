@@ -5,7 +5,7 @@ import { useLanguage } from '@/lib/i18n/language-context';
 import { api, ApiError } from '@/lib/api-client';
 import type { Order, Platform, ServiceType } from '@/lib/types';
 import { PaymentPanel } from './PaymentPanel';
-import { X, CheckCircle2, Send, Rocket, TestTube, Star, BadgeDollarSign, AlertCircle, Users, Copy, Check, CreditCard, Link2, Globe, Code2, MessageSquare } from 'lucide-react';
+import { X, CheckCircle2, Send, Rocket, TestTube, Star, BadgeDollarSign, AlertCircle, Users, Copy, Check, CreditCard, Link2, Globe, Code2, MessageSquare, TrendingUp, Search } from 'lucide-react';
 
 interface OrderModalProps {
   isOpen: boolean;
@@ -35,7 +35,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
   const googleGroupEmail = 'te2sr@googlegroups.com';
   /** Thiết kế web / làm app: chưa có app trên Store nên các trường về
    *  link kiểm thử, gói đăng tải và thanh toán 2 đợt đều không áp dụng. */
-  const isQuoteOnly = serviceType === 'WebDesign' || serviceType === 'AppDevelopment';
+  const isQuoteOnly = (['WebDesign', 'AppDevelopment', 'AppSEO', 'WebSEO', 'PageManagement'] as ServiceType[]).includes(serviceType);
 
   // Modal được mount sẵn khi đang đóng nên useState chỉ chạy một lần.
   // Đồng bộ lại dịch vụ mỗi lần mở để nút "Trao đổi yêu cầu website" v.v.
@@ -212,6 +212,9 @@ export const OrderModal: React.FC<OrderModalProps> = ({
                   { id: 'Promotion_5Star', icon: Star, label: t('order_service_promotion') },
                   { id: 'WebDesign', icon: Globe, label: t('order_service_web') },
                   { id: 'AppDevelopment', icon: Code2, label: t('order_service_appdev') },
+                  { id: 'AppSEO', icon: TrendingUp, label: t('order_service_aseo') },
+                  { id: 'WebSEO', icon: Search, label: t('order_service_wseo') },
+                  { id: 'PageManagement', icon: MessageSquare, label: t('order_service_page') },
                 ] as { id: ServiceType; icon: typeof Rocket; label: string }[]).map((svc) => {
                   const Icon = svc.icon;
                   const active = serviceType === svc.id;

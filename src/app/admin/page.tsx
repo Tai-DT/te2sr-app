@@ -23,6 +23,9 @@ const SERVICE_LABELS: Record<string, { label: string; color: string; icon: React
   DesignAnalyzer: { label: 'AI Design', color: 'text-violet-800 bg-violet-50 border-violet-300 font-bold', icon: <Sparkles className="w-3.5 h-3.5 text-violet-600" /> },
   WebDesign: { label: 'Web Design', color: 'text-emerald-800 bg-emerald-50 border-emerald-300 font-bold', icon: <Globe className="w-3.5 h-3.5 text-emerald-600" /> },
   AppDevelopment: { label: 'App Dev', color: 'text-indigo-800 bg-indigo-50 border-indigo-300 font-bold', icon: <Code2 className="w-3.5 h-3.5 text-indigo-600" /> },
+  AppSEO: { label: 'ASO', color: 'text-amber-800 bg-amber-50 border-amber-300 font-bold', icon: <ArrowUpRight className="w-3.5 h-3.5 text-amber-600" /> },
+  WebSEO: { label: 'Web SEO', color: 'text-sky-800 bg-sky-50 border-sky-300 font-bold', icon: <Search className="w-3.5 h-3.5 text-sky-600" /> },
+  PageManagement: { label: 'Page Mgmt', color: 'text-violet-800 bg-violet-50 border-violet-300 font-bold', icon: <MessageSquare className="w-3.5 h-3.5 text-violet-600" /> },
 };
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; dot: string }> = {
@@ -65,6 +68,9 @@ export default function AdminPortalPage() {
       DesignAnalyzer: 'adm_svc_design',
       WebDesign: 'adm_svc_web',
       AppDevelopment: 'adm_svc_appdev',
+      AppSEO: 'adm_svc_aseo',
+      WebSEO: 'adm_svc_wseo',
+      PageManagement: 'adm_svc_page',
     };
     return map[type] ? t(map[type]) : type;
   };

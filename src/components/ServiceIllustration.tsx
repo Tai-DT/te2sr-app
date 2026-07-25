@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-export type IllustrationType = 'Testing' | 'Publishing' | 'Promotion' | 'Analyzer' | 'Enterprise' | 'WebDesign' | 'AppDevelopment';
+export type IllustrationType = 'Testing' | 'Publishing' | 'Promotion' | 'Analyzer' | 'Enterprise' | 'WebDesign' | 'AppDevelopment' | 'AppSEO' | 'WebSEO' | 'PageManagement';
 
 /**
  * Lightweight inline-SVG illustrations for service cards & pricing tiers.
@@ -140,6 +140,83 @@ export const ServiceIllustration: React.FC<{ type: IllustrationType; className?:
         {/* dấu ngoặc code hai bên */}
         <path d="M96 58l-18 22 18 22" stroke="#4F46E5" strokeWidth="5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
         <path d="M224 58l18 22-18 22" stroke="#4F46E5" strokeWidth="5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    );
+  }
+
+  if (type === 'AppSEO') {
+    return (
+      <svg {...common} role="img" aria-label="App Store optimization illustration">
+        <defs>
+          <linearGradient id="asx" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#FFF4E6" /><stop offset="1" stopColor="#FFE6C7" />
+          </linearGradient>
+        </defs>
+        <rect width="320" height="160" rx="16" fill="url(#asx)" />
+        {/* bảng xếp hạng: 3 hàng, hàng đầu nổi bật */}
+        <rect x="52" y="34" width="150" height="26" rx="8" fill="#F59E0B" />
+        <text x="64" y="52" fontFamily="Arial" fontSize="14" fontWeight="bold" fill="#fff">1</text>
+        <rect x="80" y="41" width="80" height="12" rx="6" fill="#fff" opacity="0.85" />
+        <rect x="52" y="68" width="150" height="24" rx="8" fill="#fff" stroke="#F59E0B" strokeWidth="1.5" />
+        <text x="64" y="85" fontFamily="Arial" fontSize="13" fontWeight="bold" fill="#B45309">2</text>
+        <rect x="80" y="74" width="62" height="11" rx="5.5" fill="#FFE6C7" />
+        <rect x="52" y="100" width="150" height="24" rx="8" fill="#fff" stroke="#FCD9A6" strokeWidth="1.5" />
+        <text x="64" y="117" fontFamily="Arial" fontSize="13" fontWeight="bold" fill="#C08A3E">3</text>
+        <rect x="80" y="106" width="48" height="11" rx="5.5" fill="#FFF0DC" />
+        {/* mũi tên tăng hạng */}
+        <path d="M232 112l0-46" stroke="#F59E0B" strokeWidth="6" strokeLinecap="round" />
+        <path d="M218 80l14-16 14 16" stroke="#F59E0B" strokeWidth="6" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="232" cy="126" r="5" fill="#F59E0B" />
+      </svg>
+    );
+  }
+
+  if (type === 'WebSEO') {
+    return (
+      <svg {...common} role="img" aria-label="Website SEO illustration">
+        <defs>
+          <linearGradient id="wsx" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#E9F7FF" /><stop offset="1" stopColor="#D2ECFB" />
+          </linearGradient>
+        </defs>
+        <rect width="320" height="160" rx="16" fill="url(#wsx)" />
+        {/* thanh tìm kiếm */}
+        <rect x="60" y="28" width="200" height="28" rx="14" fill="#fff" stroke="#0284C7" strokeWidth="2" />
+        <circle cx="80" cy="42" r="7" fill="none" stroke="#0284C7" strokeWidth="2.5" />
+        <line x1="85" y1="47" x2="91" y2="53" stroke="#0284C7" strokeWidth="2.5" strokeLinecap="round" />
+        <rect x="100" y="37" width="96" height="10" rx="5" fill="#D2ECFB" />
+        {/* kết quả tìm kiếm, kết quả đầu được làm nổi */}
+        <rect x="60" y="68" width="200" height="30" rx="8" fill="#fff" stroke="#0284C7" strokeWidth="2" />
+        <rect x="72" y="76" width="92" height="8" rx="4" fill="#0284C7" />
+        <rect x="72" y="88" width="140" height="6" rx="3" fill="#DCEEFA" />
+        <rect x="60" y="106" width="200" height="14" rx="6" fill="#fff" opacity="0.7" />
+        <rect x="60" y="126" width="160" height="14" rx="6" fill="#fff" opacity="0.5" />
+        {/* huy hiệu #1 */}
+        <circle cx="256" cy="83" r="17" fill="#0284C7" />
+        <text x="256" y="89" textAnchor="middle" fontFamily="Arial" fontSize="15" fontWeight="bold" fill="#fff">#1</text>
+      </svg>
+    );
+  }
+
+  if (type === 'PageManagement') {
+    return (
+      <svg {...common} role="img" aria-label="Social page management illustration">
+        <defs>
+          <linearGradient id="pmx" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#F3EEFF" /><stop offset="1" stopColor="#E4DAFF" />
+          </linearGradient>
+        </defs>
+        <rect width="320" height="160" rx="16" fill="url(#pmx)" />
+        {/* khung bài đăng */}
+        <rect x="70" y="26" width="180" height="108" rx="12" fill="#fff" stroke="#7C3AED" strokeWidth="2" />
+        <circle cx="92" cy="48" r="11" fill="#7C3AED" opacity="0.25" />
+        <rect x="110" y="42" width="66" height="8" rx="4" fill="#E4DAFF" />
+        <rect x="110" y="54" width="42" height="6" rx="3" fill="#EFE9FC" />
+        <rect x="86" y="70" width="148" height="34" rx="8" fill="#7C3AED" opacity="0.12" />
+        {/* tương tác: tim, bình luận, chia sẻ */}
+        <path d="M96 120c-6-5-11-8-11-13a6 6 0 0 1 11-3 6 6 0 0 1 11 3c0 5-5 8-11 13z" fill="#EC4899" />
+        <path d="M132 108h26a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5h-14l-7 6v-6h-5a5 5 0 0 1-5-5v-8a5 5 0 0 1 5-5z" fill="#7C3AED" opacity="0.55" />
+        <path d="M196 110l18 8-18 8v-5h-12v-6h12z" fill="#7C3AED" opacity="0.55" />
       </svg>
     );
   }

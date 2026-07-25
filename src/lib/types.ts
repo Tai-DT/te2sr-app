@@ -4,7 +4,7 @@
 
 export type Role = 'client' | 'admin';
 export type Platform = 'iOS' | 'Android' | 'Both';
-export type ServiceType = 'Testing' | 'Publishing' | 'Promotion_5Star' | 'DesignAnalyzer' | 'WebDesign' | 'AppDevelopment';
+export type ServiceType = 'Testing' | 'Publishing' | 'Promotion_5Star' | 'DesignAnalyzer' | 'WebDesign' | 'AppDevelopment' | 'AppSEO' | 'WebSEO' | 'PageManagement';
 export type OrderStatus = 'Pending' | 'In Progress' | 'Completed' | 'Rejected';
 
 export interface User {
