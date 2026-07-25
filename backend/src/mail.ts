@@ -43,9 +43,22 @@ export async function sendMail(env: MailEnv, opts: SendOpts): Promise<{ ok: bool
         }),
       },
     );
-    const data = (await res.json().catch(() => null)) as { success?: boolean; errors?: { message?: string }[] } | null;
+    const data = (await res.json().catch(() => null)) as
+      | { success?: boolean; errors?: { code?: number; message?: string }[] }
+      | null;
     if (!res.ok || (data && data.success === false)) {
-      const msg = data?.errors?.[0]?.message || `HTTP ${res.status}`;
+      // Ghi cả HTTP status lẫn mã lỗi, không chỉ mỗi câu chữ. Trước đây log chỉ
+      // có "Authentication error" — câu này Cloudflare trả ở cổng API chung nên
+      // không phân biệt được token sai, token thiếu quyền, hay tài khoản chưa
+      // được bật dịch vụ. Mã số mới nói rõ:
+      //   401 + 10000 → cổng API từ chối token (sai/rỗng/không đúng tài khoản)
+      //   403 + 10102 → token đúng nhưng thiếu quyền Email Sending
+      //   403 + 10105 → tài khoản chưa được cấp quyền dùng (chưa lên Workers Paid)
+      //   403 + 10203 → tên miền chưa được bật gửi thư
+      const err = data?.errors?.[0];
+      const msg = err
+        ? `HTTP ${res.status} / code ${err.code ?? '?'}: ${err.message ?? 'không rõ'}`
+        : `HTTP ${res.status}`;
       console.error('✉️  sendMail failed:', msg);
       return { ok: false, error: msg };
     }
