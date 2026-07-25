@@ -1,6 +1,6 @@
 // ══════════════════════════════════════════════════════════════
 //  TE2SR — Cloudflare Worker backend (Hono + D1)
-//  Persistent orders, real JWT auth, per-order chat, AI design reports,
+//  Persistent orders, real JWT auth, per-order chat,
 //  transactional email. All data in Cloudflare D1.
 // ══════════════════════════════════════════════════════════════
 
@@ -10,7 +10,6 @@ import { cors } from 'hono/cors';
 import type { Env, JwtPayload, Order, OrderStatus, Platform, RateLimiter, ServiceType, Variables } from './types';
 import { hashPassword, isAdminEmail, optionalAuth, requireAdmin, requireAuth, signJwt, verifyPassword } from './auth';
 import * as db from './db';
-import { analyzeDesign } from './analyzer';
 import { M, type MsgKey } from './messages';
 import { isMailEnabled, newOrderAdminMail, orderConfirmationMail, orderStatusMail, sendMailAsync } from './mail';
 
@@ -396,23 +395,6 @@ app.post('/api/orders/:id/messages', requireAuth, async (c) => {
 // ══════════════════════════════════════════════════════════════
 //  AI DESIGN ANALYSIS
 // ══════════════════════════════════════════════════════════════
-app.post('/api/analyze-design', optionalAuth, async (c) => {
-  try {
-    const body = await c.req.json().catch(() => ({}));
-    const fileName = body.fileName ? String(body.fileName) : 'app-screenshot.png';
-    const user = c.get('user');
-    const report = analyzeDesign(fileName, user?.sub ?? null);
-    if (user) await db.saveReport(c.env.DB, report);
-    return c.json({ success: true, report });
-  } catch {
-    return c.json({ success: false, error: M(c, 'analyze_failed') }, 500);
-  }
-});
-
-app.get('/api/reports', requireAuth, async (c) => {
-  const reports = await db.listReportsForUser(c.env.DB, c.get('user').sub);
-  return c.json({ success: true, reports });
-});
 
 // ══════════════════════════════════════════════════════════════
 //  ADMIN

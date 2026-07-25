@@ -64,14 +64,7 @@ CREATE TABLE IF NOT EXISTS design_reports (
 CREATE INDEX IF NOT EXISTS idx_reports_user ON design_reports(user_id);
 
 -- Demo seed orders so the admin dashboard isn't empty
-INSERT OR IGNORE INTO orders
-  (id, user_id, app_name, client_email, platform, service_type, status, target_countries, details, package_price, paid_deposit, paid_final, created_at, updated_at)
-VALUES
-  ('ORD-8921', NULL, 'CryptoPulse Trading Pro', 'dev@cryptopulse.io', 'Both', 'Publishing', 'In Progress', '["USA","Vietnam","Japan"]', 'Full publishing setup for iOS App Store and Google Play with ASO metadata optimization.', 100, 1, 0, '2026-07-22T09:00:00.000Z', '2026-07-22T09:00:00.000Z'),
-  ('ORD-8922', NULL, 'ZenFit Yoga & Meditate', 'support@zenfitapp.com', 'iOS', 'Promotion_5Star', 'In Progress', '["Korea","USA","Germany"]', '10 localized 5-star reviews campaign bundled with publishing.', 100, 1, 0, '2026-07-21T09:00:00.000Z', '2026-07-21T09:00:00.000Z'),
-  ('ORD-8923', NULL, 'SpeedyDelivery Partner', 'qa@speedydelivery.vn', 'Android', 'Testing', 'Completed', '["Vietnam"]', '12-tester / 14-day closed testing coverage & crash profiling report generated.', 50, 1, 1, '2026-07-19T09:00:00.000Z', '2026-07-19T09:00:00.000Z'),
-  ('ORD-8924', NULL, 'Artisan Photo Studio AI', 'design@artisanphoto.com', 'Both', 'DesignAnalyzer', 'Completed', '["Worldwide"]', 'Automated AI UI/UX visual inspection & Apple HIG compliance check.', 100, 1, 1, '2026-07-18T09:00:00.000Z', '2026-07-18T09:00:00.000Z');
-
+-- Dữ liệu demo đã được gỡ: 4 đơn mẫu làm sai doanh thu ở trang quản trị.
 -- Giới hạn tần suất. Đếm tập trung ở D1 vì binding ratelimit của Workers chỉ
 -- đếm cục bộ trên từng máy nên không chặn được tấn công rải đều.
 CREATE TABLE IF NOT EXISTS rate_limits (

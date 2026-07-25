@@ -4,7 +4,6 @@
 
 import type {
   AdminStats,
-  DesignAnalysisReport,
   Order,
   OrderMessage,
   OrderStatus,
@@ -147,11 +146,6 @@ export const api = {
   listMessages: (orderId: string) => request<{ messages: OrderMessage[] }>(`/api/orders/${orderId}/messages`).then((d) => d.messages),
   sendMessage: (orderId: string, text: string) =>
     request<{ message: OrderMessage }>(`/api/orders/${orderId}/messages`, { method: 'POST', body: JSON.stringify({ text }) }).then((d) => d.message),
-
-  // Design analysis
-  analyzeDesign: (fileName: string) =>
-    request<{ report: DesignAnalysisReport }>('/api/analyze-design', { method: 'POST', body: JSON.stringify({ fileName }) }).then((d) => d.report),
-  listReports: () => request<{ reports: DesignAnalysisReport[] }>('/api/reports').then((d) => d.reports),
 
   // Admin
   adminStats: () => request<{ stats: AdminStats }>('/api/admin/stats').then((d) => d.stats),

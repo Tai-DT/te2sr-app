@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LanguageSelector } from './LanguageSelector';
 import { useLanguage } from '@/lib/i18n/language-context';
-import { Layers, TestTube, Rocket, Star, LayoutDashboard, Menu, X, PlusCircle, User as UserIcon, LogOut, ShieldCheck, Sparkles, Package } from 'lucide-react';
+import { Layers, TestTube, Rocket, Star, LayoutDashboard, Menu, X, PlusCircle, User as UserIcon, LogOut, ShieldCheck, Package } from 'lucide-react';
 import { OrderModal } from './OrderModal';
 import { Logo } from './brand/Logo';
 import { useAuth } from '@/lib/auth';
@@ -23,7 +23,6 @@ export const Navbar: React.FC = () => {
     { href: '/services/testing', label: t('nav_testing'), icon: TestTube },
     { href: '/services/publishing', label: t('nav_publishing'), icon: Rocket },
     { href: '/services/promotion', label: t('nav_promotion'), icon: Star },
-    { href: '/analyzer', label: t('nav_analyzer'), icon: Sparkles },
   ];
 
   // Khách đã đăng nhập mới thấy mục theo dõi đơn — khách vãng lai bấm vào chỉ
@@ -90,8 +89,10 @@ export const Navbar: React.FC = () => {
                     <span>{t('nb_admin_prefix')}{user.name}</span>
                   </Link>
                 ) : (
+                  /* Khách thường bấm vào tên mình trước đây bị đưa sang /admin
+                     và nhận 403, dù tooltip hứa "xem tiến độ đơn". */
                   <Link
-                    href="/admin"
+                    href="/orders"
                     className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-100 border border-slate-200 text-xs font-bold text-slate-800 hover:border-brand-blue hover:text-brand-blue transition-all"
                     title={t('nb_order_progress_title')}
                   >
