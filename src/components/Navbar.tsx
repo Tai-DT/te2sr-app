@@ -7,6 +7,7 @@ import { LanguageSelector } from './LanguageSelector';
 import { useLanguage } from '@/lib/i18n/language-context';
 import { Layers, TestTube, Rocket, Star, LayoutDashboard, Menu, X, PlusCircle, User as UserIcon, LogOut, ShieldCheck, Sparkles } from 'lucide-react';
 import { OrderModal } from './OrderModal';
+import { Logo } from './brand/Logo';
 import { useAuth } from '@/lib/auth';
 
 export const Navbar: React.FC = () => {
@@ -35,12 +36,8 @@ export const Navbar: React.FC = () => {
       <header className="sticky top-0 z-40 w-full backdrop-blur-xl bg-white/90 border-b border-slate-200/80 shadow-apple-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <img
-              src="/logo.png"
-              alt="TE2SR Tester"
-              className="h-9 w-auto max-w-[160px] object-contain transition-transform group-hover:scale-105"
-            />
+          <Link href="/" className="flex items-center group" aria-label="TE2SR — Testing to Store Release">
+            <Logo variant="compact" className="transition-transform group-hover:scale-[1.02]" />
           </Link>
 
           {/* Desktop Nav */}

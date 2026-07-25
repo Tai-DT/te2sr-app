@@ -337,7 +337,7 @@ export default function AdminPortalPage() {
                             <Icon className={`w-4 h-4 ${stat.color}`} />
                           </div>
                         </div>
-                        <div className="text-3xl font-extrabold text-slate-900 font-display">{(stat as any).prefix || ''}{stat.value.toLocaleString()}</div>
+                        <div className="text-3xl font-extrabold text-slate-900 font-display">{(stat as any).prefix || ''}{stat.value.toLocaleString('en-US')}</div>
                         <div className="flex items-center gap-1 text-[11px] text-emerald-700 font-extrabold">
                           <ArrowUpRight className="w-3.5 h-3.5" />
                           <span>{stat.change}</span>

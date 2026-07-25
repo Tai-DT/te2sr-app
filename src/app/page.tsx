@@ -24,7 +24,7 @@ function StatCounter({ value, label, suffix = '', color = 'text-brand-blue' }: {
   return (
     <div className="text-center p-4">
       <div className={`text-3xl sm:text-4xl font-extrabold font-display ${color}`}>
-        {value.toLocaleString()}{suffix}
+        {value.toLocaleString('en-US')}{suffix}
       </div>
       <div className="text-xs text-slate-700 font-extrabold mt-1">{label}</div>
     </div>

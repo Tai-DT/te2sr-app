@@ -209,7 +209,7 @@ export default function AnalyzerPage() {
                       <span className={`w-9 h-9 rounded-lg flex items-center justify-center text-xs font-extrabold font-display border shrink-0 ${scoreBadge(h.score)}`}>{h.score}</span>
                       <div className="min-w-0 flex-1">
                         <p className="text-xs font-bold text-slate-900 truncate group-hover:text-brand-blue">{h.fileName}</p>
-                        <p className="text-[11px] text-slate-500 font-medium">{new Date(h.createdAt).toLocaleString()} · {h.suggestions.length} {t('azr_suggestions_suffix')}</p>
+                        <p className="text-[11px] text-slate-500 font-medium">{new Date(h.createdAt).toLocaleString('vi-VN')} · {h.suggestions.length} {t('azr_suggestions_suffix')}</p>
                       </div>
                     </button>
                   ))}

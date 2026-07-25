@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { LANGUAGES } from '@/lib/i18n/dictionaries';
 import { useLanguage } from '@/lib/i18n/language-context';
 import { ShieldCheck, Globe, Star, TestTube, Rocket } from 'lucide-react';
+import { Logo } from './brand/Logo';
 import { FloatingSocialChat } from './FloatingSocialChat';
 
 export const Footer: React.FC = () => {
@@ -15,19 +16,15 @@ export const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
         {/* Col 1 */}
         <div className="space-y-4 md:col-span-1">
-          <Link href="/" className="inline-block">
-            <img
-              src="/logo.png"
-              alt="TE2SR Tester Logo"
-              className="h-10 w-auto max-w-[180px] object-contain"
-            />
+          <Link href="/" className="inline-block" aria-label="TE2SR">
+            <Logo variant="full" className="items-start" />
           </Link>
           <p className="text-xs text-slate-500 leading-relaxed">
             {t('hero_subtitle')}
           </p>
           <div className="flex items-center gap-2 text-xs text-emerald-600 font-semibold">
             <ShieldCheck className="w-4 h-4" />
-            <span>99.9% App Store Approval Guarantee</span>
+            <span>Cam kết tỷ lệ duyệt Store 90%</span>
           </div>
         </div>
 
@@ -86,10 +83,10 @@ export const Footer: React.FC = () => {
               </Link>
             </li>
             <li>
-              <span className="text-slate-500">Stitch Project ID: projects/625497910419681977</span>
+              <span className="text-slate-500">Hỗ trợ 24/7 · Zalo · WhatsApp · Messenger</span>
             </li>
             <li>
-              <span className="text-slate-500">Design System: Apple Ultra-Clean Light Mode</span>
+              <span className="text-slate-500">Thanh toán 2 đợt · Hoàn tiền 100%</span>
             </li>
           </ul>
         </div>
@@ -97,8 +94,8 @@ export const Footer: React.FC = () => {
 
       <div className="max-w-7xl mx-auto pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
         <p>{t('footer_copy')}</p>
-        <p className="mt-2 sm:mt-0 text-[11px] text-slate-500">
-          Powered by TE2SR Engine & Stitch MCP Light Architecture
+        <p className="mt-2 sm:mt-0 text-[11px] text-slate-400">
+          TE2SR · Testing → Store Release
         </p>
       </div>
 

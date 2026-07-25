@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2E8BFF"/>
+      <stop offset="1" stop-color="#0A5AE6"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="118" fill="url(#tile)"/>
+  <!-- "T2" monogram, hand-built geometric so it is font-independent and crisp at any size -->
+  <g fill="#ffffff" transform="skewX(-8) translate(28,0)">
+    <!-- T -->
+    <rect x="96" y="150" width="150" height="50" rx="8"/>
+    <rect x="146" y="150" width="50" height="220" rx="8"/>
+    <!-- 2 -->
+    <path d="M262 214
+             a66 66 0 0 1 129 20
+             c0 34 -24 55 -47 74
+             l-70 58 h120 v42
+             h-190 v-40
+             l104 -86
+             c15 -12 27 -25 27 -46
+             a30 30 0 0 0 -59 -8 z"/>
+  </g>
+</svg>
