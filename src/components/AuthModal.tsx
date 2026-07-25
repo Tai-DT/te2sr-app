@@ -35,6 +35,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, currentLa
     }
   }, []);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -78,14 +87,24 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, currentLa
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop animate-fadeIn">
-      <div className="relative w-full max-w-md bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-apple-lg space-y-6">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop animate-fadeIn"
+      onClick={onClose}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="TE2SR"
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-md bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-apple-lg space-y-6"
+      >
         {/* Close button */}
         <button
           onClick={onClose}
+          aria-label="Đóng"
           className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-900 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors"
         >
-          <X className="w-5 h-5" />
+          <X className="w-5 h-5" aria-hidden />
         </button>
 
         {/* Header */}
@@ -214,7 +233,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, currentLa
 
           <button
             type="submit"
-            className="w-full py-3 rounded-xl bg-brand-blue text-white text-xs font-bold shadow-brand-blue hover:bg-blue-600 hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+            className="w-full py-3 rounded-xl bg-brand-blue text-white text-xs font-bold shadow-brand-blue hover:bg-brand-blueHover hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
           >
             <span>{isRegister ? 'Tạo Tài Khoản Khách Hàng' : 'Đăng Nhập'}</span>
             <ArrowRight className="w-4 h-4" />

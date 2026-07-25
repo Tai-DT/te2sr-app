@@ -3,13 +3,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
-import { LanguageCode, getTranslation } from '@/lib/i18n/dictionaries';
+import { getTranslation } from '@/lib/i18n/dictionaries';
+import { useLanguage } from '@/lib/useLanguage';
+import { adminHeaders, getAdminToken, setAdminToken } from '@/lib/adminAuth';
 import { useAuth } from '@/lib/auth';
 import { Order } from '@/lib/store';
 import {
   LayoutDashboard, MessageSquare, Send, ShieldAlert, RefreshCw,
   CheckCircle2, Clock, TestTube, Rocket, Star, ChevronRight, Package,
-  Activity, Search, BarChart2, Globe, ArrowUpRight, Zap, Lock, Users, Copy, Check,
+  Activity, Search, BarChart2, Globe, ArrowUpRight, Zap, Lock, Users, Copy, Check, ShieldCheck,
 } from 'lucide-react';
 
 interface ChatMessage {
@@ -28,17 +30,20 @@ const SERVICE_LABELS: Record<string, { label: string; color: string; icon: React
 };
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; dot: string }> = {
-  Pending:     { label: 'Pending',     color: 'text-amber-900 bg-amber-50 border-amber-300 font-extrabold',   dot: 'bg-amber-600' },
-  'In Progress': { label: 'In Progress', color: 'text-brand-blue bg-blue-50 border-blue-300 font-extrabold',     dot: 'bg-brand-blue animate-pulse' },
-  Completed:   { label: 'Completed',   color: 'text-emerald-900 bg-emerald-50 border-emerald-300 font-extrabold', dot: 'bg-emerald-600' },
-  Rejected:    { label: 'Rejected',    color: 'text-red-900 bg-red-50 border-red-300 font-extrabold',         dot: 'bg-red-600' },
+  Pending:     { label: 'Pending',     color: 'text-amber-900 bg-amber-50 border-amber-300 font-semibold',   dot: 'bg-amber-600' },
+  'In Progress': { label: 'In Progress', color: 'text-brand-blue bg-blue-50 border-blue-300 font-semibold',     dot: 'bg-brand-blue animate-pulse' },
+  Completed:   { label: 'Completed',   color: 'text-emerald-900 bg-emerald-50 border-emerald-300 font-semibold', dot: 'bg-emerald-600' },
+  Rejected:    { label: 'Rejected',    color: 'text-red-900 bg-red-50 border-red-300 font-semibold',         dot: 'bg-red-600' },
 };
 
 export default function AdminPortalPage() {
-  const [currentLang, setCurrentLang] = useState<LanguageCode>('vi');
+  const [currentLang, setCurrentLang] = useLanguage();
   const { user, openAuthModal } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [needsToken, setNeedsToken] = useState(false);
+  const [tokenInput, setTokenInput] = useState('');
+  const [apiError, setApiError] = useState<string | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [activeTab, setActiveTab] = useState<'overview' | 'orders' | 'chat' | 'analytics'>('overview');
   const [filterStatus, setFilterStatus] = useState<string>('all');
@@ -49,32 +54,49 @@ export default function AdminPortalPage() {
   const googleGroupEmail = 'te2sr@googlegroups.com';
 
   const [activeChat, setActiveChat] = useState<ChatMessage[]>([
-    { id: '1', sender: 'TE2SR Support', role: 'admin', text: '👋 Chào bạn! Đơn hàng của bạn đã được tiếp nhận. Đội ngũ kỹ sư TE2SR đang tiến hành chuẩn bị tài nguyên.', timestamp: '10:15' },
-    { id: '2', sender: 'Khách hàng', role: 'client', text: 'Chào Admin, cho mình hỏi với gói Google Play thì quy trình 20 testers sẽ như thế nào?', timestamp: '10:18' },
-    { id: '3', sender: 'TE2SR Support', role: 'admin', text: '🤖 Đối với Google Play, bạn chỉ cần thêm Google Group: te2sr@googlegroups.com vào phần Closed Testing trong Google Play Console, sau đó dán Link Kiểm Thử (Opt-in URL) tại đây. Đội ngũ 12 testers thực tế của TE2SR sẽ tự động cài đặt & đếm 14 ngày liên tục!', timestamp: '10:22' },
+    { id: '1', sender: 'TE2SR Support', role: 'admin', text: 'Chào bạn! Đơn hàng của bạn đã được tiếp nhận. Đội ngũ kỹ sư TE2SR đang tiến hành chuẩn bị tài nguyên.', timestamp: '10:15' },
+    { id: '2', sender: 'Khách hàng', role: 'client', text: 'Chào Admin, cho mình hỏi với gói Google Play thì quy trình 12 testers sẽ như thế nào?', timestamp: '10:18' },
+    { id: '3', sender: 'TE2SR Support', role: 'admin', text: 'Đối với Google Play, bạn chỉ cần thêm Google Group: te2sr@googlegroups.com vào phần Closed Testing trong Google Play Console, sau đó dán Link Kiểm Thử (Opt-in URL) tại đây. Đội ngũ 12 testers thực tế của TE2SR sẽ tự động cài đặt & đếm 14 ngày liên tục!', timestamp: '10:22' },
   ]);
   const [inputMessage, setInputMessage] = useState('');
 
   const fetchOrders = async () => {
     setLoading(true);
+    setApiError(null);
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
-      const res = await fetch(`${apiUrl}/api/admin/orders`);
+      const res = await fetch(`${apiUrl}/api/admin/orders`, { headers: adminHeaders() });
+      if (res.status === 401 || res.status === 503) {
+        setNeedsToken(true);
+        setApiError('Token quản trị không đúng hoặc chưa được nhập.');
+        return;
+      }
       const data = await res.json();
       if (data.success) {
+        setNeedsToken(false);
         setOrders(data.orders);
         if (data.orders.length > 0 && !selectedOrder) {
           setSelectedOrder(data.orders[0]);
         }
+      } else {
+        setApiError(data.error || 'Không tải được danh sách đơn.');
       }
     } catch (err) {
-      // Fallback
+      setApiError('Không kết nối được máy chủ.');
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => { fetchOrders(); }, []);
+  useEffect(() => {
+    // Chưa lưu token → hiện ngay màn hình nhập, khỏi gọi API để nhận 401
+    if (!getAdminToken()) {
+      setNeedsToken(true);
+      setLoading(false);
+      return;
+    }
+    fetchOrders();
+  }, []);
   useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [activeChat]);
 
   const handleCopyGroup = () => {
@@ -85,15 +107,25 @@ export default function AdminPortalPage() {
 
   const handleUpdateStatus = async (orderId: string, status: Order['status']) => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || '';
+    setApiError(null);
     try {
-      await fetch(`${apiUrl}/api/admin/orders`, {
+      const res = await fetch(`${apiUrl}/api/admin/orders`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: adminHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({ orderId, status }),
       });
+      const data = await res.json().catch(() => null);
+      // Chỉ cập nhật giao diện khi server XÁC NHẬN đã lưu
+      if (!res.ok || !data?.success) {
+        setApiError(data?.error || 'Không cập nhật được trạng thái. Thử lại.');
+        if (res.status === 401) setNeedsToken(true);
+        return;
+      }
       setOrders(prev => prev.map(o => o.id === orderId ? { ...o, status } : o));
       if (selectedOrder?.id === orderId) setSelectedOrder(prev => prev ? { ...prev, status } : null);
-    } catch (err) {}
+    } catch (err) {
+      setApiError('Không kết nối được máy chủ.');
+    }
   };
 
   const handleSendMessage = (e: React.FormEvent) => {
@@ -128,6 +160,56 @@ export default function AdminPortalPage() {
     { id: 'analytics', label: 'Thống Kê', icon: BarChart2 },
   ];
 
+  // Chưa có token quản trị hợp lệ → yêu cầu nhập trước khi hiện bất kỳ đơn nào
+  if (needsToken) {
+    return (
+      <div className="min-h-screen bg-white flex flex-col font-sans">
+        <Navbar currentLang={currentLang} onLanguageChange={setCurrentLang} />
+        <main className="flex-1 flex items-center justify-center px-4 py-20">
+          <div className="w-full max-w-sm space-y-5 text-center">
+            <div className="w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center mx-auto">
+              <ShieldCheck className="w-6 h-6 text-amber-400" aria-hidden />
+            </div>
+            <div className="space-y-1.5">
+              <h1 className="text-xl font-bold tracking-tight text-slate-900">Cổng quản trị TE2SR</h1>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Nhập token quản trị để xem đơn hàng. Token được cấp phía máy chủ và chỉ lưu trên máy này.
+              </p>
+            </div>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                setAdminToken(tokenInput);
+                setNeedsToken(false);
+                setTokenInput('');
+                fetchOrders();
+              }}
+              className="space-y-3"
+            >
+              <input
+                type="password"
+                autoFocus
+                value={tokenInput}
+                onChange={(e) => setTokenInput(e.target.value)}
+                placeholder="Dán token quản trị"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-brand-blue focus:bg-white focus-visible:ring-2 focus-visible:ring-brand-blue/30 transition-all"
+              />
+              {apiError && <p className="text-xs text-red-700">{apiError}</p>}
+              <button
+                type="submit"
+                disabled={!tokenInput.trim()}
+                className="w-full py-3 rounded-xl bg-brand-blue hover:bg-brand-blueHover text-white font-semibold text-sm transition-colors disabled:opacity-50"
+              >
+                Mở bảng điều khiển
+              </button>
+            </form>
+          </div>
+        </main>
+        <Footer currentLang={currentLang} />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans">
       <Navbar currentLang={currentLang} onLanguageChange={setCurrentLang} />
@@ -141,7 +223,7 @@ export default function AdminPortalPage() {
               <div className="w-8 h-8 rounded-xl bg-brand-blue text-white flex items-center justify-center shadow-apple-sm">
                 <LayoutDashboard className="w-4 h-4" />
               </div>
-              <h1 className="text-xl sm:text-2xl font-extrabold font-display text-slate-900 tracking-tight">
+              <h1 className="text-xl sm:text-2xl font-semibold font-display text-slate-900 tracking-tight">
                 {user?.role === 'admin' ? 'Admin Control Center' : '📦 Cổng Theo Dõi Dịch Vụ'}
               </h1>
             </div>
@@ -153,7 +235,7 @@ export default function AdminPortalPage() {
           <div className="flex items-center gap-2">
             <button
               onClick={fetchOrders}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs font-extrabold text-slate-900 hover:border-brand-blue hover:text-brand-blue shadow-apple-sm transition-all"
+              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs font-semibold text-slate-900 hover:border-brand-blue hover:text-brand-blue shadow-apple-sm transition-all"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-brand-blue' : ''}`} />
               <span>Làm Mới</span>
@@ -173,7 +255,7 @@ export default function AdminPortalPage() {
               </div>
             </div>
             <div className="space-y-2">
-              <h3 className="text-xl font-extrabold text-slate-900">Khu Vực Yêu Cầu Xác Thực</h3>
+              <h3 className="text-xl font-semibold text-slate-900">Khu Vực Yêu Cầu Xác Thực</h3>
               <p className="text-sm text-slate-800 max-w-sm mx-auto leading-relaxed font-semibold">
                 Đăng nhập để truy cập bảng điều khiển, theo dõi tiến độ đơn hàng & trao đổi trực tiếp với đội ngũ kỹ sư TE2SR.
               </p>
@@ -181,13 +263,13 @@ export default function AdminPortalPage() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <button
                 onClick={openAuthModal}
-                className="px-8 py-3 rounded-2xl bg-brand-blue text-white font-extrabold text-sm shadow-brand-blue hover:bg-blue-600 transition-all"
+                className="px-8 py-3 rounded-2xl bg-brand-blue text-white font-semibold text-sm shadow-brand-blue hover:bg-brand-blueHover transition-all"
               >
                 Đăng Nhập Ngay
               </button>
               <button
                 onClick={() => openAuthModal()}
-                className="px-8 py-3 rounded-2xl bg-slate-100 border border-slate-300 text-slate-900 font-extrabold text-sm hover:bg-slate-200 transition-all"
+                className="px-8 py-3 rounded-2xl bg-slate-100 border border-slate-300 text-slate-900 font-semibold text-sm hover:bg-slate-200 transition-all"
               >
                 Tạo Tài Khoản Mới
               </button>
@@ -203,7 +285,7 @@ export default function AdminPortalPage() {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id as any)}
-                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-extrabold transition-all ${
+                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
                       activeTab === tab.id
                         ? 'bg-white text-brand-blue shadow-apple-sm'
                         : 'text-slate-800 hover:text-slate-900 hover:bg-white/60'
@@ -226,15 +308,15 @@ export default function AdminPortalPage() {
                       <Users className="w-5 h-5 text-amber-700" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-extrabold text-slate-900">🤖 Google Play Tester Group (12 Testers / 14 Ngày)</h4>
+                      <h4 className="text-xs font-semibold text-slate-900">Google Play Tester Group (12 Testers / 14 Ngày)</h4>
                       <p className="text-[11px] text-slate-800 font-semibold">
-                        Để thực hiện kiểm thử 12 testers trong 14 ngày trên Google Play Console, hãy thêm email: <span className="font-mono font-extrabold text-brand-blue select-all">{googleGroupEmail}</span>
+                        Để thực hiện kiểm thử 12 testers trong 14 ngày trên Google Play Console, hãy thêm email: <span className="font-mono font-semibold text-brand-blue select-all">{googleGroupEmail}</span>
                       </p>
                     </div>
                   </div>
                   <button
                     onClick={handleCopyGroup}
-                    className="px-3 py-1.5 rounded-xl bg-white border border-amber-300 text-amber-900 font-extrabold text-xs flex items-center gap-1.5 shrink-0 shadow-apple-sm hover:bg-amber-100 transition-colors"
+                    className="px-3 py-1.5 rounded-xl bg-white border border-amber-300 text-amber-900 font-semibold text-xs flex items-center gap-1.5 shrink-0 shadow-apple-sm hover:bg-amber-100 transition-colors"
                   >
                     {copiedGroup ? <Check className="w-3.5 h-3.5 text-emerald-700" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>{copiedGroup ? 'Đã sao chép' : 'Sao chép Email'}</span>
@@ -253,13 +335,13 @@ export default function AdminPortalPage() {
                     return (
                       <div key={i} className="bg-white rounded-2xl p-5 border border-slate-300 shadow-apple-sm space-y-3">
                         <div className="flex items-center justify-between">
-                          <span className="text-[11px] text-slate-800 font-extrabold uppercase tracking-wider">{stat.label}</span>
+                          <span className="text-[11px] text-slate-800 font-semibold uppercase tracking-wider">{stat.label}</span>
                           <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center">
                             <Icon className={`w-4 h-4 ${stat.color}`} />
                           </div>
                         </div>
-                        <div className="text-3xl font-extrabold text-slate-900 font-display">{stat.value}</div>
-                        <div className="flex items-center gap-1 text-[11px] text-emerald-700 font-extrabold">
+                        <div className="text-3xl font-semibold text-slate-900 font-display">{stat.value}</div>
+                        <div className="flex items-center gap-1 text-[11px] text-emerald-700 font-semibold">
                           <ArrowUpRight className="w-3.5 h-3.5" />
                           <span>{stat.change}</span>
                         </div>
@@ -271,8 +353,8 @@ export default function AdminPortalPage() {
                 {/* Recent Orders Preview */}
                 <div className="bg-white rounded-2xl border border-slate-300 shadow-apple-sm overflow-hidden">
                   <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-slate-50">
-                    <h2 className="text-sm font-extrabold text-slate-900">Đơn Hàng Gần Đây</h2>
-                    <button onClick={() => setActiveTab('orders')} className="text-xs font-extrabold text-brand-blue hover:underline flex items-center gap-1">
+                    <h2 className="text-sm font-semibold text-slate-900">Đơn Hàng Gần Đây</h2>
+                    <button onClick={() => setActiveTab('orders')} className="text-xs font-semibold text-brand-blue hover:underline flex items-center gap-1">
                       Xem tất cả <ChevronRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
@@ -291,7 +373,7 @@ export default function AdminPortalPage() {
                               {svc?.icon}
                             </div>
                             <div>
-                              <p className="text-sm font-extrabold text-slate-900 group-hover:text-brand-blue transition-colors">{order.appName}</p>
+                              <p className="text-sm font-semibold text-slate-900 group-hover:text-brand-blue transition-colors">{order.appName}</p>
                               <p className="text-[11px] text-slate-700 font-semibold">{order.id} · {order.platform}</p>
                             </div>
                           </div>
@@ -330,7 +412,7 @@ export default function AdminPortalPage() {
                               <Icon className="w-5 h-5 text-brand-blue" />
                             </div>
                             <div>
-                              <p className="text-sm font-extrabold text-slate-900 group-hover:text-brand-blue transition-colors">{action.title}</p>
+                              <p className="text-sm font-semibold text-slate-900 group-hover:text-brand-blue transition-colors">{action.title}</p>
                               <p className="text-[11px] text-slate-700 font-semibold mt-0.5">{action.desc}</p>
                             </div>
                           </div>
@@ -362,7 +444,7 @@ export default function AdminPortalPage() {
                     <select
                       value={filterStatus}
                       onChange={e => setFilterStatus(e.target.value)}
-                      className="px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 font-extrabold focus:outline-none focus:border-brand-blue shadow-apple-sm"
+                      className="px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 font-semibold focus:outline-none focus:border-brand-blue shadow-apple-sm"
                     >
                       <option value="all">Tất Cả</option>
                       <option value="Pending">Pending</option>
@@ -393,7 +475,7 @@ export default function AdminPortalPage() {
                             <div className="flex-1 min-w-0 space-y-2">
                               <div className="flex items-start justify-between gap-2">
                                 <div>
-                                  <p className="text-sm font-extrabold text-slate-900 leading-tight truncate">{order.appName}</p>
+                                  <p className="text-sm font-semibold text-slate-900 leading-tight truncate">{order.appName}</p>
                                   <p className="text-[11px] text-slate-700 font-semibold mt-0.5">{order.id} · {order.clientEmail}</p>
                                 </div>
                                 <span className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold border shrink-0 ${sts?.color}`}>
@@ -405,7 +487,7 @@ export default function AdminPortalPage() {
                                 <span className={`flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-bold border ${svc?.color}`}>
                                   {svc?.icon}<span>{svc?.label}</span>
                                 </span>
-                                <span className="px-2.5 py-0.5 rounded-md bg-slate-100 text-[11px] text-slate-900 font-extrabold">{order.platform}</span>
+                                <span className="px-2.5 py-0.5 rounded-md bg-slate-100 text-[11px] text-slate-900 font-semibold">{order.platform}</span>
                                 <span className="text-[11px] text-slate-600 font-semibold">{order.createdAt}</span>
                               </div>
                               {order.details && (
@@ -419,7 +501,7 @@ export default function AdminPortalPage() {
                                     <button
                                       key={s}
                                       onClick={e => { e.stopPropagation(); handleUpdateStatus(order.id, s); }}
-                                      className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold border transition-all ${
+                                      className={`px-2.5 py-1 rounded-lg text-[10px] font-semibold border transition-all ${
                                         order.status === s
                                           ? STATUS_CONFIG[s]?.color
                                           : 'bg-slate-100 border-slate-300 text-slate-800 hover:bg-slate-200'
@@ -452,13 +534,13 @@ export default function AdminPortalPage() {
                       {/* Header */}
                       <div className="px-5 py-4 border-b border-slate-200 bg-slate-50 space-y-2">
                         <div className="flex items-center justify-between">
-                          <span className="text-[11px] font-extrabold text-brand-blue uppercase tracking-wider">Chi Tiết Đơn</span>
+                          <span className="text-[11px] font-semibold text-brand-blue uppercase tracking-wider">Chi Tiết Đơn</span>
                           <span className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold border ${STATUS_CONFIG[selectedOrder.status]?.color}`}>
                             <span className={`w-1.5 h-1.5 rounded-full ${STATUS_CONFIG[selectedOrder.status]?.dot}`} />
                             {STATUS_CONFIG[selectedOrder.status]?.label}
                           </span>
                         </div>
-                        <h3 className="text-base font-extrabold text-slate-900">{selectedOrder.appName}</h3>
+                        <h3 className="text-base font-semibold text-slate-900">{selectedOrder.appName}</h3>
                       </div>
 
                       {/* Details */}
@@ -473,7 +555,7 @@ export default function AdminPortalPage() {
                         ].map((row, i) => (
                           <div key={i} className="flex justify-between items-start gap-2">
                             <span className="text-slate-700 shrink-0 font-bold">{row.label}</span>
-                            <span className="text-slate-900 font-extrabold text-right">{row.value}</span>
+                            <span className="text-slate-900 font-semibold text-right">{row.value}</span>
                           </div>
                         ))}
 
@@ -481,12 +563,12 @@ export default function AdminPortalPage() {
                         {(selectedOrder.platform === 'Android' || selectedOrder.platform === 'Both') && (
                           <div className="p-3 bg-amber-50 border border-amber-300 rounded-xl space-y-1">
                             <div className="flex items-center justify-between">
-                              <span className="font-extrabold text-amber-900 text-[11px] flex items-center gap-1">
+                              <span className="font-semibold text-amber-900 text-[11px] flex items-center gap-1">
                                 <Users className="w-3.5 h-3.5 text-amber-700" /> Google Play Tester Group:
                               </span>
                               <button
                                 onClick={handleCopyGroup}
-                                className="text-[10px] font-extrabold text-amber-800 underline"
+                                className="text-[10px] font-semibold text-amber-800 underline"
                               >
                                 {copiedGroup ? 'Đã sao chép' : 'Sao chép'}
                               </button>
@@ -505,7 +587,7 @@ export default function AdminPortalPage() {
 
                       {/* Progress Track */}
                       <div className="px-5 py-4 space-y-3 border-b border-slate-200">
-                        <p className="text-[11px] font-extrabold text-slate-700 uppercase tracking-wider">Tiến Độ Xử Lý</p>
+                        <p className="text-[11px] font-semibold text-slate-700 uppercase tracking-wider">Tiến Độ Xử Lý</p>
                         <div className="flex items-center gap-1">
                           {['Pending', 'In Progress', 'Completed'].map((s, i) => {
                             const statuses = ['Pending', 'In Progress', 'Completed'];
@@ -513,7 +595,7 @@ export default function AdminPortalPage() {
                             const isActive = i <= currentIdx;
                             return (
                               <React.Fragment key={s}>
-                                <div className={`flex items-center justify-center w-6 h-6 rounded-full text-[10px] font-extrabold border transition-all ${
+                                <div className={`flex items-center justify-center w-6 h-6 rounded-full text-[10px] font-semibold border transition-all ${
                                   isActive ? 'bg-brand-blue border-brand-blue text-white shadow-apple-sm' : 'bg-slate-100 border-slate-300 text-slate-500'
                                 }`}>
                                   {isActive ? <CheckCircle2 className="w-3.5 h-3.5" /> : i + 1}
@@ -536,7 +618,7 @@ export default function AdminPortalPage() {
                       <div className="px-5 py-4">
                         <button
                           onClick={() => setActiveTab('chat')}
-                          className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-brand-blue text-white text-xs font-extrabold transition-all flex items-center justify-center gap-2 shadow-apple-sm"
+                          className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-brand-blue text-white text-xs font-semibold transition-all flex items-center justify-center gap-2 shadow-apple-sm"
                         >
                           <MessageSquare className="w-4 h-4" />
                           <span>Trao Đổi Về Đơn Hàng Này</span>
@@ -563,7 +645,7 @@ export default function AdminPortalPage() {
                       <MessageSquare className="w-4 h-4 text-white" />
                     </div>
                     <div>
-                      <p className="text-sm font-extrabold text-slate-900">
+                      <p className="text-sm font-semibold text-slate-900">
                         {user.role === 'admin' ? 'Hỗ Trợ Khách Hàng TE2SR Support' : 'Trao Đổi Với Kỹ Sư TE2SR'}
                       </p>
                       <div className="flex items-center gap-1.5 text-[11px] text-emerald-700 font-bold">
@@ -572,7 +654,7 @@ export default function AdminPortalPage() {
                       </div>
                     </div>
                     {selectedOrder && (
-                      <div className="ml-auto px-2.5 py-1 rounded-lg bg-white border border-slate-300 text-[11px] text-brand-blue font-mono font-extrabold">
+                      <div className="ml-auto px-2.5 py-1 rounded-lg bg-white border border-slate-300 text-[11px] text-brand-blue font-mono font-semibold">
                         {selectedOrder.id}
                       </div>
                     )}
@@ -582,7 +664,7 @@ export default function AdminPortalPage() {
                   <div className="h-96 overflow-y-auto space-y-4 p-5 bg-slate-50">
                     {activeChat.map(msg => (
                       <div key={msg.id} className={`flex gap-2.5 ${msg.role !== 'admin' ? 'flex-row-reverse' : ''}`}>
-                        <div className={`w-7 h-7 rounded-full border flex items-center justify-center text-[10px] font-extrabold shrink-0 ${
+                        <div className={`w-7 h-7 rounded-full border flex items-center justify-center text-[10px] font-semibold shrink-0 ${
                           msg.role === 'admin'
                             ? 'bg-brand-blue border-brand-blue text-white'
                             : 'bg-slate-300 border-slate-400 text-slate-900'
@@ -616,7 +698,7 @@ export default function AdminPortalPage() {
                     <button
                       type="submit"
                       disabled={!inputMessage.trim()}
-                      className="p-2.5 rounded-xl bg-brand-blue text-white shadow-brand-blue hover:bg-blue-600 transition-all disabled:opacity-50"
+                      className="p-2.5 rounded-xl bg-brand-blue text-white shadow-brand-blue hover:bg-brand-blueHover transition-all disabled:opacity-50"
                     >
                       <Send className="w-4 h-4" />
                     </button>
@@ -630,7 +712,7 @@ export default function AdminPortalPage() {
               <div className="space-y-6">
                 {/* Service Breakdown */}
                 <div className="bg-white rounded-2xl border border-slate-300 p-6 shadow-apple-sm">
-                  <h2 className="text-sm font-extrabold text-slate-900 mb-4 flex items-center gap-2">
+                  <h2 className="text-sm font-semibold text-slate-900 mb-4 flex items-center gap-2">
                     <BarChart2 className="w-4 h-4 text-brand-blue" />
                     <span>Phân Tích Theo Dịch Vụ</span>
                   </h2>
@@ -664,9 +746,9 @@ export default function AdminPortalPage() {
                     const count = orders.filter(o => o.status === key).length;
                     return (
                       <div key={key} className="bg-white rounded-2xl p-5 border border-slate-300 text-center space-y-2 shadow-apple-sm">
-                        <span className="text-xs font-extrabold text-slate-800">{sts.label}</span>
-                        <p className="text-3xl font-extrabold text-slate-900">{count}</p>
-                        <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold border ${sts.color}`}>
+                        <span className="text-xs font-semibold text-slate-800">{sts.label}</span>
+                        <p className="text-3xl font-semibold text-slate-900">{count}</p>
+                        <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold border ${sts.color}`}>
                           <span className={`w-1.5 h-1.5 rounded-full ${sts.dot}`} />
                           {count} đơn
                         </span>
@@ -677,13 +759,13 @@ export default function AdminPortalPage() {
 
                 {/* Global Coverage */}
                 <div className="bg-white rounded-2xl border border-slate-300 p-6 shadow-apple-sm">
-                  <h2 className="text-sm font-extrabold text-slate-900 mb-4 flex items-center gap-2">
+                  <h2 className="text-sm font-semibold text-slate-900 mb-4 flex items-center gap-2">
                     <Globe className="w-4 h-4 text-brand-blue" />
                     <span>Thị Trường Mục Tiêu</span>
                   </h2>
                   <div className="flex flex-wrap gap-2">
                     {Array.from(new Set(orders.flatMap(o => o.targetCountries))).map(country => (
-                      <span key={country} className="px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-300 text-xs text-slate-900 font-extrabold">
+                      <span key={country} className="px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-300 text-xs text-slate-900 font-semibold">
                         {country}
                       </span>
                     ))}

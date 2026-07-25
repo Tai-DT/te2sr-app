@@ -1,3 +1,14 @@
 name = "te2sr-backend"
 main = "src/index.ts"
-compatibility_date = "2024-01-01"
+compatibility_date = "2024-09-23"
+
+# Bí mật (KHÔNG commit vào file này):
+#   npx wrangler secret put ADMIN_TOKEN
+
+[[d1_databases]]
+binding = "DB"
+database_name = "te2sr-db"
+database_id = "b0efcf93-3122-4ab9-bc06-c3ad7d8f37e2"
+
+[observability]
+enabled = true

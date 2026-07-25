@@ -32,19 +32,19 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-low/80 border border-white/10 hover:border-neon-blue/50 hover:bg-surface-card transition-all text-xs md:text-sm font-medium text-slate-200"
+        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 hover:border-slate-300 hover:bg-slate-100 transition-colors text-xs md:text-sm font-medium text-slate-700"
         title="Select Language"
       >
-        <Globe className="w-4 h-4 text-neon-blue animate-pulse" />
+        <Globe className="w-4 h-4 text-slate-400" />
         <span className="text-base">{selected.flag}</span>
         <span className="hidden sm:inline">{selected.nativeName}</span>
-        <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isOpen ? 'rotate-180 text-neon-blue' : 'text-slate-400'}`} />
+        <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isOpen ? 'rotate-180 text-brand-blue' : 'text-slate-400'}`} />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-48 py-2 bg-surface-base/95 backdrop-blur-xl border border-neon-blue/30 rounded-xl shadow-2xl z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-          <div className="px-3 py-1.5 text-[10px] font-semibold tracking-wider text-slate-400 uppercase border-b border-white/5 mb-1">
-            Global Languages (8)
+        <div className="absolute right-0 mt-2 w-48 py-2 bg-white border border-slate-200 rounded-xl shadow-apple-lg z-50">
+          <div className="px-3 py-1.5 text-[10px] font-semibold tracking-wider text-slate-400 uppercase border-b border-slate-100 mb-1">
+            Ngôn ngữ (8)
           </div>
           <div className="max-h-64 overflow-y-auto">
             {LANGUAGES.map((lang) => {
@@ -58,15 +58,15 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
                   }}
                   className={`w-full flex items-center justify-between px-3 py-2 text-xs text-left transition-colors ${
                     isSelected
-                      ? 'bg-neon-blue/15 text-neon-blue font-semibold'
-                      : 'text-slate-300 hover:bg-white/5 hover:text-white'
+                      ? 'bg-blue-50 text-brand-blue font-semibold'
+                      : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
                     <span className="text-base">{lang.flag}</span>
                     <span>{lang.nativeName}</span>
                   </div>
-                  {isSelected && <Check className="w-3.5 h-3.5 text-neon-blue" />}
+                  {isSelected && <Check className="w-3.5 h-3.5 text-brand-blue" />}
                 </button>
               );
             })}

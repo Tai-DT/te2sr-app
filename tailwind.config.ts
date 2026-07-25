@@ -20,6 +20,7 @@ const config: Config = {
         },
         brand: {
           blue: '#0071E3',
+          blueHover: '#005BB5',
           dark: '#1D1D1F',
           gray: '#86868B',
           light: '#F5F5F7',
@@ -40,8 +41,11 @@ const config: Config = {
         'brand-blue': '0 4px 14px rgba(0, 113, 227, 0.3)',
       },
       fontFamily: {
-        sans: ['var(--font-inter)', 'sans-serif'],
-        display: ['var(--font-montserrat)', 'sans-serif'],
+        sans: ['var(--font-inter)', 'system-ui', '-apple-system', 'sans-serif'],
+        display: ['var(--font-inter)', 'system-ui', '-apple-system', 'sans-serif'],
+      },
+      letterSpacing: {
+        tightest: '-0.03em',
       },
     },
   },
