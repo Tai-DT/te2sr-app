@@ -13,7 +13,7 @@ import {
   LayoutDashboard, MessageSquare, Send, ShieldAlert, RefreshCw,
   CheckCircle2, Clock, TestTube, Rocket, Star, ChevronRight, Package,
   Activity, Search, BarChart2, Globe, ArrowUpRight, Zap, Lock, Users, Copy, Check,
-  Sparkles, DollarSign, Loader2,
+  Sparkles, DollarSign, Loader2, Code2,
 } from 'lucide-react';
 
 const SERVICE_LABELS: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
@@ -21,6 +21,8 @@ const SERVICE_LABELS: Record<string, { label: string; color: string; icon: React
   Publishing: { label: 'App Store', color: 'text-slate-900 bg-slate-100 border-slate-300 font-bold', icon: <Rocket className="w-3.5 h-3.5 text-slate-900" /> },
   Promotion_5Star: { label: '5★ Boost', color: 'text-amber-800 bg-amber-50 border-amber-300 font-bold', icon: <Star className="w-3.5 h-3.5 text-amber-600" /> },
   DesignAnalyzer: { label: 'AI Design', color: 'text-violet-800 bg-violet-50 border-violet-300 font-bold', icon: <Sparkles className="w-3.5 h-3.5 text-violet-600" /> },
+  WebDesign: { label: 'Web Design', color: 'text-emerald-800 bg-emerald-50 border-emerald-300 font-bold', icon: <Globe className="w-3.5 h-3.5 text-emerald-600" /> },
+  AppDevelopment: { label: 'App Dev', color: 'text-indigo-800 bg-indigo-50 border-indigo-300 font-bold', icon: <Code2 className="w-3.5 h-3.5 text-indigo-600" /> },
 };
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; dot: string }> = {
@@ -61,6 +63,8 @@ export default function AdminPortalPage() {
       Publishing: 'adm_svc_publishing',
       Promotion_5Star: 'adm_svc_promotion',
       DesignAnalyzer: 'adm_svc_design',
+      WebDesign: 'adm_svc_web',
+      AppDevelopment: 'adm_svc_appdev',
     };
     return map[type] ? t(map[type]) : type;
   };

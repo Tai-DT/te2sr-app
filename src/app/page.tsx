@@ -7,6 +7,7 @@ import { GlassCard } from '@/components/GlassCard';
 import { OrderModal } from '@/components/OrderModal';
 import { ServiceIllustration } from '@/components/ServiceIllustration';
 import { useLanguage } from '@/lib/i18n/language-context';
+import type { ServiceType } from '@/lib/types';
 import {
   Rocket,
   ShieldCheck,
@@ -18,6 +19,9 @@ import {
   TrendingUp,
   CreditCard,
   PhoneCall,
+  Globe,
+  Code2,
+  MessageSquare,
 } from 'lucide-react';
 
 function StatCounter({ value, label, suffix = '', color = 'text-brand-blue' }: { value: number; label: string; suffix?: string; color?: string }) {
@@ -34,11 +38,9 @@ function StatCounter({ value, label, suffix = '', color = 'text-brand-blue' }: {
 export default function HomePage() {
   const { t } = useLanguage();
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
-  const [initialService, setInitialService] = useState<
-    'Testing' | 'Publishing' | 'Promotion_5Star' | 'DesignAnalyzer'
-  >('Testing');
+  const [initialService, setInitialService] = useState<ServiceType>('Testing');
 
-  const openServiceModal = (service: 'Testing' | 'Publishing' | 'Promotion_5Star' | 'DesignAnalyzer') => {
+  const openServiceModal = (service: ServiceType) => {
     setInitialService(service);
     setIsOrderModalOpen(true);
   };
@@ -156,7 +158,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
               {
                 service: 'Testing' as const,
@@ -191,6 +193,30 @@ export default function HomePage() {
                 cta: t('home_svc_promo_cta'),
                 glow: 'magenta' as const,
               },
+              {
+                service: 'WebDesign' as const,
+                illustration: 'WebDesign' as const,
+                icon: <Globe className="w-6 h-6 text-emerald-600" />,
+                iconBg: 'bg-emerald-50 border-emerald-200',
+                title: t('home_svc_web_title'),
+                desc: t('home_svc_web_desc'),
+                features: [t('home_svc_web_feat1'), t('home_svc_web_feat2'), t('home_svc_web_feat3'), t('home_svc_web_feat4')],
+                cta: t('home_svc_web_cta'),
+                glow: 'blue' as const,
+                quoteOnly: true,
+              },
+              {
+                service: 'AppDevelopment' as const,
+                illustration: 'AppDevelopment' as const,
+                icon: <Code2 className="w-6 h-6 text-indigo-600" />,
+                iconBg: 'bg-indigo-50 border-indigo-200',
+                title: t('home_svc_app_title'),
+                desc: t('home_svc_app_desc'),
+                features: [t('home_svc_app_feat1'), t('home_svc_app_feat2'), t('home_svc_app_feat3'), t('home_svc_app_feat4')],
+                cta: t('home_svc_app_cta'),
+                glow: 'blue' as const,
+                quoteOnly: true,
+              },
             ].map((svc, i) => (
               <GlassCard key={i} glow={svc.glow} className="flex flex-col justify-between h-full group card-shine border-slate-300">
                 <div className="space-y-4">
@@ -204,6 +230,12 @@ export default function HomePage() {
                     <h3 className="text-lg font-extrabold text-slate-900 font-display leading-tight">{svc.title}</h3>
                   </div>
                   <p className="text-xs text-slate-800 leading-relaxed font-medium">{svc.desc}</p>
+                  {(svc as any).quoteOnly && (
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-200 text-[11px] font-bold text-slate-700">
+                      <MessageSquare className="w-3.5 h-3.5 text-slate-500" />
+                      {t('svc_quote_on_request')}
+                    </span>
+                  )}
                   <ul className="space-y-2.5 pt-2">
                     {svc.features.map((f, j) => (
                       <li key={j} className="flex items-start gap-2.5 text-xs text-slate-900 font-bold">

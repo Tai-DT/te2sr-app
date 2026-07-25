@@ -1,15 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/lib/i18n/language-context';
 import { api, ApiError } from '@/lib/api-client';
-import type { Order, Platform } from '@/lib/types';
-import { X, CheckCircle2, Send, Rocket, TestTube, Star, BadgeDollarSign, AlertCircle, Users, Copy, Check, CreditCard, Link2 } from 'lucide-react';
+import type { Order, Platform, ServiceType } from '@/lib/types';
+import { X, CheckCircle2, Send, Rocket, TestTube, Star, BadgeDollarSign, AlertCircle, Users, Copy, Check, CreditCard, Link2, Globe, Code2 } from 'lucide-react';
 
 interface OrderModalProps {
   isOpen: boolean;
   onClose: () => void;
-  initialService?: 'Testing' | 'Publishing' | 'Promotion_5Star' | 'DesignAnalyzer';
+  initialService?: ServiceType;
 }
 
 export const OrderModal: React.FC<OrderModalProps> = ({
@@ -21,9 +21,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
   const [appName, setAppName] = useState('');
   const [clientEmail, setClientEmail] = useState('');
   const [platform, setPlatform] = useState<'iOS' | 'Android' | 'Both'>('Both');
-  const [serviceType, setServiceType] = useState<
-    'Testing' | 'Publishing' | 'Promotion_5Star' | 'DesignAnalyzer'
-  >(initialService);
+  const [serviceType, setServiceType] = useState<ServiceType>(initialService);
   const [targetCountries, setTargetCountries] = useState('Vietnam, USA, Japan');
   const [testingUrl, setTestingUrl] = useState('');
   const [details, setDetails] = useState('');
@@ -34,6 +32,13 @@ export const OrderModal: React.FC<OrderModalProps> = ({
   const [copiedGroup, setCopiedGroup] = useState(false);
 
   const googleGroupEmail = 'te2sr@googlegroups.com';
+
+  // Modal được mount sẵn khi đang đóng nên useState chỉ chạy một lần.
+  // Đồng bộ lại dịch vụ mỗi lần mở để nút "Trao đổi yêu cầu website" v.v.
+  // chọn đúng dịch vụ người dùng vừa bấm.
+  useEffect(() => {
+    if (isOpen) setServiceType(initialService);
+  }, [isOpen, initialService]);
 
   if (!isOpen) return null;
 
@@ -221,44 +226,31 @@ export const OrderModal: React.FC<OrderModalProps> = ({
             <div className="space-y-1.5">
               <label className="text-xs font-extrabold text-slate-900">{t('order_select_service_label')}</label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setServiceType('Testing')}
-                  className={`p-3 rounded-xl border text-left text-xs font-extrabold flex items-center gap-2 transition-all ${
-                    serviceType === 'Testing'
-                      ? 'bg-brand-blue text-white border-brand-blue shadow-apple-sm'
-                      : 'bg-slate-50 border-slate-300 text-slate-800 hover:bg-slate-100'
-                  }`}
-                >
-                  <TestTube className="w-4 h-4 shrink-0" />
-                  <span>{t('order_service_testing')}</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setServiceType('Publishing')}
-                  className={`p-3 rounded-xl border text-left text-xs font-extrabold flex items-center gap-2 transition-all ${
-                    serviceType === 'Publishing'
-                      ? 'bg-brand-blue text-white border-brand-blue shadow-apple-sm'
-                      : 'bg-slate-50 border-slate-300 text-slate-800 hover:bg-slate-100'
-                  }`}
-                >
-                  <Rocket className="w-4 h-4 shrink-0" />
-                  <span>{t('order_service_publishing')}</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setServiceType('Promotion_5Star')}
-                  className={`p-3 rounded-xl border text-left text-xs font-extrabold flex items-center gap-2 transition-all ${
-                    serviceType === 'Promotion_5Star'
-                      ? 'bg-brand-blue text-white border-brand-blue shadow-apple-sm'
-                      : 'bg-slate-50 border-slate-300 text-slate-800 hover:bg-slate-100'
-                  }`}
-                >
-                  <Star className="w-4 h-4 shrink-0" />
-                  <span>{t('order_service_promotion')}</span>
-                </button>
+                {([
+                  { id: 'Testing', icon: TestTube, label: t('order_service_testing') },
+                  { id: 'Publishing', icon: Rocket, label: t('order_service_publishing') },
+                  { id: 'Promotion_5Star', icon: Star, label: t('order_service_promotion') },
+                  { id: 'WebDesign', icon: Globe, label: t('order_service_web') },
+                  { id: 'AppDevelopment', icon: Code2, label: t('order_service_appdev') },
+                ] as { id: ServiceType; icon: typeof Rocket; label: string }[]).map((svc) => {
+                  const Icon = svc.icon;
+                  const active = serviceType === svc.id;
+                  return (
+                    <button
+                      key={svc.id}
+                      type="button"
+                      onClick={() => setServiceType(svc.id)}
+                      className={`p-3 rounded-xl border text-left text-xs font-extrabold flex items-center gap-2 transition-all ${
+                        active
+                          ? 'bg-brand-blue text-white border-brand-blue shadow-apple-sm'
+                          : 'bg-slate-50 border-slate-300 text-slate-800 hover:bg-slate-100'
+                      }`}
+                    >
+                      <Icon className="w-4 h-4 shrink-0" />
+                      <span>{svc.label}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 

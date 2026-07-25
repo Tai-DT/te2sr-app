@@ -30,9 +30,14 @@ app.use('*', (c, next) => {
 // ── Validation helpers ────────────────────────────────────────
 const VALID_STATUSES: OrderStatus[] = ['Pending', 'In Progress', 'Completed', 'Rejected'];
 const VALID_PLATFORMS: Platform[] = ['iOS', 'Android', 'Both'];
-const VALID_SERVICES: ServiceType[] = ['Testing', 'Publishing', 'Promotion_5Star', 'DesignAnalyzer'];
+const VALID_SERVICES: ServiceType[] = ['Testing', 'Publishing', 'Promotion_5Star', 'DesignAnalyzer', 'WebDesign', 'AppDevelopment'];
 
-function priceFor(platform: Platform): number | null {
+/** Dịch vụ báo giá theo yêu cầu — không có giá niêm yết. */
+const QUOTE_ONLY_SERVICES: ServiceType[] = ['WebDesign', 'AppDevelopment'];
+
+function priceFor(platform: Platform, serviceType?: ServiceType): number | null {
+  // Thiết kế web / làm app: chốt giá sau khi trao đổi yêu cầu
+  if (serviceType && QUOTE_ONLY_SERVICES.includes(serviceType)) return null;
   if (platform === 'Android') return 50;
   if (platform === 'Both') return 100;
   return null; // iOS-only → Enterprise "contact us"
@@ -199,7 +204,7 @@ app.post('/api/orders', optionalAuth, async (c) => {
       targetCountries,
       testingUrl: body.testingUrl ? String(body.testingUrl).trim() : null,
       details: body.details ? String(body.details).trim() : '',
-      packagePrice: priceFor(platform),
+      packagePrice: priceFor(platform, serviceType),
     });
 
     const conf = orderConfirmationMail(order);

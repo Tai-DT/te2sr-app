@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-export type IllustrationType = 'Testing' | 'Publishing' | 'Promotion' | 'Analyzer' | 'Enterprise';
+export type IllustrationType = 'Testing' | 'Publishing' | 'Promotion' | 'Analyzer' | 'Enterprise' | 'WebDesign' | 'AppDevelopment';
 
 /**
  * Lightweight inline-SVG illustrations for service cards & pricing tiers.
@@ -90,6 +90,56 @@ export const ServiceIllustration: React.FC<{ type: IllustrationType; className?:
         <rect x="148" y="118" width="24" height="16" rx="3" fill="#0071E3" />
         <circle cx="160" cy="32" r="10" fill="#0071E3" />
         <path d="M156 32l3 3 6-6" stroke="#fff" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    );
+  }
+
+  if (type === 'WebDesign') {
+    return (
+      <svg {...common} role="img" aria-label="Website design illustration">
+        <defs>
+          <linearGradient id="wd" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#E8FBF4" /><stop offset="1" stopColor="#D2F2E6" />
+          </linearGradient>
+        </defs>
+        <rect width="320" height="160" rx="16" fill="url(#wd)" />
+        {/* cửa sổ trình duyệt */}
+        <rect x="62" y="26" width="196" height="108" rx="12" fill="#fff" stroke="#10B981" strokeWidth="2" />
+        <path d="M62 44h196" stroke="#10B981" strokeWidth="2" />
+        <circle cx="76" cy="35" r="3.5" fill="#EF4444" />
+        <circle cx="88" cy="35" r="3.5" fill="#F59E0B" />
+        <circle cx="100" cy="35" r="3.5" fill="#10B981" />
+        {/* bố cục trang */}
+        <rect x="74" y="56" width="60" height="42" rx="6" fill="#10B981" opacity="0.18" />
+        <rect x="142" y="56" width="104" height="9" rx="4.5" fill="#D6F5E8" />
+        <rect x="142" y="71" width="80" height="9" rx="4.5" fill="#E4F7EF" />
+        <rect x="142" y="88" width="46" height="12" rx="6" fill="#10B981" />
+        <rect x="74" y="108" width="172" height="8" rx="4" fill="#EAF8F2" />
+        {/* con trỏ */}
+        <path d="M214 104l22 9-9 3.5-3.5 9z" fill="#0F172A" />
+      </svg>
+    );
+  }
+
+  if (type === 'AppDevelopment') {
+    return (
+      <svg {...common} role="img" aria-label="Mobile app development illustration">
+        <defs>
+          <linearGradient id="ad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#EEF2FF" /><stop offset="1" stopColor="#DCE3FF" />
+          </linearGradient>
+        </defs>
+        <rect width="320" height="160" rx="16" fill="url(#ad)" />
+        {/* điện thoại */}
+        <rect x="126" y="22" width="68" height="116" rx="14" fill="#fff" stroke="#4F46E5" strokeWidth="2" />
+        <rect x="150" y="29" width="20" height="4" rx="2" fill="#C7D2FE" />
+        <rect x="136" y="44" width="48" height="26" rx="6" fill="#4F46E5" opacity="0.14" />
+        <rect x="136" y="76" width="30" height="7" rx="3.5" fill="#DCE3FF" />
+        <rect x="136" y="88" width="48" height="7" rx="3.5" fill="#E8ECFF" />
+        <rect x="136" y="104" width="48" height="16" rx="8" fill="#4F46E5" />
+        {/* dấu ngoặc code hai bên */}
+        <path d="M96 58l-18 22 18 22" stroke="#4F46E5" strokeWidth="5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M224 58l18 22-18 22" stroke="#4F46E5" strokeWidth="5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     );
   }
