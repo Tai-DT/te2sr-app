@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/lib/i18n/language-context';
 import { api, ApiError } from '@/lib/api-client';
 import type { Order, Platform, ServiceType } from '@/lib/types';
@@ -28,6 +29,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
   const [details, setDetails] = useState('');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
   const [submittedOrder, setSubmittedOrder] = useState<Order | null>(null);
   const [error, setError] = useState('');
   const [copiedGroup, setCopiedGroup] = useState(false);
@@ -183,8 +185,12 @@ export const OrderModal: React.FC<OrderModalProps> = ({
               </>
             )}
 
+            {/* Nút này từng chỉ đóng modal, không đưa khách đi đâu cả — trong khi
+                chữ trên nút hứa "xem tiến độ". Nay dẫn thẳng sang trang theo dõi
+                đơn; nếu chưa đăng nhập, trang đó hướng dẫn đăng nhập Google
+                bằng đúng email đã đặt để nhận lại đơn. */}
             <button
-              onClick={resetForm}
+              onClick={() => { resetForm(); router.push('/orders'); }}
               className="w-full py-3 rounded-xl bg-brand-blue text-white font-extrabold text-xs shadow-brand-blue hover:bg-blue-600 transition-all"
             >
               {t('order_finish_view_progress')}

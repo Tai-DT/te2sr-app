@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LanguageSelector } from './LanguageSelector';
 import { useLanguage } from '@/lib/i18n/language-context';
-import { Layers, TestTube, Rocket, Star, LayoutDashboard, Menu, X, PlusCircle, User as UserIcon, LogOut, ShieldCheck, Sparkles } from 'lucide-react';
+import { Layers, TestTube, Rocket, Star, LayoutDashboard, Menu, X, PlusCircle, User as UserIcon, LogOut, ShieldCheck, Sparkles, Package } from 'lucide-react';
 import { OrderModal } from './OrderModal';
 import { Logo } from './brand/Logo';
 import { useAuth } from '@/lib/auth';
@@ -25,6 +25,12 @@ export const Navbar: React.FC = () => {
     { href: '/services/promotion', label: t('nav_promotion'), icon: Star },
     { href: '/analyzer', label: t('nav_analyzer'), icon: Sparkles },
   ];
+
+  // Khách đã đăng nhập mới thấy mục theo dõi đơn — khách vãng lai bấm vào chỉ
+  // gặp màn hình yêu cầu đăng nhập, không có gì để xem.
+  if (user) {
+    navLinks.push({ href: '/orders', label: t('nav_orders'), icon: Package });
+  }
 
   // If user is Admin, dynamically append Admin Portal link to nav
   if (user?.role === 'admin') {
