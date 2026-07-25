@@ -23,3 +23,7 @@ backend/.wrangler/
 # IDE / OS files
 .DS_Store
 *.log
+
+# File token tạm khi nạp secret — không bao giờ được commit (repo công khai)
+cf-token.txt
+*.token.txt
