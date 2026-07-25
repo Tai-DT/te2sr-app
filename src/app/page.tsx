@@ -7,7 +7,7 @@ import { GlassCard } from '@/components/GlassCard';
 import { OrderModal } from '@/components/OrderModal';
 import { ServiceIllustration } from '@/components/ServiceIllustration';
 import { useLanguage } from '@/lib/i18n/language-context';
-import type { ServiceType } from '@/lib/types';
+import type { Platform, ServiceType } from '@/lib/types';
 import {
   Rocket,
   ShieldCheck,
@@ -41,8 +41,14 @@ export default function HomePage() {
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
   const [initialService, setInitialService] = useState<ServiceType>('Testing');
 
-  const openServiceModal = (service: ServiceType) => {
+  const [initialPlatform, setInitialPlatform] = useState<Platform>('Both');
+
+  // Phải truyền cả nền tảng: giá do nền tảng quyết định (Android $50,
+  // iOS $70, cả hai $100). Trước đây nút nào cũng để mặc định 'Both' nên
+  // khách bấm gói $50 vẫn ra đơn $100.
+  const openServiceModal = (service: ServiceType, platform: Platform = 'Both') => {
     setInitialService(service);
+    setInitialPlatform(platform);
     setIsOrderModalOpen(true);
   };
 
@@ -312,7 +318,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-stretch">
             {/* Starter ($50 - Google Play) */}
             <div className="bg-white rounded-2xl border border-slate-300 p-7 flex flex-col justify-between space-y-6 shadow-apple-sm card-shine">
               <div className="space-y-4">
@@ -346,10 +352,51 @@ export default function HomePage() {
                 </ul>
               </div>
               <button
-                onClick={() => openServiceModal('Publishing')}
+                onClick={() => openServiceModal('Publishing', 'Android')}
                 className="w-full py-3.5 rounded-xl bg-slate-100 border border-slate-300 text-slate-900 font-extrabold text-xs hover:border-brand-blue hover:bg-white transition-all"
               >
                 {t('home_price_gplay_btn')}
+              </button>
+            </div>
+
+            {/* App Store ($70 - chỉ iOS) */}
+            <div className="bg-white rounded-2xl border border-slate-300 p-7 flex flex-col justify-between space-y-6 shadow-apple-sm card-shine">
+              <div className="space-y-4">
+                <div className="space-y-1">
+                  <div className="overflow-hidden rounded-xl border border-slate-200 mb-2.5"><ServiceIllustration type="Publishing" /></div>
+                  <p className="text-[11px] font-extrabold uppercase tracking-widest text-slate-700">{t('home_price_ios_label')}</p>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-5xl font-extrabold font-display text-slate-900">$70</span>
+                    <span className="text-xs text-slate-700 font-bold">{t('home_price_ios_unit')}</span>
+                  </div>
+                  <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-blue-50 border border-blue-200 text-brand-blue text-[11px] font-extrabold">
+                    <CreditCard className="w-3.5 h-3.5" />
+                    <span>{t('home_price_ios_split')}</span>
+                  </div>
+                </div>
+                <div className="border-t border-slate-200" />
+                <ul className="space-y-3 text-xs text-slate-900 font-bold">
+                  {[
+                    t('home_price_ios_feat1'),
+                    t('home_price_ios_feat2'),
+                    t('home_price_ios_feat3'),
+                    t('home_price_ios_feat4'),
+                    t('home_price_gift_10_reviews'),
+                    t('home_price_secure_account'),
+                    t('home_price_refund_fail'),
+                  ].map((f, i) => (
+                    <li key={i} className="flex items-start gap-2.5">
+                      <CheckCircle className="w-4 h-4 text-brand-blue shrink-0 mt-0.5" />
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <button
+                onClick={() => openServiceModal('Publishing', 'iOS')}
+                className="w-full py-3.5 rounded-xl bg-slate-100 border border-slate-300 text-slate-900 font-extrabold text-xs hover:border-brand-blue hover:bg-white transition-all"
+              >
+                {t('home_price_ios_btn')}
               </button>
             </div>
 
@@ -392,7 +439,7 @@ export default function HomePage() {
                 </ul>
               </div>
               <button
-                onClick={() => openServiceModal('Publishing')}
+                onClick={() => openServiceModal('Publishing', 'Both')}
                 className="w-full py-3.5 rounded-xl bg-brand-blue hover:bg-blue-600 text-white font-extrabold text-sm shadow-brand-blue hover:scale-[1.02] transition-all"
               >
                 {t('home_price_both_btn')}
@@ -452,6 +499,7 @@ export default function HomePage() {
         isOpen={isOrderModalOpen}
         onClose={() => setIsOrderModalOpen(false)}
         initialService={initialService}
+        initialPlatform={initialPlatform}
       />
     </div>
   );

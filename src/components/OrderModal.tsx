@@ -12,17 +12,22 @@ interface OrderModalProps {
   isOpen: boolean;
   onClose: () => void;
   initialService?: ServiceType;
+  /** Nền tảng chọn sẵn theo gói khách vừa bấm. Không truyền thì mặc định
+   *  'Both' ($100) — trước đây nút gói $50 (Google Play) cũng rơi vào mặc
+   *  định này nên khách bấm gói $50 lại nhận đơn $100. */
+  initialPlatform?: Platform;
 }
 
 export const OrderModal: React.FC<OrderModalProps> = ({
   isOpen,
   onClose,
   initialService = 'Testing',
+  initialPlatform = 'Both',
 }) => {
   const { t } = useLanguage();
   const [appName, setAppName] = useState('');
   const [clientEmail, setClientEmail] = useState('');
-  const [platform, setPlatform] = useState<'iOS' | 'Android' | 'Both'>('Both');
+  const [platform, setPlatform] = useState<Platform>(initialPlatform);
   const [serviceType, setServiceType] = useState<ServiceType>(initialService);
   const [targetCountries, setTargetCountries] = useState('Vietnam, USA, Japan');
   const [testingUrl, setTestingUrl] = useState('');
@@ -43,8 +48,11 @@ export const OrderModal: React.FC<OrderModalProps> = ({
   // Đồng bộ lại dịch vụ mỗi lần mở để nút "Trao đổi yêu cầu website" v.v.
   // chọn đúng dịch vụ người dùng vừa bấm.
   useEffect(() => {
-    if (isOpen) setServiceType(initialService);
-  }, [isOpen, initialService]);
+    if (isOpen) {
+      setServiceType(initialService);
+      setPlatform(initialPlatform);
+    }
+  }, [isOpen, initialService, initialPlatform]);
 
   if (!isOpen) return null;
 
@@ -299,9 +307,12 @@ export const OrderModal: React.FC<OrderModalProps> = ({
                     onChange={(e) => setPlatform(e.target.value as Platform)}
                     className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-extrabold text-slate-900 focus:outline-none focus:border-brand-blue focus:bg-white transition-all"
                   >
+                    {/* iOS từng bị gắn nhãn "Doanh Nghiệp (LIÊN HỆ)" vì App Store
+                        chưa có giá niêm yết. Nay App Store là $70, để nhãn cũ thì
+                        khách tưởng đang xin báo giá mà lại bị tính tiền. */}
                     <option value="Android">{t('order_package_googleplay')}</option>
+                    <option value="iOS">{t('order_package_appstore')}</option>
                     <option value="Both">{t('order_package_both')}</option>
-                    <option value="iOS">{t('order_package_enterprise')}</option>
                   </select>
                 </div>
 

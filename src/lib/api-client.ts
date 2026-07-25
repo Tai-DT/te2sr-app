@@ -39,6 +39,9 @@ export class ApiError extends Error {
 }
 
 // ── Core request ──────────────────────────────────────────────
+/** Ngưỡng chờ tối đa cho mỗi lời gọi API. */
+const REQUEST_TIMEOUT_MS = 20_000;
+
 async function request<T = any>(path: string, options: RequestInit = {}): Promise<T> {
   const token = getToken();
   const headers: Record<string, string> = {
@@ -47,11 +50,21 @@ async function request<T = any>(path: string, options: RequestInit = {}): Promis
   };
   if (token) headers.Authorization = `Bearer ${token}`;
 
+  // Không có timeout thì một request treo sẽ để giao diện quay vòng vĩnh viễn:
+  // không báo lỗi, không có nút thử lại, khách chỉ thấy "đang tải" mãi mãi.
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
   let res: Response;
   try {
-    res = await fetch(`${API_BASE_URL}${path}`, { ...options, headers });
-  } catch {
+    res = await fetch(`${API_BASE_URL}${path}`, { ...options, headers, signal: controller.signal });
+  } catch (err) {
+    if (err instanceof DOMException && err.name === 'AbortError') {
+      throw new ApiError('Máy chủ phản hồi quá lâu. Vui lòng thử lại.', 0);
+    }
     throw new ApiError('Không kết nối được máy chủ. Vui lòng kiểm tra kết nối mạng.', 0);
+  } finally {
+    clearTimeout(timer);
   }
 
   let data: any = null;

@@ -130,16 +130,33 @@ export interface NewOrder {
 
 export async function createOrder(db: D1Database, o: NewOrder): Promise<Order> {
   const ts = nowIso();
-  await db
-    .prepare(`INSERT INTO orders
-      (id, user_id, app_name, client_email, platform, service_type, status, target_countries, testing_url, details, package_price, paid_deposit, paid_final, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, ?, 'Pending', ?, ?, ?, ?, 0, 0, ?, ?)`)
-    .bind(
-      o.id, o.userId, o.appName, o.clientEmail.toLowerCase(), o.platform, o.serviceType,
-      JSON.stringify(o.targetCountries ?? []), o.testingUrl ?? null, o.details ?? '', o.packagePrice ?? null, ts, ts,
-    )
-    .run();
-  const row = await db.prepare(`SELECT * FROM orders WHERE id = ?`).bind(o.id).first<OrderRow>();
+
+  // Mã đơn chỉ có 5 chữ số (100.000 khả năng) nên theo nghịch lý ngày sinh,
+  // chỉ vài trăm đơn là xác suất trùng đã đáng kể. Mã lại là khoá chính, nên
+  // trùng sẽ làm INSERT thất bại và KHÁCH MẤT ĐƠN. Sinh lại mã rồi thử tiếp
+  // thay vì để lỗi bắn ra ngoài.
+  let id = o.id;
+  for (let attempt = 0; ; attempt++) {
+    try {
+      await db
+        .prepare(`INSERT INTO orders
+          (id, user_id, app_name, client_email, platform, service_type, status, target_countries, testing_url, details, package_price, paid_deposit, paid_final, created_at, updated_at)
+          VALUES (?, ?, ?, ?, ?, ?, 'Pending', ?, ?, ?, ?, 0, 0, ?, ?)`)
+        .bind(
+          id, o.userId, o.appName, o.clientEmail.toLowerCase(), o.platform, o.serviceType,
+          JSON.stringify(o.targetCountries ?? []), o.testingUrl ?? null, o.details ?? '', o.packagePrice ?? null, ts, ts,
+        )
+        .run();
+      break;
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      // Chỉ thử lại khi đúng là trùng mã; lỗi khác phải báo ra ngay.
+      if (attempt >= 5 || !/UNIQUE|constraint/i.test(msg)) throw err;
+      id = newOrderId();
+    }
+  }
+
+  const row = await db.prepare(`SELECT * FROM orders WHERE id = ?`).bind(id).first<OrderRow>();
   return rowToOrder(row!);
 }
 
@@ -148,7 +165,11 @@ export async function listAllOrders(db: D1Database): Promise<Order[]> {
   return (results ?? []).map(rowToOrder);
 }
 
-/** Orders belonging to a user id OR matching their email (covers guest orders placed before login). */
+/**
+ * Đơn thuộc về user id, HOẶC khớp email — nhưng người gọi chỉ được truyền
+ * email thật khi email đó đã được Google xác thực. Nếu tin vào email tự khai
+ * lúc đăng ký thì ai cũng đọc được đơn của khách khác (xem canAccessOrder).
+ */
 export async function listOrdersForUser(db: D1Database, userId: string, email: string): Promise<Order[]> {
   const { results } = await db
     .prepare(`SELECT * FROM orders WHERE user_id = ? OR client_email = ? ORDER BY created_at DESC`)

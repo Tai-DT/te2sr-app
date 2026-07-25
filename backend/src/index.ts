@@ -39,9 +39,10 @@ const QUOTE_ONLY_SERVICES: ServiceType[] = ['WebDesign', 'AppDevelopment', 'AppS
 function priceFor(platform: Platform, serviceType?: ServiceType): number | null {
   // Thiết kế web / làm app: chốt giá sau khi trao đổi yêu cầu
   if (serviceType && QUOTE_ONLY_SERVICES.includes(serviceType)) return null;
-  if (platform === 'Android') return 50;
-  if (platform === 'Both') return 100;
-  return null; // iOS-only → Enterprise "contact us"
+  if (platform === 'Android') return 50;  // Google Play
+  if (platform === 'iOS') return 70;      // App Store
+  if (platform === 'Both') return 100;    // cả hai store
+  return null;
 }
 
 /**

@@ -88,12 +88,15 @@ export async function signJwt(input: SignInput, secret: string, expiresInSec = 6
 }
 
 export async function verifyJwt(token: string, secret: string): Promise<JwtPayload | null> {
-  const parts = token.split('.');
-  if (parts.length !== 3) return null;
-  const [header, payload, signature] = parts;
-  const expected = await hmacSign(`${header}.${payload}`, secret);
-  if (!timingSafeEqual(b64urlToBytes(signature), b64urlToBytes(expected))) return null;
+  // Toàn bộ thân hàm nằm trong try: b64urlToBytes() ném lỗi khi gặp base64 rác
+  // (ví dụ "a.b.c" hay "aaa.bbb.!!!"), khiến máy chủ trả 500 thay vì 401.
+  // Token không hợp lệ luôn phải là "không được phép", không phải "lỗi hệ thống".
   try {
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+    const [header, payload, signature] = parts;
+    const expected = await hmacSign(`${header}.${payload}`, secret);
+    if (!timingSafeEqual(b64urlToBytes(signature), b64urlToBytes(expected))) return null;
     const data = JSON.parse(dec.decode(b64urlToBytes(payload))) as JwtPayload;
     if (data.exp && data.exp < Math.floor(Date.now() / 1000)) return null;
     return data;
