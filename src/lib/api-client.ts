@@ -42,10 +42,25 @@ export class ApiError extends Error {
 /** Ngưỡng chờ tối đa cho mỗi lời gọi API. */
 const REQUEST_TIMEOUT_MS = 20_000;
 
+/**
+ * Ngôn ngữ khách đang xem, đọc thẳng từ localStorage (nơi language-context
+ * lưu). Máy chủ dùng nó để trả thông báo lỗi đúng ngôn ngữ — trước đây mọi
+ * lỗi đều là tiếng Việt nên khách quốc tế không đọc được.
+ */
+function currentLang(): string {
+  if (typeof window === 'undefined') return 'vi';
+  try {
+    return localStorage.getItem('te2sr_lang') || 'vi';
+  } catch {
+    return 'vi';
+  }
+}
+
 async function request<T = any>(path: string, options: RequestInit = {}): Promise<T> {
   const token = getToken();
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
+    'X-Lang': currentLang(),
     ...(options.headers as Record<string, string>),
   };
   if (token) headers.Authorization = `Bearer ${token}`;

@@ -20,6 +20,9 @@ export const LANGUAGES: LanguageOption[] = [
 
 export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
   vi: {
+    footer_approval_pledge: "Cam kết tỷ lệ duyệt Store 90%",
+    footer_support_channels: "Hỗ trợ 24/7 · Zalo · WhatsApp · Messenger",
+    footer_payment_terms: "Thanh toán 2 đợt · Hoàn tiền 100%",
     order_package_appstore: "Gói App Store ($70)",
     home_price_ios_label: "Đăng Tải App Store",
     home_price_ios_unit: "/ iOS App",
@@ -764,6 +767,9 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     svcr_bonus_line2: "Gói tăng trưởng số lượng lớn sẽ ra mắt sau — liên hệ để được tư vấn sớm.",
   },
   en: {
+    footer_approval_pledge: "90% store approval rate pledged",
+    footer_support_channels: "24/7 support · Zalo · WhatsApp · Messenger",
+    footer_payment_terms: "Paid in 2 steps · 100% refund",
     order_package_appstore: "App Store package ($70)",
     home_price_ios_label: "App Store publishing",
     home_price_ios_unit: "/ iOS app",
@@ -1505,6 +1511,9 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     svcr_bonus_line2: "Large-scale growth packages are coming soon — contact us for early consultation.",
   },
   ja: {
+    footer_approval_pledge: "ストア審査通過率90%をお約束",
+    footer_support_channels: "24時間365日サポート · Zalo · WhatsApp · Messenger",
+    footer_payment_terms: "2回払い · 全額返金保証",
     order_package_appstore: "App Store プラン（$70）",
     home_price_ios_label: "App Store 公開",
     home_price_ios_unit: "/ iOSアプリ",
@@ -1938,6 +1947,9 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     svcr_bonus_line2: "大規模グロースパッケージは近日公開予定です。お早めにご相談ください。",
   },
   ko: {
+    footer_approval_pledge: "스토어 승인률 90% 보장",
+    footer_support_channels: "연중무휴 지원 · Zalo · WhatsApp · Messenger",
+    footer_payment_terms: "2회 분할 결제 · 100% 환불",
     order_package_appstore: "App Store 패키지 ($70)",
     home_price_ios_label: "App Store 출시",
     home_price_ios_unit: "/ iOS 앱",
@@ -2371,6 +2383,9 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     svcr_bonus_line2: "대규모 성장 패키지는 곧 출시됩니다 — 조기 상담을 원하시면 문의해 주세요.",
   },
   fr: {
+    footer_approval_pledge: "Taux d’approbation garanti à 90 %",
+    footer_support_channels: "Assistance 24/7 · Zalo · WhatsApp · Messenger",
+    footer_payment_terms: "Paiement en 2 fois · Remboursement 100 %",
     order_package_appstore: "Offre App Store (70 $)",
     home_price_ios_label: "Publication App Store",
     home_price_ios_unit: "/ app iOS",
@@ -2804,6 +2819,9 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     svcr_bonus_line2: "Les forfaits de croissance à grande échelle arrivent bientôt — contactez-nous pour un conseil anticipé.",
   },
   de: {
+    footer_approval_pledge: "90 % Store-Freigabequote zugesichert",
+    footer_support_channels: "Support rund um die Uhr · Zalo · WhatsApp · Messenger",
+    footer_payment_terms: "Zahlung in 2 Raten · 100 % Rückerstattung",
     order_package_appstore: "App-Store-Paket (70 $)",
     home_price_ios_label: "App-Store-Veröffentlichung",
     home_price_ios_unit: "/ iOS-App",
@@ -3237,6 +3255,9 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     svcr_bonus_line2: "Große Wachstumspakete kommen bald — kontaktieren Sie uns für eine frühzeitige Beratung.",
   },
   es: {
+    footer_approval_pledge: "90 % de aprobación garantizada",
+    footer_support_channels: "Soporte 24/7 · Zalo · WhatsApp · Messenger",
+    footer_payment_terms: "Pago en 2 partes · Reembolso del 100 %",
     order_package_appstore: "Paquete App Store (70 $)",
     home_price_ios_label: "Publicación en App Store",
     home_price_ios_unit: "/ app iOS",
@@ -3670,6 +3691,9 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     svcr_bonus_line2: "Los paquetes de crecimiento a gran escala llegarán pronto — contáctanos para una consulta anticipada.",
   },
   zh: {
+    footer_approval_pledge: "承诺 90% 商店过审率",
+    footer_support_channels: "7×24 小时支持 · Zalo · WhatsApp · Messenger",
+    footer_payment_terms: "分两期支付 · 100% 退款",
     order_package_appstore: "App Store 套餐（$70）",
     home_price_ios_label: "App Store 上架",
     home_price_ios_unit: "/ iOS 应用",

@@ -24,7 +24,7 @@ export const Footer: React.FC = () => {
           </p>
           <div className="flex items-center gap-2 text-xs text-emerald-600 font-semibold">
             <ShieldCheck className="w-4 h-4" />
-            <span>Cam kết tỷ lệ duyệt Store 90%</span>
+            <span>{t('footer_approval_pledge')}</span>
           </div>
         </div>
 
@@ -83,10 +83,10 @@ export const Footer: React.FC = () => {
               </Link>
             </li>
             <li>
-              <span className="text-slate-500">Hỗ trợ 24/7 · Zalo · WhatsApp · Messenger</span>
+              <span className="text-slate-500">{t('footer_support_channels')}</span>
             </li>
             <li>
-              <span className="text-slate-500">Thanh toán 2 đợt · Hoàn tiền 100%</span>
+              <span className="text-slate-500">{t('footer_payment_terms')}</span>
             </li>
           </ul>
         </div>

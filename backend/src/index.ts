@@ -11,6 +11,7 @@ import type { Env, JwtPayload, Order, OrderStatus, Platform, RateLimiter, Servic
 import { hashPassword, isAdminEmail, optionalAuth, requireAdmin, requireAuth, signJwt, verifyPassword } from './auth';
 import * as db from './db';
 import { analyzeDesign } from './analyzer';
+import { M, type MsgKey } from './messages';
 import { isMailEnabled, newOrderAdminMail, orderConfirmationMail, orderStatusMail, sendMailAsync } from './mail';
 
 const app = new Hono<{ Bindings: Env; Variables: Variables }>();
@@ -23,7 +24,7 @@ app.use('*', (c, next) => {
   return cors({
     origin: allowAll ? '*' : allowed.includes(origin) ? origin : allowed[0] || '*',
     allowMethods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowHeaders: ['Content-Type', 'Authorization'],
+    allowHeaders: ['Content-Type', 'Authorization', 'X-Lang'],
     maxAge: 86400,
   })(c, next);
 });
@@ -57,7 +58,7 @@ function rateLimit(
   pick: (env: Env) => RateLimiter | undefined,
   scope: string,
   max: number,
-  message: string,
+  messageKey: MsgKey,
 ) {
   const PERIOD = 60;
   return async (c: Context<{ Bindings: Env; Variables: Variables }>, next: Next) => {
@@ -66,14 +67,14 @@ function rateLimit(
     // Lớp 1 — chặn lũ dồn vào một máy trước khi chạm database.
     const burst = pick(c.env);
     if (burst && !(await burst.limit({ key: `${scope}:${ip}` })).success) {
-      return c.json({ success: false, error: message }, 429);
+      return c.json({ success: false, error: M(c, messageKey) }, 429);
     }
 
     // Lớp 2 — bộ đếm dùng chung, chính xác. Nếu D1 lỗi thì cho đi tiếp:
     // không để sự cố database làm sập cả chức năng đăng nhập.
     try {
       const used = await db.bumpRateLimit(c.env.DB, `${scope}:${ip}`, PERIOD);
-      if (used > max) return c.json({ success: false, error: message }, 429);
+      if (used > max) return c.json({ success: false, error: M(c, messageKey) }, 429);
       if (used === 1) c.executionCtx?.waitUntil(db.purgeRateLimits(c.env.DB).catch(() => {}));
     } catch (err) {
       console.error('rateLimit D1 failed:', err instanceof Error ? err.message : err);
@@ -103,8 +104,8 @@ async function exceeded(
   }
 }
 
-const TOO_MANY_AUTH = 'Bạn thao tác quá nhanh. Vui lòng thử lại sau 1 phút.';
-const TOO_MANY_ORDER = 'Bạn vừa gửi quá nhiều yêu cầu. Vui lòng đợi 1 phút rồi thử lại.';
+const TOO_MANY_AUTH: MsgKey = 'too_many_auth';
+const TOO_MANY_ORDER: MsgKey = 'too_many_orders';
 
 function canAccessOrder(order: Order, user: JwtPayload): boolean {
   if (user.role === 'admin') return true;
@@ -128,9 +129,9 @@ app.get('/health', (c) => c.json({ status: 'ok', service: 'te2sr-backend', time:
 app.post('/api/auth/register', rateLimit((e) => e.RL_AUTH, 'auth', 10, TOO_MANY_AUTH), async (c) => {
   try {
     const { name, email, password } = await c.req.json();
-    if (!name || !email || !password) return c.json({ success: false, error: 'Thiếu họ tên, email hoặc mật khẩu.' }, 400);
-    if (!isEmail(email)) return c.json({ success: false, error: 'Email không hợp lệ.' }, 400);
-    if (String(password).length < 6) return c.json({ success: false, error: 'Mật khẩu tối thiểu 6 ký tự.' }, 400);
+    if (!name || !email || !password) return c.json({ success: false, error: M(c, 'missing_name_email_password') }, 400);
+    if (!isEmail(email)) return c.json({ success: false, error: M(c, 'invalid_email') }, 400);
+    if (String(password).length < 6) return c.json({ success: false, error: M(c, 'password_too_short') }, 400);
 
     // Chặn TRƯỚC khi tra DB: ADMIN_EMAILS nằm trong wrangler.toml (công khai)
     // và không có bước xác minh email, nên nếu để đăng ký tự phục vụ cấp quyền
@@ -139,12 +140,12 @@ app.post('/api/auth/register', rateLimit((e) => e.RL_AUTH, 'auth', 10, TOO_MANY_
     if (isAdminEmail(email, c.env)) {
       return c.json({
         success: false,
-        error: 'Địa chỉ email này là tài khoản quản trị. Vui lòng đăng nhập bằng Google.',
+        error: M(c, 'admin_must_use_google'),
       }, 403);
     }
 
     const existing = await db.getUserByEmail(c.env.DB, email);
-    if (existing) return c.json({ success: false, error: 'Email đã được đăng ký. Vui lòng đăng nhập.' }, 409);
+    if (existing) return c.json({ success: false, error: M(c, 'email_taken') }, 409);
 
     const role = 'client';
     const passwordHash = await hashPassword(String(password));
@@ -154,14 +155,14 @@ app.post('/api/auth/register', rateLimit((e) => e.RL_AUTH, 'auth', 10, TOO_MANY_
     const token = await signJwt({ sub: user.id, email: user.email, role: user.role, name: user.name, emailVerified: false }, c.env.JWT_SECRET);
     return c.json({ success: true, token, user });
   } catch {
-    return c.json({ success: false, error: 'Đăng ký thất bại.' }, 500);
+    return c.json({ success: false, error: M(c, 'register_failed') }, 500);
   }
 });
 
 app.post('/api/auth/login', rateLimit((e) => e.RL_AUTH, 'auth', 10, TOO_MANY_AUTH), async (c) => {
   try {
     const { email, password } = await c.req.json();
-    if (!email || !password) return c.json({ success: false, error: 'Thiếu email hoặc mật khẩu.' }, 400);
+    if (!email || !password) return c.json({ success: false, error: M(c, 'missing_email_password') }, 400);
 
     // 10 lần sai / phút cho MỖI email, bất kể đến từ bao nhiêu IP.
     if (await exceeded(c, `login-email:${String(email).toLowerCase()}`, 10)) {
@@ -170,7 +171,7 @@ app.post('/api/auth/login', rateLimit((e) => e.RL_AUTH, 'auth', 10, TOO_MANY_AUT
 
     const record = await db.getUserByEmail(c.env.DB, email);
     if (!record || !(await verifyPassword(String(password), record.passwordHash))) {
-      return c.json({ success: false, error: 'Email hoặc mật khẩu không đúng.' }, 401);
+      return c.json({ success: false, error: M(c, 'bad_credentials') }, 401);
     }
 
     let role = record.role;
@@ -182,23 +183,23 @@ app.post('/api/auth/login', rateLimit((e) => e.RL_AUTH, 'auth', 10, TOO_MANY_AUT
     const token = await signJwt({ sub: user.id, email: user.email, role: user.role, name: user.name, emailVerified: record.authProvider === 'google' }, c.env.JWT_SECRET);
     return c.json({ success: true, token, user });
   } catch {
-    return c.json({ success: false, error: 'Đăng nhập thất bại.' }, 500);
+    return c.json({ success: false, error: M(c, 'login_failed') }, 500);
   }
 });
 
 app.post('/api/auth/google', rateLimit((e) => e.RL_AUTH, 'auth', 10, TOO_MANY_AUTH), async (c) => {
   try {
     const { credential } = await c.req.json();
-    if (!credential) return c.json({ success: false, error: 'Thiếu Google credential (id_token).' }, 400);
+    if (!credential) return c.json({ success: false, error: M(c, 'missing_google_credential') }, 400);
 
     const res = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${encodeURIComponent(credential)}`);
-    if (!res.ok) return c.json({ success: false, error: 'Xác thực Google thất bại.' }, 401);
+    if (!res.ok) return c.json({ success: false, error: M(c, 'google_auth_failed') }, 401);
     const info = (await res.json()) as { aud?: string; email?: string; email_verified?: string; name?: string; picture?: string };
 
     if (c.env.GOOGLE_CLIENT_ID && info.aud !== c.env.GOOGLE_CLIENT_ID) {
-      return c.json({ success: false, error: 'Google client id không khớp.' }, 401);
+      return c.json({ success: false, error: M(c, 'google_client_mismatch') }, 401);
     }
-    if (!info.email) return c.json({ success: false, error: 'Không lấy được email từ Google.' }, 401);
+    if (!info.email) return c.json({ success: false, error: M(c, 'google_no_email') }, 401);
 
     const email = info.email.toLowerCase();
     const role = isAdminEmail(email, c.env) ? 'admin' : 'client';
@@ -223,13 +224,13 @@ app.post('/api/auth/google', rateLimit((e) => e.RL_AUTH, 'auth', 10, TOO_MANY_AU
     const token = await signJwt({ sub: user.id, email: user.email, role: user.role, name: user.name, emailVerified: true }, c.env.JWT_SECRET);
     return c.json({ success: true, token, user: publicUser });
   } catch {
-    return c.json({ success: false, error: 'Lỗi xác thực Google.' }, 500);
+    return c.json({ success: false, error: M(c, 'google_verify_failed') }, 500);
   }
 });
 
 app.get('/api/auth/me', requireAuth, async (c) => {
   const user = await db.getUserById(c.env.DB, c.get('user').sub);
-  if (!user) return c.json({ success: false, error: 'Không tìm thấy người dùng.' }, 404);
+  if (!user) return c.json({ success: false, error: M(c, 'user_not_found') }, 404);
   return c.json({ success: true, user });
 });
 
@@ -237,19 +238,19 @@ app.post('/api/auth/change-password', rateLimit((e) => e.RL_AUTH, 'auth', 10, TO
   try {
     const { currentPassword, newPassword } = await c.req.json();
     if (!newPassword || String(newPassword).length < 6) {
-      return c.json({ success: false, error: 'Mật khẩu mới tối thiểu 6 ký tự.' }, 400);
+      return c.json({ success: false, error: M(c, 'new_password_too_short') }, 400);
     }
     const record = await db.getUserByEmail(c.env.DB, c.get('user').email);
-    if (!record) return c.json({ success: false, error: 'Không tìm thấy người dùng.' }, 404);
+    if (!record) return c.json({ success: false, error: M(c, 'user_not_found') }, 404);
     if (record.passwordHash) {
       if (!currentPassword || !(await verifyPassword(String(currentPassword), record.passwordHash))) {
-        return c.json({ success: false, error: 'Mật khẩu hiện tại không đúng.' }, 401);
+        return c.json({ success: false, error: M(c, 'wrong_current_password') }, 401);
       }
     }
     await db.setUserPassword(c.env.DB, record.id, await hashPassword(String(newPassword)));
     return c.json({ success: true });
   } catch {
-    return c.json({ success: false, error: 'Đổi mật khẩu thất bại.' }, 500);
+    return c.json({ success: false, error: M(c, 'change_password_failed') }, 500);
   }
 });
 
@@ -270,8 +271,8 @@ app.post('/api/orders', rateLimit((e) => e.RL_ORDER, 'order', 5, TOO_MANY_ORDER)
     const body = await c.req.json();
     const appName = String(body.appName || '').trim();
     const clientEmail = String(body.clientEmail || '').trim();
-    if (!appName || !clientEmail) return c.json({ success: false, error: 'Cần tên app và email liên hệ.' }, 400);
-    if (!isEmail(clientEmail)) return c.json({ success: false, error: 'Email liên hệ không hợp lệ.' }, 400);
+    if (!appName || !clientEmail) return c.json({ success: false, error: M(c, 'order_missing_fields') }, 400);
+    if (!isEmail(clientEmail)) return c.json({ success: false, error: M(c, 'order_invalid_email') }, 400);
 
     const platform: Platform = VALID_PLATFORMS.includes(body.platform) ? body.platform : 'Both';
     const serviceType: ServiceType = VALID_SERVICES.includes(body.serviceType) ? body.serviceType : 'Testing';
@@ -300,38 +301,38 @@ app.post('/api/orders', rateLimit((e) => e.RL_ORDER, 'order', 5, TOO_MANY_ORDER)
 
     return c.json({ success: true, order });
   } catch {
-    return c.json({ success: false, error: 'Tạo đơn hàng thất bại.' }, 500);
+    return c.json({ success: false, error: M(c, 'order_create_failed') }, 500);
   }
 });
 
 app.get('/api/orders/:id', requireAuth, async (c) => {
   const order = await db.getOrderById(c.env.DB, c.req.param('id')!);
-  if (!order) return c.json({ success: false, error: 'Không tìm thấy đơn hàng.' }, 404);
-  if (!canAccessOrder(order, c.get('user'))) return c.json({ success: false, error: 'Không có quyền truy cập đơn này.' }, 403);
+  if (!order) return c.json({ success: false, error: M(c, 'order_not_found') }, 404);
+  if (!canAccessOrder(order, c.get('user'))) return c.json({ success: false, error: M(c, 'order_forbidden') }, 403);
   return c.json({ success: true, order });
 });
 
 app.patch('/api/orders/:id/status', requireAdmin, async (c) => {
   try {
     const { status } = await c.req.json();
-    if (!VALID_STATUSES.includes(status)) return c.json({ success: false, error: 'Trạng thái không hợp lệ.' }, 400);
+    if (!VALID_STATUSES.includes(status)) return c.json({ success: false, error: M(c, 'invalid_status') }, 400);
     const order = await db.updateOrderStatus(c.env.DB, c.req.param('id')!, status);
-    if (!order) return c.json({ success: false, error: 'Không tìm thấy đơn hàng.' }, 404);
+    if (!order) return c.json({ success: false, error: M(c, 'order_not_found') }, 404);
     const st = orderStatusMail(order);
     sendMailAsync(c.env, { to: order.clientEmail, subject: st.subject, html: st.html, text: st.text }, c.executionCtx);
     return c.json({ success: true, order });
   } catch {
-    return c.json({ success: false, error: 'Cập nhật trạng thái thất bại.' }, 500);
+    return c.json({ success: false, error: M(c, 'status_update_failed') }, 500);
   }
 });
 
 app.patch('/api/orders/:id/payment', requireAdmin, async (c) => {
   try {
     const { field, value } = await c.req.json();
-    if (field !== 'paid_deposit' && field !== 'paid_final') return c.json({ success: false, error: 'Trường thanh toán không hợp lệ.' }, 400);
+    if (field !== 'paid_deposit' && field !== 'paid_final') return c.json({ success: false, error: M(c, 'invalid_payment_field') }, 400);
     const id = c.req.param('id')!;
     let order = await db.updateOrderPayment(c.env.DB, id, field, !!value);
-    if (!order) return c.json({ success: false, error: 'Không tìm thấy đơn hàng.' }, 404);
+    if (!order) return c.json({ success: false, error: M(c, 'order_not_found') }, 404);
     // Paying the deposit kicks off the 14-day testing countdown.
     if (field === 'paid_deposit' && !!value) {
       await db.startTestingIfUnset(c.env.DB, id);
@@ -339,7 +340,7 @@ app.patch('/api/orders/:id/payment', requireAdmin, async (c) => {
     }
     return c.json({ success: true, order });
   } catch {
-    return c.json({ success: false, error: 'Cập nhật thanh toán thất bại.' }, 500);
+    return c.json({ success: false, error: M(c, 'payment_update_failed') }, 500);
   }
 });
 
@@ -347,16 +348,16 @@ app.patch('/api/orders/:id/payment', requireAdmin, async (c) => {
 app.patch('/api/orders/:id/testing', requireAdmin, async (c) => {
   try {
     const { action, startedAt } = await c.req.json();
-    if (action !== 'start' && action !== 'reset') return c.json({ success: false, error: 'Hành động không hợp lệ.' }, 400);
+    if (action !== 'start' && action !== 'reset') return c.json({ success: false, error: M(c, 'invalid_action') }, 400);
     let value: string | null = null;
     if (action === 'start') {
       value = startedAt && !Number.isNaN(Date.parse(startedAt)) ? new Date(startedAt).toISOString() : db.nowIso();
     }
     const order = await db.setTestingStarted(c.env.DB, c.req.param('id')!, value);
-    if (!order) return c.json({ success: false, error: 'Không tìm thấy đơn hàng.' }, 404);
+    if (!order) return c.json({ success: false, error: M(c, 'order_not_found') }, 404);
     return c.json({ success: true, order });
   } catch {
-    return c.json({ success: false, error: 'Cập nhật bộ đếm thất bại.' }, 500);
+    return c.json({ success: false, error: M(c, 'timer_update_failed') }, 500);
   }
 });
 
@@ -365,8 +366,8 @@ app.patch('/api/orders/:id/testing', requireAdmin, async (c) => {
 // ══════════════════════════════════════════════════════════════
 app.get('/api/orders/:id/messages', requireAuth, async (c) => {
   const order = await db.getOrderById(c.env.DB, c.req.param('id')!);
-  if (!order) return c.json({ success: false, error: 'Không tìm thấy đơn hàng.' }, 404);
-  if (!canAccessOrder(order, c.get('user'))) return c.json({ success: false, error: 'Không có quyền.' }, 403);
+  if (!order) return c.json({ success: false, error: M(c, 'order_not_found') }, 404);
+  if (!canAccessOrder(order, c.get('user'))) return c.json({ success: false, error: M(c, 'forbidden') }, 403);
   const messages = await db.listMessages(c.env.DB, order.id);
   return c.json({ success: true, messages });
 });
@@ -374,11 +375,11 @@ app.get('/api/orders/:id/messages', requireAuth, async (c) => {
 app.post('/api/orders/:id/messages', requireAuth, async (c) => {
   try {
     const order = await db.getOrderById(c.env.DB, c.req.param('id')!);
-    if (!order) return c.json({ success: false, error: 'Không tìm thấy đơn hàng.' }, 404);
+    if (!order) return c.json({ success: false, error: M(c, 'order_not_found') }, 404);
     const user = c.get('user');
-    if (!canAccessOrder(order, user)) return c.json({ success: false, error: 'Không có quyền.' }, 403);
+    if (!canAccessOrder(order, user)) return c.json({ success: false, error: M(c, 'forbidden') }, 403);
     const { text } = await c.req.json();
-    if (!text || !String(text).trim()) return c.json({ success: false, error: 'Nội dung tin nhắn trống.' }, 400);
+    if (!text || !String(text).trim()) return c.json({ success: false, error: M(c, 'empty_message') }, 400);
     const message = await db.addMessage(c.env.DB, {
       orderId: order.id,
       senderId: user.sub,
@@ -388,7 +389,7 @@ app.post('/api/orders/:id/messages', requireAuth, async (c) => {
     });
     return c.json({ success: true, message });
   } catch {
-    return c.json({ success: false, error: 'Gửi tin nhắn thất bại.' }, 500);
+    return c.json({ success: false, error: M(c, 'send_message_failed') }, 500);
   }
 });
 
@@ -404,7 +405,7 @@ app.post('/api/analyze-design', optionalAuth, async (c) => {
     if (user) await db.saveReport(c.env.DB, report);
     return c.json({ success: true, report });
   } catch {
-    return c.json({ success: false, error: 'Phân tích thiết kế thất bại.' }, 500);
+    return c.json({ success: false, error: M(c, 'analyze_failed') }, 500);
   }
 });
 
@@ -422,10 +423,10 @@ app.get('/api/admin/stats', requireAdmin, async (c) => {
 });
 
 // ── Fallback ──────────────────────────────────────────────────
-app.notFound((c) => c.json({ success: false, error: 'Endpoint không tồn tại.' }, 404));
+app.notFound((c) => c.json({ success: false, error: M(c, 'not_found') }, 404));
 app.onError((err, c) => {
   console.error('Unhandled error:', err);
-  return c.json({ success: false, error: 'Lỗi máy chủ nội bộ.' }, 500);
+  return c.json({ success: false, error: M(c, 'internal_error') }, 500);
 });
 
 export default app;
