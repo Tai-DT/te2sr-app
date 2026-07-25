@@ -75,6 +75,8 @@ export interface SignInput {
   email: string;
   role: Role;
   name: string;
+  /** Email đã được Google xác thực? Quyết định quyền nhận đơn theo email. */
+  emailVerified?: boolean;
 }
 
 export async function signJwt(input: SignInput, secret: string, expiresInSec = 60 * 60 * 24 * 7): Promise<string> {

@@ -2,8 +2,17 @@
 //  Shared domain + environment types for the TE2SR Worker (D1)
 // ══════════════════════════════════════════════════════════════
 
+/** Binding giới hạn tần suất của Cloudflare Workers. */
+export interface RateLimiter {
+  limit(opts: { key: string }): Promise<{ success: boolean }>;
+}
+
 export interface Env {
   DB: D1Database;
+  /** Chặn dò mật khẩu trên các route đăng nhập/đăng ký. */
+  RL_AUTH?: RateLimiter;
+  /** Chặn spam tạo đơn (mỗi đơn kích hoạt gửi email). */
+  RL_ORDER?: RateLimiter;
   /** HMAC secret for signing session JWTs (wrangler secret put JWT_SECRET). */
   JWT_SECRET: string;
   /** Google OAuth 2.0 web client id — validates id_token audience. */
@@ -97,6 +106,10 @@ export interface JwtPayload {
   email: string;
   role: Role;
   name: string;
+  /** true khi email đã được bên thứ ba xác thực (Google). Đăng ký bằng mật
+   *  khẩu KHÔNG xác minh hộp thư nên luôn false — dùng cờ này để quyết định
+   *  có được phép nhận đơn của khách vãng lai theo email hay không. */
+  emailVerified?: boolean;
   iat: number;
   exp: number;
 }

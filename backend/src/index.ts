@@ -5,8 +5,9 @@
 // ══════════════════════════════════════════════════════════════
 
 import { Hono } from 'hono';
+import type { Context, Next } from 'hono';
 import { cors } from 'hono/cors';
-import type { Env, JwtPayload, Order, OrderStatus, Platform, ServiceType, Variables } from './types';
+import type { Env, JwtPayload, Order, OrderStatus, Platform, RateLimiter, ServiceType, Variables } from './types';
 import { hashPassword, isAdminEmail, optionalAuth, requireAdmin, requireAuth, signJwt, verifyPassword } from './auth';
 import * as db from './db';
 import { analyzeDesign } from './analyzer';
@@ -43,8 +44,75 @@ function priceFor(platform: Platform, serviceType?: ServiceType): number | null 
   return null; // iOS-only → Enterprise "contact us"
 }
 
+/**
+ * Chặn theo tần suất trên từng IP, đếm bằng D1 nên chính xác trên toàn cầu.
+ *
+ * Binding `ratelimit` của Workers chỉ đếm cục bộ trong từng máy: 14 lần thử
+ * đăng nhập rải ra vẫn lọt hết vì không máy nào chạm ngưỡng. Vì vậy nó chỉ
+ * dùng làm lớp chắn rẻ chặn lũ request dồn dập, còn quyết định chặn thật
+ * dựa trên bộ đếm D1.
+ */
+function rateLimit(
+  pick: (env: Env) => RateLimiter | undefined,
+  scope: string,
+  max: number,
+  message: string,
+) {
+  const PERIOD = 60;
+  return async (c: Context<{ Bindings: Env; Variables: Variables }>, next: Next) => {
+    const ip = c.req.header('CF-Connecting-IP') || c.req.header('X-Forwarded-For') || 'anon';
+
+    // Lớp 1 — chặn lũ dồn vào một máy trước khi chạm database.
+    const burst = pick(c.env);
+    if (burst && !(await burst.limit({ key: `${scope}:${ip}` })).success) {
+      return c.json({ success: false, error: message }, 429);
+    }
+
+    // Lớp 2 — bộ đếm dùng chung, chính xác. Nếu D1 lỗi thì cho đi tiếp:
+    // không để sự cố database làm sập cả chức năng đăng nhập.
+    try {
+      const used = await db.bumpRateLimit(c.env.DB, `${scope}:${ip}`, PERIOD);
+      if (used > max) return c.json({ success: false, error: message }, 429);
+      if (used === 1) c.executionCtx?.waitUntil(db.purgeRateLimits(c.env.DB).catch(() => {}));
+    } catch (err) {
+      console.error('rateLimit D1 failed:', err instanceof Error ? err.message : err);
+    }
+
+    await next();
+  };
+}
+
+/**
+ * Chặn theo một khoá tuỳ ý (thường là email). Chặn theo IP là chưa đủ: kẻ tấn
+ * công dùng mạng đổi IP liên tục sẽ lọt hết, trong khi dò mật khẩu luôn nhắm
+ * vào MỘT email cố định — nên khoá theo email mới là thứ chặn được thật.
+ * Trả về true nếu đã vượt ngưỡng.
+ */
+async function exceeded(
+  c: Context<{ Bindings: Env; Variables: Variables }>,
+  key: string,
+  max: number,
+  periodSec = 60,
+): Promise<boolean> {
+  try {
+    return (await db.bumpRateLimit(c.env.DB, key, periodSec)) > max;
+  } catch (err) {
+    console.error('exceeded() D1 failed:', err instanceof Error ? err.message : err);
+    return false; // sự cố database không được làm sập đăng nhập
+  }
+}
+
+const TOO_MANY_AUTH = 'Bạn thao tác quá nhanh. Vui lòng thử lại sau 1 phút.';
+const TOO_MANY_ORDER = 'Bạn vừa gửi quá nhiều yêu cầu. Vui lòng đợi 1 phút rồi thử lại.';
+
 function canAccessOrder(order: Order, user: JwtPayload): boolean {
-  return user.role === 'admin' || order.userId === user.sub || order.clientEmail.toLowerCase() === user.email.toLowerCase();
+  if (user.role === 'admin') return true;
+  if (order.userId && order.userId === user.sub) return true;
+  // Khớp theo email chỉ được chấp nhận khi email đã được Google xác thực.
+  // Đăng ký bằng mật khẩu không xác minh hộp thư, nên nếu tin vào email tự
+  // khai thì bất kỳ ai cũng đọc được đơn và toàn bộ chat của khách khác.
+  if (user.emailVerified && order.clientEmail.toLowerCase() === user.email.toLowerCase()) return true;
+  return false;
 }
 
 const isEmail = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
@@ -56,7 +124,7 @@ app.get('/health', (c) => c.json({ status: 'ok', service: 'te2sr-backend', time:
 // ══════════════════════════════════════════════════════════════
 //  AUTH
 // ══════════════════════════════════════════════════════════════
-app.post('/api/auth/register', async (c) => {
+app.post('/api/auth/register', rateLimit((e) => e.RL_AUTH, 'auth', 10, TOO_MANY_AUTH), async (c) => {
   try {
     const { name, email, password } = await c.req.json();
     if (!name || !email || !password) return c.json({ success: false, error: 'Thiếu họ tên, email hoặc mật khẩu.' }, 400);
@@ -82,17 +150,22 @@ app.post('/api/auth/register', async (c) => {
     const user = await db.createUser(c.env.DB, {
       id: db.newUserId(), name: String(name).trim(), email, passwordHash, role, authProvider: 'password',
     });
-    const token = await signJwt({ sub: user.id, email: user.email, role: user.role, name: user.name }, c.env.JWT_SECRET);
+    const token = await signJwt({ sub: user.id, email: user.email, role: user.role, name: user.name, emailVerified: false }, c.env.JWT_SECRET);
     return c.json({ success: true, token, user });
   } catch {
     return c.json({ success: false, error: 'Đăng ký thất bại.' }, 500);
   }
 });
 
-app.post('/api/auth/login', async (c) => {
+app.post('/api/auth/login', rateLimit((e) => e.RL_AUTH, 'auth', 10, TOO_MANY_AUTH), async (c) => {
   try {
     const { email, password } = await c.req.json();
     if (!email || !password) return c.json({ success: false, error: 'Thiếu email hoặc mật khẩu.' }, 400);
+
+    // 10 lần sai / phút cho MỖI email, bất kể đến từ bao nhiêu IP.
+    if (await exceeded(c, `login-email:${String(email).toLowerCase()}`, 10)) {
+      return c.json({ success: false, error: TOO_MANY_AUTH }, 429);
+    }
 
     const record = await db.getUserByEmail(c.env.DB, email);
     if (!record || !(await verifyPassword(String(password), record.passwordHash))) {
@@ -105,14 +178,14 @@ app.post('/api/auth/login', async (c) => {
       role = 'admin';
     }
     const user = { id: record.id, name: record.name, email: record.email, role, avatar: record.avatar, authProvider: record.authProvider, createdAt: record.createdAt };
-    const token = await signJwt({ sub: user.id, email: user.email, role: user.role, name: user.name }, c.env.JWT_SECRET);
+    const token = await signJwt({ sub: user.id, email: user.email, role: user.role, name: user.name, emailVerified: record.authProvider === 'google' }, c.env.JWT_SECRET);
     return c.json({ success: true, token, user });
   } catch {
     return c.json({ success: false, error: 'Đăng nhập thất bại.' }, 500);
   }
 });
 
-app.post('/api/auth/google', async (c) => {
+app.post('/api/auth/google', rateLimit((e) => e.RL_AUTH, 'auth', 10, TOO_MANY_AUTH), async (c) => {
   try {
     const { credential } = await c.req.json();
     if (!credential) return c.json({ success: false, error: 'Thiếu Google credential (id_token).' }, 400);
@@ -146,7 +219,7 @@ app.post('/api/auth/google', async (c) => {
     }
 
     const publicUser = { id: user.id, name: user.name, email: user.email, role: user.role, avatar: user.avatar, authProvider: user.authProvider, createdAt: user.createdAt };
-    const token = await signJwt({ sub: user.id, email: user.email, role: user.role, name: user.name }, c.env.JWT_SECRET);
+    const token = await signJwt({ sub: user.id, email: user.email, role: user.role, name: user.name, emailVerified: true }, c.env.JWT_SECRET);
     return c.json({ success: true, token, user: publicUser });
   } catch {
     return c.json({ success: false, error: 'Lỗi xác thực Google.' }, 500);
@@ -159,7 +232,7 @@ app.get('/api/auth/me', requireAuth, async (c) => {
   return c.json({ success: true, user });
 });
 
-app.post('/api/auth/change-password', requireAuth, async (c) => {
+app.post('/api/auth/change-password', rateLimit((e) => e.RL_AUTH, 'auth', 10, TOO_MANY_AUTH), requireAuth, async (c) => {
   try {
     const { currentPassword, newPassword } = await c.req.json();
     if (!newPassword || String(newPassword).length < 6) {
@@ -186,11 +259,12 @@ app.get('/api/orders', requireAuth, async (c) => {
   const user = c.get('user');
   const orders = user.role === 'admin'
     ? await db.listAllOrders(c.env.DB)
-    : await db.listOrdersForUser(c.env.DB, user.sub, user.email);
+    // Chỉ gộp đơn theo email khi email đã được Google xác thực (xem canAccessOrder)
+    : await db.listOrdersForUser(c.env.DB, user.sub, user.emailVerified ? user.email : '\u0000never-match');
   return c.json({ success: true, orders });
 });
 
-app.post('/api/orders', optionalAuth, async (c) => {
+app.post('/api/orders', rateLimit((e) => e.RL_ORDER, 'order', 5, TOO_MANY_ORDER), optionalAuth, async (c) => {
   try {
     const body = await c.req.json();
     const appName = String(body.appName || '').trim();
@@ -219,9 +293,9 @@ app.post('/api/orders', optionalAuth, async (c) => {
     });
 
     const conf = orderConfirmationMail(order);
-    sendMailAsync(c.env, { to: order.clientEmail, subject: conf.subject, html: conf.html, text: conf.text });
+    sendMailAsync(c.env, { to: order.clientEmail, subject: conf.subject, html: conf.html, text: conf.text }, c.executionCtx);
     const adminMail = newOrderAdminMail(order);
-    sendMailAsync(c.env, { to: c.env.MAIL_ADMIN || 'admin@te2sr.com', subject: adminMail.subject, html: adminMail.html, text: adminMail.text });
+    sendMailAsync(c.env, { to: c.env.MAIL_ADMIN || 'admin@te2sr.com', subject: adminMail.subject, html: adminMail.html, text: adminMail.text }, c.executionCtx);
 
     return c.json({ success: true, order });
   } catch {
@@ -243,7 +317,7 @@ app.patch('/api/orders/:id/status', requireAdmin, async (c) => {
     const order = await db.updateOrderStatus(c.env.DB, c.req.param('id')!, status);
     if (!order) return c.json({ success: false, error: 'Không tìm thấy đơn hàng.' }, 404);
     const st = orderStatusMail(order);
-    sendMailAsync(c.env, { to: order.clientEmail, subject: st.subject, html: st.html, text: st.text });
+    sendMailAsync(c.env, { to: order.clientEmail, subject: st.subject, html: st.html, text: st.text }, c.executionCtx);
     return c.json({ success: true, order });
   } catch {
     return c.json({ success: false, error: 'Cập nhật trạng thái thất bại.' }, 500);

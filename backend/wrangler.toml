@@ -24,3 +24,17 @@ CLOUDFLARE_ACCOUNT_ID = "538f170a4371858f97066cf05483b585"
 # Secrets (set via: wrangler secret put <NAME>):
 #   JWT_SECRET            — session signing key
 #   CLOUDFLARE_API_TOKEN  — Email Sending token (optional)
+
+# Giới hạn tần suất (Workers Rate Limiting). Tính theo IP, mỗi data-center.
+# Chặn dò mật khẩu và spam đơn/email. period chỉ nhận 10 hoặc 60.
+[[unsafe.bindings]]
+name = "RL_AUTH"
+type = "ratelimit"
+namespace_id = "1001"
+simple = { limit = 10, period = 60 }
+
+[[unsafe.bindings]]
+name = "RL_ORDER"
+type = "ratelimit"
+namespace_id = "1002"
+simple = { limit = 5, period = 60 }

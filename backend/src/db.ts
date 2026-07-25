@@ -259,3 +259,36 @@ export async function adminStats(db: D1Database): Promise<AdminStats> {
     estimatedRevenue: Math.round(revenue),
   };
 }
+
+// ══════════════════════════════════════════════════════════════
+//  Giới hạn tần suất — bộ đếm dùng chung trên D1
+//  Binding ratelimit của Workers chỉ đếm cục bộ trên từng máy, nên nhiều
+//  request rải ra không máy nào chạm ngưỡng. D1 là nguồn đếm duy nhất nên
+//  chặn được dò mật khẩu rải rác — đây mới là thứ thực sự bảo vệ.
+// ══════════════════════════════════════════════════════════════
+
+/** Tăng bộ đếm của `key` và trả về số lần đã dùng trong cửa sổ hiện tại. */
+export async function bumpRateLimit(
+  d1: D1Database,
+  key: string,
+  periodSec: number,
+): Promise<number> {
+  const now = Math.floor(Date.now() / 1000);
+  const row = await d1
+    .prepare(
+      `INSERT INTO rate_limits (key, count, reset_at) VALUES (?1, 1, ?2)
+       ON CONFLICT(key) DO UPDATE SET
+         count    = CASE WHEN rate_limits.reset_at <= ?3 THEN 1   ELSE rate_limits.count + 1 END,
+         reset_at = CASE WHEN rate_limits.reset_at <= ?3 THEN ?2  ELSE rate_limits.reset_at END
+       RETURNING count`,
+    )
+    .bind(key, now + periodSec, now)
+    .first<{ count: number }>();
+  return row?.count ?? 1;
+}
+
+/** Dọn các bản ghi đã hết hạn. Gọi nền, không chặn request. */
+export async function purgeRateLimits(d1: D1Database): Promise<void> {
+  const now = Math.floor(Date.now() / 1000);
+  await d1.prepare(`DELETE FROM rate_limits WHERE reset_at < ?`).bind(now).run();
+}

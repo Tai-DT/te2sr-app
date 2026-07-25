@@ -57,8 +57,18 @@ export async function sendMail(env: MailEnv, opts: SendOpts): Promise<{ ok: bool
 }
 
 /** Fire-and-forget: never blocks or throws into the request path. */
-export function sendMailAsync(env: MailEnv, opts: SendOpts): void {
-  void sendMail(env, opts).catch(() => {});
+/**
+ * Gửi mail nền. BẮT BUỘC truyền ExecutionContext: trên Cloudflare Workers,
+ * mọi promise chưa xong sẽ bị huỷ ngay khi response được trả về, nên nếu chỉ
+ * `void sendMail(...)` thì email gần như không bao giờ được gửi.
+ * ctx.waitUntil() giữ worker sống cho tới khi gửi xong.
+ */
+export function sendMailAsync(env: MailEnv, opts: SendOpts, ctx?: { waitUntil(p: Promise<unknown>): void }): void {
+  const task = sendMail(env, opts).catch((err) => {
+    console.error('sendMail failed:', opts.subject, err instanceof Error ? err.message : err);
+  });
+  if (ctx?.waitUntil) ctx.waitUntil(task);
+  else void task; // dev/local fallback
 }
 
 // ── Templates ─────────────────────────────────────────────────
