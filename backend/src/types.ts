@@ -21,9 +21,9 @@ export interface Env {
   ADMIN_EMAILS?: string;
   /** Comma-separated allowed CORS origins, or `*`. */
   ALLOWED_ORIGINS?: string;
-  /** Cloudflare Email Sending (optional transactional email). */
-  CLOUDFLARE_ACCOUNT_ID?: string;
-  CLOUDFLARE_API_TOKEN?: string;
+  /** Resend — gửi thư giao dịch. Cloudflare Email Sending không dùng được
+   *  vì gói Workers Free không cho gửi tới người nhận bất kỳ. */
+  RESEND_API_KEY?: string;
   MAIL_FROM?: string;
   MAIL_FROM_NAME?: string;
   MAIL_ADMIN?: string;
