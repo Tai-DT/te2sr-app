@@ -31,10 +31,10 @@ app.use('*', (c, next) => {
 // ── Validation helpers ────────────────────────────────────────
 const VALID_STATUSES: OrderStatus[] = ['Pending', 'In Progress', 'Completed', 'Rejected'];
 const VALID_PLATFORMS: Platform[] = ['iOS', 'Android', 'Both'];
-const VALID_SERVICES: ServiceType[] = ['Testing', 'Publishing', 'Promotion_5Star', 'DesignAnalyzer', 'WebDesign', 'AppDevelopment', 'AppSEO', 'WebSEO', 'PageManagement'];
+const VALID_SERVICES: ServiceType[] = ['Testing', 'Publishing', 'Promotion_5Star', 'DesignAnalyzer', 'WebTesting', 'WebDesign', 'AppDevelopment', 'AppSEO', 'WebSEO', 'PageManagement'];
 
 /** Dịch vụ báo giá theo yêu cầu — không có giá niêm yết. */
-const QUOTE_ONLY_SERVICES: ServiceType[] = ['WebDesign', 'AppDevelopment', 'AppSEO', 'WebSEO', 'PageManagement'];
+const QUOTE_ONLY_SERVICES: ServiceType[] = ['WebTesting', 'WebDesign', 'AppDevelopment', 'AppSEO', 'WebSEO', 'PageManagement'];
 
 function priceFor(platform: Platform, serviceType?: ServiceType): number | null {
   // Thiết kế web / làm app: chốt giá sau khi trao đổi yêu cầu

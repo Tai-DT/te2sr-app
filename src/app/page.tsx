@@ -22,8 +22,7 @@ import {
   Globe,
   Code2,
   MessageSquare,
-  Search,
-} from 'lucide-react';
+  Search, MonitorCheck } from 'lucide-react';
 
 function StatCounter({ value, label, suffix = '', color = 'text-brand-blue' }: { value: number; label: string; suffix?: string; color?: string }) {
   return (
@@ -199,6 +198,18 @@ export default function HomePage() {
                 features: [t('home_svc_promo_feat1'), t('home_svc_promo_feat2'), t('home_svc_promo_feat3'), t('home_svc_promo_feat4')],
                 cta: t('home_svc_promo_cta'),
                 glow: 'magenta' as const,
+              },
+              {
+                service: 'WebTesting' as const,
+                illustration: 'WebTesting' as const,
+                icon: <MonitorCheck className="w-6 h-6 text-orange-600" />,
+                iconBg: 'bg-orange-50 border-orange-200',
+                title: t('home_svc_webtest_title'),
+                desc: t('home_svc_webtest_desc'),
+                features: [t('home_svc_webtest_feat1'), t('home_svc_webtest_feat2'), t('home_svc_webtest_feat3'), t('home_svc_webtest_feat4')],
+                cta: t('home_svc_webtest_cta'),
+                glow: 'blue' as const,
+                quoteOnly: true,
               },
               {
                 service: 'WebDesign' as const,

@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-export type IllustrationType = 'Testing' | 'Publishing' | 'Promotion' | 'Analyzer' | 'Enterprise' | 'WebDesign' | 'AppDevelopment' | 'AppSEO' | 'WebSEO' | 'PageManagement';
+export type IllustrationType = 'Testing' | 'Publishing' | 'Promotion' | 'Analyzer' | 'Enterprise' | 'WebTesting' | 'WebDesign' | 'AppDevelopment' | 'AppSEO' | 'WebSEO' | 'PageManagement';
 
 /**
  * Lightweight inline-SVG illustrations for service cards & pricing tiers.
@@ -117,6 +117,41 @@ export const ServiceIllustration: React.FC<{ type: IllustrationType; className?:
         <rect x="74" y="108" width="172" height="8" rx="4" fill="#EAF8F2" />
         {/* con trỏ */}
         <path d="M214 104l22 9-9 3.5-3.5 9z" fill="#0F172A" />
+      </svg>
+    );
+  }
+
+  if (type === 'WebTesting') {
+    return (
+      <svg {...common} role="img" aria-label="Website testing illustration">
+        <defs>
+          <linearGradient id="wt" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#FFF4E6" /><stop offset="1" stopColor="#FFE7C7" />
+          </linearGradient>
+        </defs>
+        <rect width="320" height="160" rx="16" fill="url(#wt)" />
+        {/* cửa sổ trình duyệt đang được soi */}
+        <rect x="46" y="24" width="168" height="112" rx="12" fill="#fff" stroke="#EA580C" strokeWidth="2" />
+        <path d="M46 42h168" stroke="#EA580C" strokeWidth="2" />
+        <circle cx="60" cy="33" r="3.5" fill="#EF4444" />
+        <circle cx="72" cy="33" r="3.5" fill="#F59E0B" />
+        <circle cx="84" cy="33" r="3.5" fill="#22C55E" />
+        {/* danh sách kiểm: 2 mục đạt, 1 mục lỗi */}
+        <circle cx="66" cy="60" r="7" fill="#22C55E" />
+        <path d="M62.5 60l2.5 2.5 4.5-5" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        <rect x="80" y="56" width="112" height="8" rx="4" fill="#FFE7C7" />
+        <circle cx="66" cy="84" r="7" fill="#22C55E" />
+        <path d="M62.5 84l2.5 2.5 4.5-5" stroke="#fff" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        <rect x="80" y="80" width="88" height="8" rx="4" fill="#FFE7C7" />
+        <circle cx="66" cy="108" r="7" fill="#EF4444" />
+        <path d="M63.5 105.5l5 5M68.5 105.5l-5 5" stroke="#fff" strokeWidth="2" strokeLinecap="round" />
+        <rect x="80" y="104" width="70" height="8" rx="4" fill="#FEE2E2" />
+        {/* kính lúp soi lỗi */}
+        <circle cx="238" cy="74" r="30" fill="#fff" stroke="#EA580C" strokeWidth="4" />
+        <path d="M259 96l16 16" stroke="#EA580C" strokeWidth="6" strokeLinecap="round" />
+        {/* dấu lỗi trong kính lúp */}
+        <path d="M238 60v18" stroke="#EF4444" strokeWidth="5" strokeLinecap="round" />
+        <circle cx="238" cy="88" r="3" fill="#EF4444" />
       </svg>
     );
   }

@@ -6,7 +6,7 @@ import { useLanguage } from '@/lib/i18n/language-context';
 import { api, ApiError } from '@/lib/api-client';
 import type { Order, Platform, ServiceType } from '@/lib/types';
 import { PaymentPanel } from './PaymentPanel';
-import { X, CheckCircle2, Send, Rocket, TestTube, Star, BadgeDollarSign, AlertCircle, Users, Copy, Check, CreditCard, Link2, Globe, Code2, MessageSquare, TrendingUp, Search } from 'lucide-react';
+import { X, CheckCircle2, Send, Rocket, TestTube, Star, BadgeDollarSign, AlertCircle, Users, Copy, Check, CreditCard, Link2, Globe, Code2, MessageSquare, TrendingUp, Search, MonitorCheck } from 'lucide-react';
 
 interface OrderModalProps {
   isOpen: boolean;
@@ -42,7 +42,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
   const googleGroupEmail = 'te2sr@googlegroups.com';
   /** Thiết kế web / làm app: chưa có app trên Store nên các trường về
    *  link kiểm thử, gói đăng tải và thanh toán 2 đợt đều không áp dụng. */
-  const isQuoteOnly = (['WebDesign', 'AppDevelopment', 'AppSEO', 'WebSEO', 'PageManagement'] as ServiceType[]).includes(serviceType);
+  const isQuoteOnly = (['WebTesting', 'WebDesign', 'AppDevelopment', 'AppSEO', 'WebSEO', 'PageManagement'] as ServiceType[]).includes(serviceType);
 
   // Modal được mount sẵn khi đang đóng nên useState chỉ chạy một lần.
   // Đồng bộ lại dịch vụ mỗi lần mở để nút "Trao đổi yêu cầu website" v.v.
