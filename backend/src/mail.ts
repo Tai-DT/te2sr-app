@@ -124,15 +124,40 @@ function layout(title: string, bodyHtml: string): string {
 }
 
 export function orderConfirmationMail(order: Order): { subject: string; html: string; text: string } {
-  const price = order.packagePrice != null ? ` ($${order.packagePrice})` : '';
-  const html = layout('Đã nhận yêu cầu dịch vụ ✅', `
-    <p>Cảm ơn bạn đã đăng ký dịch vụ TE2SR.</p>
-    <p><b>Mã đơn:</b> ${esc(order.id)}<br/>
+  // Đơn báo giá theo yêu cầu chưa có giá, chưa chốt nền tảng. Trước đây thư
+  // này gửi cùng một nội dung cho mọi đơn, nên khách đọc "chưa cần thanh toán
+  // gì ở bước này" trên màn hình rồi vài giây sau nhận thư đòi 50% + 50% —
+  // kèm dòng "Gói: Both" mà họ chưa hề chọn.
+  const isQuote = order.packagePrice == null;
+
+  const rows = isQuote
+    ? `<b>Mã đơn:</b> ${esc(order.id)}<br/>
+       <b>Dự án:</b> ${esc(order.appName)}`
+    : `<b>Mã đơn:</b> ${esc(order.id)}<br/>
        <b>Ứng dụng:</b> ${esc(order.appName)}<br/>
-       <b>Gói:</b> ${esc(order.platform)}${price}</p>
-    <p>Đội ngũ kỹ sư sẽ liên hệ và xử lý theo quy trình thanh toán 2 đợt (50% + 50%). Bạn có thể theo dõi tiến độ và trao đổi trực tiếp trong cổng khách hàng.</p>`);
-  const text = `Da nhan don ${order.id} - ${order.appName} (${order.platform}). Cam on ban da dung TE2SR.`;
-  return { subject: `TE2SR · Đã nhận đơn ${order.id}`, html, text };
+       <b>Gói:</b> ${esc(order.platform)} ($${order.packagePrice})`;
+
+  const nextStep = isQuote
+    ? `<p>Đây là dịch vụ báo giá theo yêu cầu — <b>bạn chưa cần thanh toán gì ở bước này</b>.
+       Kỹ sư TE2SR sẽ đọc yêu cầu và liên hệ báo giá trong vòng 24 giờ. Bạn có thể bổ sung
+       thông tin bất cứ lúc nào trong khung trao đổi của đơn.</p>`
+    : `<p>Đơn thanh toán làm 2 đợt: 50% để bắt đầu và 50% khi app đã live trên Store.
+       Bạn có thể theo dõi tiến độ và trao đổi trực tiếp với kỹ sư trong cổng khách hàng.</p>`;
+
+  const html = layout(isQuote ? 'Đã nhận yêu cầu báo giá ✅' : 'Đã nhận yêu cầu dịch vụ ✅', `
+    <p>Cảm ơn bạn đã đăng ký dịch vụ TE2SR.</p>
+    <p>${rows}</p>
+    ${nextStep}`);
+
+  const text = isQuote
+    ? `Da nhan yeu cau bao gia ${order.id} - ${order.appName}. Chua can thanh toan. Ky su se lien he trong 24 gio.`
+    : `Da nhan don ${order.id} - ${order.appName} (${order.platform}). Cam on ban da dung TE2SR.`;
+
+  return {
+    subject: isQuote ? `TE2SR · Đã nhận yêu cầu báo giá ${order.id}` : `TE2SR · Đã nhận đơn ${order.id}`,
+    html,
+    text,
+  };
 }
 
 export function orderStatusMail(order: Order): { subject: string; html: string; text: string } {
