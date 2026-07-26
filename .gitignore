@@ -31,3 +31,7 @@ resend-key.txt
 
 # Ảnh gốc chưa xử lý — KHÔNG đưa lên web cho tới khi đã che thông tin cá nhân
 assets-goc/
+
+# Ảnh chuẩn bị cho Facebook — không cần lên web
+assets-facebook/
+noi-dung-page-facebook.md
