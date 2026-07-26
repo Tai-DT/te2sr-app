@@ -14,9 +14,9 @@ export const metadata: Metadata = {
   // Bắt buộc cho static export: thiếu metadataBase thì mọi ảnh og bị xuất
   // thành đường dẫn tương đối, và Facebook/Zalo không tải được.
   metadataBase: new URL(SITE_URL),
-  title: TITLE,
+  // template để trang con không phải lặp lại tên thương hiệu
+  title: { default: TITLE, template: '%s — TE2SR' },
   description: DESCRIPTION,
-  alternates: { canonical: SITE_URL },
   // Thiếu khối này nên link dán lên Facebook/Zalo/Messenger hiện ra trơ trọi
   // không ảnh, dù public/og.png đã có sẵn đúng chuẩn 1200×630.
   openGraph: {

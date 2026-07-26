@@ -1,0 +1,53 @@
+# TE2SR
+
+> Dịch vụ chạy đủ 12 tester trong 14 ngày theo yêu cầu closed testing của Google Play, đăng tải ứng dụng lên App Store và Google Play, và kiểm thử website. Có mặt bằng 8 ngôn ngữ, phục vụ khách toàn cầu.
+
+TE2SR (Testing to Store Release) làm việc trên thiết bị thật, không dùng máy ảo. Mọi lỗi bàn giao đều kèm ảnh chụp màn hình và các bước tái hiện để lập trình viên sửa được ngay.
+
+## Dịch vụ có giá niêm yết
+
+Giá theo nền tảng, thanh toán hai đợt (50% để bắt đầu, 50% khi ứng dụng lên Store):
+
+- **Kiểm thử ứng dụng (QA)** — chạy đủ số tester Google Play yêu cầu, báo cáo lỗi crash và giao diện. Google Play $50 · App Store $70 · cả hai $100.
+- **Đăng tải lên Store** — chuẩn bị hồ sơ, chứng chỉ, metadata ASO, xử lý phản hồi của bên duyệt. Google Play $50 · App Store $70 · cả hai $100.
+- **Tăng đánh giá 5 sao** — tặng kèm 10 đánh giá từ người dùng thật theo ngôn ngữ chỉ định. Google Play $50 · App Store $70 · cả hai $100.
+
+## Dịch vụ báo giá theo yêu cầu
+
+Không niêm yết giá vì khối lượng phụ thuộc quy mô dự án. Khách gửi yêu cầu, kỹ sư liên hệ báo giá trong 24 giờ:
+
+- **Kiểm thử website (QA)** — đi hết mọi luồng như khách thật; Chrome, Safari, Firefox, Edge trên điện thoại, máy tính bảng và máy tính; đo Core Web Vitals; rà lỗi bảo mật cơ bản.
+- **Thiết kế website** — landing page, web bán hàng, trang giới thiệu; bàn giao mã nguồn.
+- **Lập trình ứng dụng di động** — iOS và Android theo yêu cầu, kèm kiểm thử và đưa lên Store.
+- **SEO ứng dụng (ASO)** — nghiên cứu từ khoá, tối ưu tiêu đề và mô tả, thiết kế lại ảnh chụp màn hình.
+- **SEO website** — SEO kỹ thuật, bản đồ nội dung, tối ưu Core Web Vitals.
+- **Quản lý page mạng xã hội** — kế hoạch nội dung, thiết kế bài đăng, trả lời tin nhắn.
+
+## Câu hỏi thường gặp
+
+**Google Play closed testing yêu cầu gì?**
+Với tài khoản nhà phát triển cá nhân, Google Play yêu cầu ít nhất 12 tester tham gia liên tục 14 ngày trước khi cho phát hành công khai. Tester phải là tài khoản Google thật và giữ ứng dụng cài đặt suốt thời gian đó.
+
+**Mất bao lâu?**
+Tối thiểu 14 ngày vì đó là mốc Google bắt buộc. Đồng hồ bắt đầu khi tester đầu tiên cài ứng dụng; khách theo dõi số ngày còn lại trong cổng khách hàng.
+
+**Thanh toán thế nào?**
+Hai đợt 50% + 50%. Nhận chuyển khoản ngân hàng qua mã QR, hoặc Binance Pay cho khách quốc tế.
+
+**Khi nào được hoàn tiền?**
+Hoàn tiền 100% nếu Google báo lỗi vì tester phía TE2SR không chạy đủ 12 người trong 14 ngày.
+
+**Có nhận mọi loại ứng dụng không?**
+Không. TE2SR không nhận ứng dụng lừa đảo hoặc cờ bạc.
+
+## Liên kết
+
+- Trang chủ: https://te2sr.com
+- Kiểm thử ứng dụng: https://te2sr.com/services/testing
+- Đăng tải lên Store: https://te2sr.com/services/publishing
+- Tăng đánh giá 5 sao: https://te2sr.com/services/promotion
+- Liên hệ: admin@te2sr.com
+
+## Ngôn ngữ
+
+Tiếng Việt, English, 日本語, 한국어, Français, Deutsch, Español, 中文.

@@ -1,0 +1,866 @@
+'use client';
+
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Navbar } from '@/components/Navbar';
+import { Footer } from '@/components/Footer';
+import { useLanguage } from '@/lib/i18n/language-context';
+import { useAuth } from '@/lib/auth';
+import { api, ApiError } from '@/lib/api-client';
+import { ChangePasswordCard } from '@/components/ChangePasswordCard';
+import { SOCIAL_LINKS } from '@/lib/social';
+import type { Order, OrderMessage } from '@/lib/types';
+import {
+  LayoutDashboard, MessageSquare, Send, ShieldAlert, RefreshCw,
+  CheckCircle2, Clock, TestTube, Rocket, Star, ChevronRight, Package,
+  Activity, Search, BarChart2, Globe, ArrowUpRight, Zap, Lock, Users, Copy, Check,
+  Sparkles, DollarSign, Loader2, Code2, MonitorCheck } from 'lucide-react';
+
+const SERVICE_LABELS: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
+  Testing: { label: 'QA Testing', color: 'text-brand-blue bg-blue-50 border-blue-300 font-bold', icon: <TestTube className="w-3.5 h-3.5 text-brand-blue" /> },
+  Publishing: { label: 'App Store', color: 'text-slate-900 bg-slate-100 border-slate-300 font-bold', icon: <Rocket className="w-3.5 h-3.5 text-slate-900" /> },
+  Promotion_5Star: { label: '5★ Boost', color: 'text-amber-800 bg-amber-50 border-amber-300 font-bold', icon: <Star className="w-3.5 h-3.5 text-amber-600" /> },
+  DesignAnalyzer: { label: 'AI Design', color: 'text-violet-800 bg-violet-50 border-violet-300 font-bold', icon: <Sparkles className="w-3.5 h-3.5 text-violet-600" /> },
+  WebTesting: { label: 'Web QA', color: 'text-orange-800 bg-orange-50 border-orange-300 font-bold', icon: <MonitorCheck className="w-3.5 h-3.5 text-orange-600" /> },
+  WebDesign: { label: 'Web Design', color: 'text-emerald-800 bg-emerald-50 border-emerald-300 font-bold', icon: <Globe className="w-3.5 h-3.5 text-emerald-600" /> },
+  AppDevelopment: { label: 'App Dev', color: 'text-indigo-800 bg-indigo-50 border-indigo-300 font-bold', icon: <Code2 className="w-3.5 h-3.5 text-indigo-600" /> },
+  AppSEO: { label: 'ASO', color: 'text-amber-800 bg-amber-50 border-amber-300 font-bold', icon: <ArrowUpRight className="w-3.5 h-3.5 text-amber-600" /> },
+  WebSEO: { label: 'Web SEO', color: 'text-sky-800 bg-sky-50 border-sky-300 font-bold', icon: <Search className="w-3.5 h-3.5 text-sky-600" /> },
+  PageManagement: { label: 'Page Mgmt', color: 'text-violet-800 bg-violet-50 border-violet-300 font-bold', icon: <MessageSquare className="w-3.5 h-3.5 text-violet-600" /> },
+};
+
+const STATUS_CONFIG: Record<string, { label: string; color: string; dot: string }> = {
+  Pending: { label: 'Pending', color: 'text-amber-900 bg-amber-50 border-amber-300 font-extrabold', dot: 'bg-amber-600' },
+  'In Progress': { label: 'In Progress', color: 'text-brand-blue bg-blue-50 border-blue-300 font-extrabold', dot: 'bg-brand-blue animate-pulse' },
+  Completed: { label: 'Completed', color: 'text-emerald-900 bg-emerald-50 border-emerald-300 font-extrabold', dot: 'bg-emerald-600' },
+  Rejected: { label: 'Rejected', color: 'text-red-900 bg-red-50 border-red-300 font-extrabold', dot: 'bg-red-600' },
+};
+
+const ALL_STATUSES: Order['status'][] = ['Pending', 'In Progress', 'Completed', 'Rejected'];
+
+const TESTING_DAYS = 14;
+function testingCountdown(startedAt: string | null) {
+  if (!startedAt) return null;
+  const start = new Date(startedAt).getTime();
+  if (Number.isNaN(start)) return null;
+  const elapsedDays = Math.max(0, Math.floor((Date.now() - start) / 86400000));
+  const daysLeft = Math.max(0, TESTING_DAYS - elapsedDays);
+  const pct = Math.min(100, Math.round((Math.min(elapsedDays, TESTING_DAYS) / TESTING_DAYS) * 100));
+  return { elapsedDays, daysLeft, pct, done: daysLeft === 0, dayNo: Math.min(elapsedDays + 1, TESTING_DAYS) };
+}
+function toLocalInput(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return '';
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+export default function AdminPortalPageClient() {
+  const { t } = useLanguage();
+  const { user, loading: authLoading, openAuthModal } = useAuth();
+  const isAdmin = user?.role === 'admin';
+
+  // Translate module-scope SERVICE_LABELS / STATUS_CONFIG labels at the render site.
+  const svcLabel = (type: string) => {
+    const map: Record<string, string> = {
+      Testing: 'adm_svc_testing',
+      Publishing: 'adm_svc_publishing',
+      Promotion_5Star: 'adm_svc_promotion',
+      DesignAnalyzer: 'adm_svc_design',
+      WebTesting: 'adm_svc_webtest',
+      WebDesign: 'adm_svc_web',
+      AppDevelopment: 'adm_svc_appdev',
+      AppSEO: 'adm_svc_aseo',
+      WebSEO: 'adm_svc_wseo',
+      PageManagement: 'adm_svc_page',
+    };
+    return map[type] ? t(map[type]) : type;
+  };
+  const stsLabel = (status: string) => {
+    const map: Record<string, string> = {
+      Pending: 'adm_status_pending',
+      'In Progress': 'adm_status_in_progress',
+      Completed: 'adm_status_completed',
+      Rejected: 'adm_status_rejected',
+    };
+    return map[status] ? t(map[status]) : status;
+  };
+
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [activeTab, setActiveTab] = useState<'overview' | 'orders' | 'chat' | 'analytics'>('overview');
+  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [copiedGroup, setCopiedGroup] = useState(false);
+
+  const [messages, setMessages] = useState<OrderMessage[]>([]);
+  const [loadingMessages, setLoadingMessages] = useState(false);
+  const [inputMessage, setInputMessage] = useState('');
+  const [sending, setSending] = useState(false);
+  const [testingInput, setTestingInput] = useState('');
+  const chatEndRef = useRef<HTMLDivElement>(null);
+
+  // Sync the countdown start-date input when the selected order changes.
+  useEffect(() => {
+    if (!selectedOrder) return;
+    setTestingInput(toLocalInput(selectedOrder.testingStartedAt || new Date().toISOString()));
+  }, [selectedOrder?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const googleGroupEmail = 'te2sr@googlegroups.com';
+
+  const fetchOrders = useCallback(async () => {
+    if (!user) return;
+    setLoading(true);
+    try {
+      const data = await api.listOrders();
+      setOrders(data);
+      setSelectedOrder((prev) => prev ?? data[0] ?? null);
+    } catch {
+      /* handled by auth gate / empty state */
+    } finally {
+      setLoading(false);
+    }
+  }, [user]);
+
+  useEffect(() => { fetchOrders(); }, [fetchOrders]);
+
+  // Load persisted chat for the selected order.
+  useEffect(() => {
+    if (!selectedOrder || !user) { setMessages([]); return; }
+    let cancelled = false;
+    setLoadingMessages(true);
+    api.listMessages(selectedOrder.id)
+      .then((msgs) => { if (!cancelled) setMessages(msgs); })
+      .catch(() => { if (!cancelled) setMessages([]); })
+      .finally(() => { if (!cancelled) setLoadingMessages(false); });
+    return () => { cancelled = true; };
+  }, [selectedOrder, user]);
+
+  useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [messages]);
+
+  // Near-realtime: poll for new messages every 4s while the chat is open.
+  useEffect(() => {
+    if (activeTab !== 'chat' || !selectedOrder || !user) return;
+    const id = setInterval(async () => {
+      try {
+        const msgs = await api.listMessages(selectedOrder.id);
+        setMessages((prev) => (msgs.length !== prev.length ? msgs : prev));
+      } catch { /* ignore transient errors */ }
+    }, 4000);
+    return () => clearInterval(id);
+  }, [activeTab, selectedOrder, user]);
+
+  const handleCopyGroup = () => {
+    navigator.clipboard.writeText(googleGroupEmail);
+    setCopiedGroup(true);
+    setTimeout(() => setCopiedGroup(false), 2000);
+  };
+
+  const handleUpdateStatus = async (orderId: string, status: Order['status']) => {
+    try {
+      const updated = await api.updateOrderStatus(orderId, status);
+      setOrders((prev) => prev.map((o) => (o.id === orderId ? updated : o)));
+      setSelectedOrder((prev) => (prev?.id === orderId ? updated : prev));
+    } catch (err) {
+      alert(err instanceof ApiError ? err.message : t('adm_update_failed'));
+    }
+  };
+
+  const handleSetTesting = async (orderId: string, action: 'start' | 'reset') => {
+    try {
+      const startedAt = action === 'start' && testingInput ? new Date(testingInput).toISOString() : undefined;
+      const updated = await api.setTesting(orderId, action, startedAt);
+      setOrders((prev) => prev.map((o) => (o.id === orderId ? updated : o)));
+      setSelectedOrder((prev) => (prev?.id === orderId ? updated : prev));
+    } catch (err) {
+      alert(err instanceof ApiError ? err.message : t('adm_update_failed'));
+    }
+  };
+
+  const [priceInput, setPriceInput] = useState('');
+  const [savingPrice, setSavingPrice] = useState(false);
+
+  const handleTogglePayment = async (orderId: string, field: 'paid_deposit' | 'paid_final', value: boolean) => {
+    try {
+      const updated = await api.updateOrderPayment(orderId, field, value);
+      setOrders((prev) => prev.map((o) => (o.id === orderId ? updated : o)));
+      setSelectedOrder((prev) => (prev?.id === orderId ? updated : prev));
+    } catch (err) {
+      alert(err instanceof ApiError ? err.message : t('adm_payment_update_failed'));
+    }
+  };
+
+  const handleSetPrice = async (orderId: string, raw: string) => {
+    const trimmed = raw.trim();
+    setSavingPrice(true);
+    try {
+      // Ô trống = xoá giá, đưa đơn về trạng thái chờ báo giá.
+      const updated = await api.updateOrderPrice(orderId, trimmed === '' ? null : Number(trimmed));
+      setOrders((prev) => prev.map((o) => (o.id === orderId ? updated : o)));
+      setSelectedOrder((prev) => (prev?.id === orderId ? updated : prev));
+      setPriceInput('');
+      // Thống kê tính tại chỗ từ `orders` nên setOrders ở trên đã làm nó tự cập nhật.
+    } catch (err) {
+      alert(err instanceof ApiError ? err.message : t('adm_price_update_failed'));
+    } finally {
+      setSavingPrice(false);
+    }
+  };
+
+  const handleSendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inputMessage.trim() || !selectedOrder || sending) return;
+    setSending(true);
+    try {
+      const msg = await api.sendMessage(selectedOrder.id, inputMessage.trim());
+      setMessages((prev) => [...prev, msg]);
+      setInputMessage('');
+    } catch (err) {
+      alert(err instanceof ApiError ? err.message : t('adm_send_failed'));
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const filteredOrders = orders.filter((o) => {
+    const matchStatus = filterStatus === 'all' || o.status === filterStatus;
+    const matchSearch =
+      o.appName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      o.id.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchStatus && matchSearch;
+  });
+
+  const totalOrders = orders.length;
+  const inProgress = orders.filter((o) => o.status === 'In Progress').length;
+  const completed = orders.filter((o) => o.status === 'Completed').length;
+  const pending = orders.filter((o) => o.status === 'Pending').length;
+  const revenue = orders.reduce((sum, o) => {
+    const price = o.packagePrice ?? 0;
+    return sum + (o.paidDeposit ? price / 2 : 0) + (o.paidFinal ? price / 2 : 0);
+  }, 0);
+
+  const TABS = [
+    { id: 'overview', label: t('adm_tab_overview'), icon: LayoutDashboard },
+    { id: 'orders', label: t('adm_tab_orders'), icon: Package },
+    { id: 'chat', label: t('adm_tab_chat'), icon: MessageSquare },
+    { id: 'analytics', label: t('adm_tab_analytics'), icon: BarChart2 },
+  ];
+
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans">
+      <Navbar />
+
+      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        {/* ─── PAGE HEADER ─── */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-xl bg-brand-blue text-white flex items-center justify-center shadow-apple-sm">
+                <LayoutDashboard className="w-4 h-4" />
+              </div>
+              <h1 className="text-xl sm:text-2xl font-extrabold font-display text-slate-900 tracking-tight">
+                {isAdmin ? t('adm_header_admin') : t('adm_header_client')}
+              </h1>
+            </div>
+            <p className="text-xs text-slate-700 pl-10 font-bold">
+              {user ? `${t('adm_greeting')}, ${user.name} · ${isAdmin ? t('adm_role_admin') : t('adm_role_client')}` : t('adm_subtitle_guest')}
+            </p>
+          </div>
+
+          {user && (
+            <button
+              onClick={fetchOrders}
+              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-slate-300 text-xs font-extrabold text-slate-900 hover:border-brand-blue hover:text-brand-blue shadow-apple-sm transition-all"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-brand-blue' : ''}`} />
+              <span>{t('adm_refresh')}</span>
+            </button>
+          )}
+        </div>
+
+        {/* ─── AUTH GATE ─── */}
+        {authLoading ? (
+          <div className="bg-white rounded-3xl p-16 text-center border border-slate-300 shadow-apple-md">
+            <Loader2 className="w-8 h-8 mx-auto animate-spin text-brand-blue" />
+            <p className="text-sm text-slate-600 font-semibold mt-3">{t('adm_loading_session')}</p>
+          </div>
+        ) : !user ? (
+          <div className="bg-white rounded-3xl p-12 text-center space-y-6 border border-slate-300 shadow-apple-md">
+            <div className="relative mx-auto w-20 h-20">
+              <div className="w-20 h-20 rounded-2xl bg-blue-50 border border-blue-200 flex items-center justify-center mx-auto shadow-apple-sm">
+                <Lock className="w-9 h-9 text-brand-blue" />
+              </div>
+              <div className="absolute -top-1 -right-1 w-5 h-5 bg-amber-500 rounded-full flex items-center justify-center">
+                <ShieldAlert className="w-3 h-3 text-white" />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <h3 className="text-xl font-extrabold text-slate-900">{t('adm_auth_title')}</h3>
+              <p className="text-sm text-slate-800 max-w-sm mx-auto leading-relaxed font-semibold">
+                {t('adm_auth_desc')}
+              </p>
+            </div>
+            <button
+              onClick={openAuthModal}
+              className="px-8 py-3 rounded-2xl bg-brand-blue text-white font-extrabold text-sm shadow-brand-blue hover:bg-blue-600 transition-all"
+            >
+              {t('adm_auth_button')}
+            </button>
+          </div>
+        ) : (
+          <>
+            {/* ─── NAV TABS ─── */}
+            <div className="flex gap-1 p-1.5 bg-slate-200/80 rounded-2xl border border-slate-300 w-fit">
+              {TABS.map((tab) => {
+                const Icon = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id as any)}
+                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-extrabold transition-all ${
+                      activeTab === tab.id ? 'bg-white text-brand-blue shadow-apple-sm' : 'text-slate-800 hover:text-slate-900 hover:bg-white/60'
+                    }`}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline">{tab.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* ══════════ TAB: OVERVIEW ══════════ */}
+            {activeTab === 'overview' && (
+              <div className="space-y-6">
+                <div className="bg-amber-50 border border-amber-300 rounded-2xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-apple-sm">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-amber-100 border border-amber-300 flex items-center justify-center shrink-0">
+                      <Users className="w-5 h-5 text-amber-700" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-extrabold text-slate-900">{t('adm_tester_group_title')}</h4>
+                      <p className="text-[11px] text-slate-800 font-semibold">
+                        {t('adm_tester_group_desc')} <span className="font-mono font-extrabold text-brand-blue select-all">{googleGroupEmail}</span>
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleCopyGroup}
+                    className="px-3 py-1.5 rounded-xl bg-white border border-amber-300 text-amber-900 font-extrabold text-xs flex items-center gap-1.5 shrink-0 shadow-apple-sm hover:bg-amber-100 transition-colors"
+                  >
+                    {copiedGroup ? <Check className="w-3.5 h-3.5 text-emerald-700" /> : <Copy className="w-3.5 h-3.5" />}
+                    <span>{copiedGroup ? t('adm_copied') : t('adm_copy_email')}</span>
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                  {[
+                    { label: t('adm_stat_total_orders'), value: totalOrders, icon: Package, color: 'text-brand-blue', change: `${totalOrders} ${t('adm_unit_orders')}` },
+                    { label: t('adm_stat_in_progress'), value: inProgress, icon: Activity, color: 'text-blue-700', change: `${inProgress} ${t('adm_active')}` },
+                    { label: t('adm_stat_completed'), value: completed, icon: CheckCircle2, color: 'text-emerald-700', change: `${Math.round((completed / Math.max(totalOrders, 1)) * 100)}%` },
+                    { label: isAdmin ? t('adm_stat_revenue') : t('adm_stat_pending'), value: isAdmin ? revenue : pending, icon: isAdmin ? DollarSign : Clock, color: 'text-amber-700', change: isAdmin ? t('adm_collected') : t('adm_needs_action'), prefix: isAdmin ? '$' : '' },
+                  ].map((stat, i) => {
+                    const Icon = stat.icon;
+                    return (
+                      <div key={i} className="bg-white rounded-2xl p-5 border border-slate-300 shadow-apple-sm space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[11px] text-slate-800 font-extrabold uppercase tracking-wider">{stat.label}</span>
+                          <div className="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center">
+                            <Icon className={`w-4 h-4 ${stat.color}`} />
+                          </div>
+                        </div>
+                        <div className="text-3xl font-extrabold text-slate-900 font-display">{(stat as any).prefix || ''}{stat.value.toLocaleString('en-US')}</div>
+                        <div className="flex items-center gap-1 text-[11px] text-emerald-700 font-extrabold">
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                          <span>{stat.change}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="bg-white rounded-2xl border border-slate-300 shadow-apple-sm overflow-hidden">
+                  <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 bg-slate-50">
+                    <h2 className="text-sm font-extrabold text-slate-900">{t('adm_recent_orders')}</h2>
+                    <button onClick={() => setActiveTab('orders')} className="text-xs font-extrabold text-brand-blue hover:underline flex items-center gap-1">
+                      {t('adm_view_all')} <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                  <div className="divide-y divide-slate-200">
+                    {orders.length === 0 && !loading && (
+                      <div className="px-5 py-10 text-center text-slate-500 text-sm font-semibold">{t('adm_no_orders')}</div>
+                    )}
+                    {orders.slice(0, 4).map((order) => {
+                      const svc = SERVICE_LABELS[order.serviceType];
+                      const sts = STATUS_CONFIG[order.status];
+                      return (
+                        <div
+                          key={order.id}
+                          onClick={() => { setSelectedOrder(order); setActiveTab('orders'); }}
+                          className="flex items-center justify-between px-5 py-4 hover:bg-slate-50 cursor-pointer transition-colors group"
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-xl bg-slate-100 border border-slate-300 flex items-center justify-center text-slate-900 font-bold">
+                              {svc?.icon || <Package className="w-4 h-4" />}
+                            </div>
+                            <div>
+                              <p className="text-sm font-extrabold text-slate-900 group-hover:text-brand-blue transition-colors">{order.appName}</p>
+                              <p className="text-[11px] text-slate-700 font-semibold">{order.id} · {order.platform}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <span className={`hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold border ${svc?.color}`}>{svcLabel(order.serviceType)}</span>
+                            <span className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold border ${sts?.color}`}>
+                              <span className={`w-1.5 h-1.5 rounded-full ${sts?.dot}`} />{stsLabel(order.status)}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Account security */}
+                <ChangePasswordCard />
+              </div>
+            )}
+
+            {/* ══════════ TAB: ORDERS ══════════ */}
+            {activeTab === 'orders' && (
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                <div className="lg:col-span-3 space-y-4">
+                  <div className="flex gap-2">
+                    <div className="relative flex-1">
+                      <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-500" />
+                      <input
+                        type="text"
+                        placeholder={t('adm_search_placeholder')}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 placeholder-slate-500 focus:outline-none focus:border-brand-blue shadow-apple-sm transition-colors"
+                      />
+                    </div>
+                    <select
+                      value={filterStatus}
+                      onChange={(e) => setFilterStatus(e.target.value)}
+                      className="px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 font-extrabold focus:outline-none focus:border-brand-blue shadow-apple-sm"
+                    >
+                      <option value="all">{t('adm_filter_all')}</option>
+                      {ALL_STATUSES.map((s) => <option key={s} value={s}>{stsLabel(s)}</option>)}
+                    </select>
+                  </div>
+
+                  <div className="space-y-3">
+                    {filteredOrders.map((order) => {
+                      const svc = SERVICE_LABELS[order.serviceType];
+                      const sts = STATUS_CONFIG[order.status];
+                      const isSelected = selectedOrder?.id === order.id;
+                      return (
+                        <div
+                          key={order.id}
+                          onClick={() => setSelectedOrder(order)}
+                          className={`bg-white rounded-2xl p-5 border cursor-pointer transition-all shadow-apple-sm hover:border-brand-blue ${isSelected ? 'border-brand-blue bg-blue-50/20' : 'border-slate-300'}`}
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-300 flex items-center justify-center text-slate-900 font-bold shrink-0">
+                              {svc?.icon || <Package className="w-4 h-4" />}
+                            </div>
+                            <div className="flex-1 min-w-0 space-y-2">
+                              <div className="flex items-start justify-between gap-2">
+                                <div>
+                                  <p className="text-sm font-extrabold text-slate-900 leading-tight truncate">{order.appName}</p>
+                                  <p className="text-[11px] text-slate-700 font-semibold mt-0.5">{order.id} · {order.clientEmail}</p>
+                                </div>
+                                <span className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold border shrink-0 ${sts?.color}`}>
+                                  <span className={`w-1.5 h-1.5 rounded-full ${sts?.dot}`} />{stsLabel(order.status)}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className={`flex items-center gap-1 px-2.5 py-0.5 rounded-md text-[11px] font-bold border ${svc?.color}`}>
+                                  {svc?.icon}<span>{svcLabel(order.serviceType)}</span>
+                                </span>
+                                <span className="px-2.5 py-0.5 rounded-md bg-slate-100 text-[11px] text-slate-900 font-extrabold">{order.platform}</span>
+                                {order.packagePrice != null && <span className="px-2.5 py-0.5 rounded-md bg-emerald-50 border border-emerald-200 text-[11px] text-emerald-800 font-extrabold">${order.packagePrice}</span>}
+                                <span className="text-[11px] text-slate-600 font-semibold">{order.createdAt.slice(0, 10)}</span>
+                              </div>
+
+                              {isAdmin && (
+                                <div className="flex gap-1.5 pt-1 flex-wrap">
+                                  {ALL_STATUSES.map((s) => (
+                                    <button
+                                      key={s}
+                                      onClick={(e) => { e.stopPropagation(); handleUpdateStatus(order.id, s); }}
+                                      className={`px-2.5 py-1 rounded-lg text-[10px] font-extrabold border transition-all ${order.status === s ? STATUS_CONFIG[s]?.color : 'bg-slate-100 border-slate-300 text-slate-800 hover:bg-slate-200'}`}
+                                    >
+                                      {stsLabel(s)}
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+
+                    {filteredOrders.length === 0 && (
+                      <div className="text-center py-12 text-slate-600 bg-white rounded-2xl border border-slate-300 font-semibold">
+                        <Package className="w-8 h-8 mx-auto mb-2 opacity-40" />
+                        <p className="text-sm">{t('adm_no_orders_found')}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Order Detail Panel */}
+                <div className="lg:col-span-2">
+                  {selectedOrder ? (
+                    <div className="bg-white rounded-2xl border border-slate-300 shadow-apple-sm overflow-hidden sticky top-20">
+                      <div className="px-5 py-4 border-b border-slate-200 bg-slate-50 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[11px] font-extrabold text-brand-blue uppercase tracking-wider">{t('adm_order_detail')}</span>
+                          <span className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold border ${STATUS_CONFIG[selectedOrder.status]?.color}`}>
+                            <span className={`w-1.5 h-1.5 rounded-full ${STATUS_CONFIG[selectedOrder.status]?.dot}`} />{stsLabel(selectedOrder.status)}
+                          </span>
+                        </div>
+                        <h3 className="text-base font-extrabold text-slate-900">{selectedOrder.appName}</h3>
+                      </div>
+
+                      <div className="px-5 py-4 space-y-3 text-xs border-b border-slate-200">
+                        {[
+                          { label: t('adm_row_order_id'), value: selectedOrder.id },
+                          { label: t('adm_row_client_email'), value: selectedOrder.clientEmail },
+                          { label: t('adm_row_platform'), value: selectedOrder.platform },
+                          { label: t('adm_row_service'), value: svcLabel(selectedOrder.serviceType) },
+                          { label: t('adm_row_price'), value: selectedOrder.packagePrice != null ? `$${selectedOrder.packagePrice}` : t('adm_contact_price') },
+                          { label: t('adm_row_created'), value: selectedOrder.createdAt.slice(0, 10) },
+                          { label: t('adm_row_countries'), value: selectedOrder.targetCountries.join(', ') },
+                        ].map((row, i) => (
+                          <div key={i} className="flex justify-between items-start gap-2">
+                            <span className="text-slate-700 shrink-0 font-bold">{row.label}</span>
+                            <span className="text-slate-900 font-extrabold text-right">{row.value}</span>
+                          </div>
+                        ))}
+
+                        {/* Chốt giá cho đơn báo giá theo yêu cầu.
+                            Sáu dịch vụ không có giá niêm yết nên đơn tạo ra với
+                            giá NULL; không có ô này thì dù thu tiền xong, doanh
+                            thu vẫn cộng 0 vì adminStats dùng packagePrice ?? 0. */}
+                        {isAdmin && (
+                          <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl space-y-2">
+                            <div className="flex items-center gap-1.5 text-amber-900 font-extrabold text-[11px]">
+                              <DollarSign className="w-3.5 h-3.5" />
+                              <span>{t('adm_price_title')}</span>
+                            </div>
+                            <p className="text-[11px] text-amber-900 leading-relaxed">
+                              {selectedOrder.packagePrice === null
+                                ? t('adm_price_unset_hint')
+                                : t('adm_price_set_hint')}
+                            </p>
+                            <form
+                              onSubmit={(e) => {
+                                e.preventDefault();
+                                handleSetPrice(selectedOrder.id, priceInput);
+                              }}
+                              className="flex gap-2"
+                            >
+                              <div className="relative flex-1 min-w-0">
+                                <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-bold">$</span>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  step="1"
+                                  value={priceInput}
+                                  onChange={(e) => setPriceInput(e.target.value)}
+                                  placeholder={selectedOrder.packagePrice !== null ? String(selectedOrder.packagePrice) : '0'}
+                                  className="w-full pl-6 pr-2 py-2 rounded-lg border border-amber-300 bg-white text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-500"
+                                />
+                              </div>
+                              <button
+                                type="submit"
+                                disabled={savingPrice}
+                                className="shrink-0 px-3 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white text-[11px] font-extrabold transition-colors"
+                              >
+                                {savingPrice ? '…' : t('adm_price_save')}
+                              </button>
+                            </form>
+                          </div>
+                        )}
+
+                        {/* Payment status (admin can toggle) */}
+                        <div className="grid grid-cols-2 gap-2 pt-1">
+                          {([
+                            { field: 'paid_deposit' as const, label: t('adm_payment_deposit'), paid: selectedOrder.paidDeposit },
+                            { field: 'paid_final' as const, label: t('adm_payment_final'), paid: selectedOrder.paidFinal },
+                          ]).map((p) => (
+                            <button
+                              key={p.field}
+                              disabled={!isAdmin}
+                              onClick={() => isAdmin && handleTogglePayment(selectedOrder.id, p.field, !p.paid)}
+                              className={`px-2.5 py-2 rounded-xl text-[11px] font-extrabold border flex items-center justify-center gap-1.5 transition-all ${
+                                p.paid ? 'bg-emerald-50 border-emerald-300 text-emerald-800' : 'bg-slate-50 border-slate-300 text-slate-500'
+                              } ${isAdmin ? 'hover:scale-[1.02] cursor-pointer' : 'cursor-default'}`}
+                            >
+                              {p.paid ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Clock className="w-3.5 h-3.5" />}
+                              <span>{p.label}</span>
+                            </button>
+                          ))}
+                        </div>
+
+                        {/* 14-day testing countdown */}
+                        <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl space-y-2">
+                          <div className="flex items-center gap-1.5 text-brand-blue font-extrabold text-[11px]">
+                            <Clock className="w-3.5 h-3.5" />
+                            <span>{t('adm_countdown_title')}</span>
+                          </div>
+                          {(() => {
+                            const cd = testingCountdown(selectedOrder.testingStartedAt);
+                            if (!cd) return <p className="text-[11px] text-slate-600 font-semibold">{t('adm_countdown_not_started')}</p>;
+                            return (
+                              <div className="space-y-1.5">
+                                <div className="flex items-baseline justify-between gap-2">
+                                  <span className="text-[11px] font-bold text-slate-700">{t('adm_testing_progress')} {cd.dayNo}/{TESTING_DAYS}</span>
+                                  <span className={`font-extrabold ${cd.done ? 'text-emerald-700 text-[11px]' : 'text-brand-blue'}`}>
+                                    {cd.done ? t('adm_countdown_done') : <><span className="text-lg">{cd.daysLeft}</span> <span className="text-[11px]">{t('adm_days_remaining')}</span></>}
+                                  </span>
+                                </div>
+                                <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
+                                  <div className={`h-full rounded-full transition-all duration-700 ${cd.done ? 'bg-emerald-500' : 'bg-brand-blue'}`} style={{ width: `${cd.pct}%` }} />
+                                </div>
+                              </div>
+                            );
+                          })()}
+                          {isAdmin && (
+                            <div className="space-y-1.5 pt-1">
+                              <label className="text-[10px] font-bold text-slate-600 block">{t('adm_start_date_label')}</label>
+                              <div className="flex gap-1.5">
+                                <input
+                                  type="datetime-local"
+                                  value={testingInput}
+                                  onChange={(e) => setTestingInput(e.target.value)}
+                                  className="flex-1 min-w-0 px-2 py-1.5 bg-white border border-slate-300 rounded-lg text-[11px] font-semibold text-slate-900 focus:outline-none focus:border-brand-blue"
+                                />
+                                <button onClick={() => handleSetTesting(selectedOrder.id, 'start')} className="px-2.5 py-1.5 rounded-lg bg-brand-blue text-white text-[11px] font-extrabold hover:bg-blue-600 shrink-0 transition-colors">
+                                  {t('adm_start_countdown')}
+                                </button>
+                              </div>
+                              {selectedOrder.testingStartedAt && (
+                                <button onClick={() => handleSetTesting(selectedOrder.id, 'reset')} className="text-[10px] font-extrabold text-red-600 hover:underline">
+                                  {t('adm_reset_countdown')}
+                                </button>
+                              )}
+                            </div>
+                          )}
+                        </div>
+
+                        {(selectedOrder.platform === 'Android' || selectedOrder.platform === 'Both') && (
+                          <div className="p-3 bg-amber-50 border border-amber-300 rounded-xl space-y-1">
+                            <div className="flex items-center justify-between">
+                              <span className="font-extrabold text-amber-900 text-[11px] flex items-center gap-1">
+                                <Users className="w-3.5 h-3.5 text-amber-700" /> {t('adm_tester_group_label')}
+                              </span>
+                              <button onClick={handleCopyGroup} className="text-[10px] font-extrabold text-amber-800 underline">
+                                {copiedGroup ? t('adm_copied') : t('adm_copy')}
+                              </button>
+                            </div>
+                            <p className="font-mono text-[11px] font-bold text-brand-blue select-all">{googleGroupEmail}</p>
+                          </div>
+                        )}
+
+                        {selectedOrder.testingUrl && (
+                          <div className="pt-1">
+                            <p className="text-slate-700 mb-1 font-bold">{t('adm_testing_link')}</p>
+                            <a href={selectedOrder.testingUrl} target="_blank" rel="noopener noreferrer" className="text-brand-blue font-semibold break-all hover:underline">{selectedOrder.testingUrl}</a>
+                          </div>
+                        )}
+
+                        {selectedOrder.details && (
+                          <div className="pt-2 border-t border-slate-200">
+                            <p className="text-slate-700 mb-1 font-bold">{t('adm_notes')}</p>
+                            <p className="text-slate-900 leading-relaxed font-medium">{selectedOrder.details}</p>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="px-5 py-4 space-y-3 border-b border-slate-200">
+                        <p className="text-[11px] font-extrabold text-slate-700 uppercase tracking-wider">{t('adm_progress_title')}</p>
+                        <div className="flex items-center gap-1">
+                          {['Pending', 'In Progress', 'Completed'].map((s, i) => {
+                            const statuses = ['Pending', 'In Progress', 'Completed'];
+                            const currentIdx = statuses.indexOf(selectedOrder.status);
+                            const isActive = i <= currentIdx;
+                            return (
+                              <React.Fragment key={s}>
+                                <div className={`flex items-center justify-center w-6 h-6 rounded-full text-[10px] font-extrabold border transition-all ${isActive ? 'bg-brand-blue border-brand-blue text-white shadow-apple-sm' : 'bg-slate-100 border-slate-300 text-slate-500'}`}>
+                                  {isActive ? <CheckCircle2 className="w-3.5 h-3.5" /> : i + 1}
+                                </div>
+                                {i < 2 && <div className={`flex-1 h-0.5 ${isActive && i < currentIdx ? 'bg-brand-blue' : 'bg-slate-300'}`} />}
+                              </React.Fragment>
+                            );
+                          })}
+                        </div>
+                        <div className="flex justify-between text-[10px] text-slate-800 font-bold">
+                          <span>{t('adm_step_received')}</span><span>{t('adm_step_processing')}</span><span>{t('adm_step_done')}</span>
+                        </div>
+                      </div>
+
+                      <div className="px-5 py-4">
+                        <button
+                          onClick={() => setActiveTab('chat')}
+                          className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-brand-blue text-white text-xs font-extrabold transition-all flex items-center justify-center gap-2 shadow-apple-sm"
+                        >
+                          <MessageSquare className="w-4 h-4" /><span>{t('adm_discuss_order')}</span>
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="bg-white rounded-2xl border border-slate-300 p-8 text-center text-slate-700 font-semibold shadow-apple-sm">
+                      <Package className="w-8 h-8 mx-auto mb-2 opacity-40" />
+                      <p className="text-sm">{t('adm_select_order_detail')}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* ══════════ TAB: CHAT ══════════ */}
+            {activeTab === 'chat' && (
+              <div className="max-w-2xl mx-auto">
+                {!selectedOrder ? (
+                  <div className="bg-white rounded-2xl border border-slate-300 p-10 text-center text-slate-600 font-semibold shadow-apple-sm">
+                    <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-40" />
+                    <p className="text-sm">{t('adm_chat_no_order')}</p>
+                  </div>
+                ) : (
+                  <div className="bg-white rounded-2xl border border-slate-300 shadow-apple-sm overflow-hidden">
+                    <div className="flex items-center gap-3 px-5 py-4 border-b border-slate-200 bg-slate-50">
+                      <div className="w-9 h-9 rounded-full bg-brand-blue flex items-center justify-center shadow-apple-sm">
+                        <MessageSquare className="w-4 h-4 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-extrabold text-slate-900">{isAdmin ? t('adm_chat_title_admin') : t('adm_chat_title_client')}</p>
+                        <div className="flex items-center gap-1.5 text-[11px] text-emerald-700 font-bold">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" /><span>{selectedOrder.appName}</span>
+                        </div>
+                      </div>
+                      <div className="ml-auto px-2.5 py-1 rounded-lg bg-white border border-slate-300 text-[11px] text-brand-blue font-mono font-extrabold">{selectedOrder.id}</div>
+                    </div>
+
+                    {/* Quick contact channels */}
+                    <div className="flex items-center gap-2 px-5 py-2.5 border-b border-slate-200 bg-white">
+                      <span className="text-[11px] font-bold text-slate-500">{t('adm_quick_contact')}</span>
+                      <a href={SOCIAL_LINKS.zalo} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 text-[11px] font-extrabold hover:bg-blue-100 transition-colors">
+                        <span className="w-4 h-4 rounded bg-blue-500 text-white flex items-center justify-center text-[9px] font-bold">Z</span>Zalo
+                      </a>
+                      <a href={SOCIAL_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] font-extrabold hover:bg-emerald-100 transition-colors">
+                        <span className="w-4 h-4 rounded bg-emerald-500 text-white flex items-center justify-center text-[8px] font-bold">WA</span>WhatsApp
+                      </a>
+                    </div>
+
+                    <div className="h-96 overflow-y-auto space-y-4 p-5 bg-slate-50">
+                      {loadingMessages ? (
+                        <div className="flex items-center justify-center h-full text-slate-400"><Loader2 className="w-5 h-5 animate-spin" /></div>
+                      ) : messages.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center h-full text-slate-400 text-xs font-semibold gap-2">
+                          <MessageSquare className="w-6 h-6 opacity-40" />
+                          <span>{t('adm_no_messages')}</span>
+                        </div>
+                      ) : (
+                        messages.map((msg) => {
+                          const mine = msg.senderId === user?.id;
+                          return (
+                            <div key={msg.id} className={`flex gap-2.5 ${mine ? 'flex-row-reverse' : ''}`}>
+                              <div className={`w-7 h-7 rounded-full border flex items-center justify-center text-[10px] font-extrabold shrink-0 ${msg.role === 'admin' ? 'bg-brand-blue border-brand-blue text-white' : 'bg-slate-300 border-slate-400 text-slate-900'}`}>
+                                {msg.role === 'admin' ? 'TE' : msg.senderName?.[0]?.toUpperCase() || 'U'}
+                              </div>
+                              <div className={`max-w-[78%] space-y-1 ${mine ? 'items-end flex flex-col' : ''}`}>
+                                <p className="text-[11px] text-slate-700 font-bold">{msg.senderName} · {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                                <div className={`px-4 py-2.5 rounded-2xl text-xs leading-relaxed font-semibold ${mine ? 'bg-brand-blue text-white rounded-tr-sm shadow-brand-blue' : 'bg-white border border-slate-300 text-slate-900 rounded-tl-sm shadow-apple-sm'}`}>
+                                  {msg.text}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })
+                      )}
+                      <div ref={chatEndRef} />
+                    </div>
+
+                    <form onSubmit={handleSendMessage} className="flex items-center gap-2 p-4 border-t border-slate-200 bg-white">
+                      <input
+                        type="text"
+                        value={inputMessage}
+                        onChange={(e) => setInputMessage(e.target.value)}
+                        placeholder={isAdmin ? t('adm_input_admin') : t('adm_input_client')}
+                        className="flex-1 px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 placeholder-slate-500 focus:outline-none focus:border-brand-blue focus:bg-white transition-colors"
+                      />
+                      <button type="submit" disabled={!inputMessage.trim() || sending} className="p-2.5 rounded-xl bg-brand-blue text-white shadow-brand-blue hover:bg-blue-600 transition-all disabled:opacity-50">
+                        {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                      </button>
+                    </form>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ══════════ TAB: ANALYTICS ══════════ */}
+            {activeTab === 'analytics' && (
+              <div className="space-y-6">
+                <div className="bg-white rounded-2xl border border-slate-300 p-6 shadow-apple-sm">
+                  <h2 className="text-sm font-extrabold text-slate-900 mb-4 flex items-center gap-2">
+                    <BarChart2 className="w-4 h-4 text-brand-blue" /><span>{t('adm_analytics_by_service')}</span>
+                  </h2>
+                  <div className="space-y-3">
+                    {Object.entries(SERVICE_LABELS).map(([key, svc]) => {
+                      const count = orders.filter((o) => o.serviceType === key).length;
+                      const pct = totalOrders > 0 ? Math.round((count / totalOrders) * 100) : 0;
+                      return (
+                        <div key={key} className="space-y-1.5">
+                          <div className="flex items-center justify-between text-xs font-bold">
+                            <span className="flex items-center gap-1.5 text-slate-900">{svc.icon}<span>{svcLabel(key)}</span></span>
+                            <span className="text-slate-700">{count} {t('adm_unit_orders')} · {pct}%</span>
+                          </div>
+                          <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
+                            <div className="h-full bg-brand-blue rounded-full transition-all duration-1000" style={{ width: `${pct}%` }} />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  {Object.entries(STATUS_CONFIG).map(([key, sts]) => {
+                    const count = orders.filter((o) => o.status === key).length;
+                    return (
+                      <div key={key} className="bg-white rounded-2xl p-5 border border-slate-300 text-center space-y-2 shadow-apple-sm">
+                        <span className="text-xs font-extrabold text-slate-800">{stsLabel(key)}</span>
+                        <p className="text-3xl font-extrabold text-slate-900">{count}</p>
+                        <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold border ${sts.color}`}>
+                          <span className={`w-1.5 h-1.5 rounded-full ${sts.dot}`} />{count} {t('adm_unit_orders')}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="bg-white rounded-2xl border border-slate-300 p-6 shadow-apple-sm">
+                  <h2 className="text-sm font-extrabold text-slate-900 mb-4 flex items-center gap-2">
+                    <Globe className="w-4 h-4 text-brand-blue" /><span>{t('adm_target_market')}</span>
+                  </h2>
+                  <div className="flex flex-wrap gap-2">
+                    {Array.from(new Set(orders.flatMap((o) => o.targetCountries))).map((country) => (
+                      <span key={country} className="px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-300 text-xs text-slate-900 font-extrabold">{country}</span>
+                    ))}
+                    {orders.length === 0 && <span className="text-sm text-slate-500 font-semibold">{t('adm_no_data')}</span>}
+                  </div>
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </main>
+
+      <Footer />
+    </div>
+  );
+}
