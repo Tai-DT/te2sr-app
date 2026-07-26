@@ -1,20 +1,27 @@
 // ══════════════════════════════════════════════════════════════
-//  Transactional email via the Cloudflare Email Sending REST API.
-//  From a Node process (not a Worker) we use the REST endpoint with a
-//  Bearer API token. All sends are graceful: if email isn't configured
-//  they are skipped, and failures never break the request path.
+//  Thư giao dịch (xác nhận đơn, báo đổi trạng thái) gửi qua Resend.
+//
+//  Vì sao không dùng Cloudflare Email Sending: dịch vụ đó KHÔNG gửi được cho
+//  người nhận bất kỳ trên gói Workers Free — chỉ gửi tới địa chỉ đã xác minh
+//  trong chính tài khoản mình, tức là báo được cho quản trị nhưng không gửi
+//  nổi thư xác nhận cho khách. Muốn gửi cho khách phải lên Workers Paid.
+//  Resend miễn phí 3.000 thư/tháng, đã ra bản chính thức, gọi bằng fetch
+//  thuần nên không cần thêm thư viện.
+//
+//  Mọi lần gửi đều "mềm": chưa cấu hình thì bỏ qua, lỗi cũng không bao giờ
+//  làm hỏng luồng xử lý đơn của khách.
 // ══════════════════════════════════════════════════════════════
 
 import type { Env, Order } from './types';
 
 /** The subset of Env the mailer reads. */
-export type MailEnv = Pick<Env, 'CLOUDFLARE_ACCOUNT_ID' | 'CLOUDFLARE_API_TOKEN' | 'MAIL_FROM' | 'MAIL_FROM_NAME' | 'MAIL_ADMIN'>;
+export type MailEnv = Pick<Env, 'RESEND_API_KEY' | 'MAIL_FROM' | 'MAIL_FROM_NAME' | 'MAIL_ADMIN'>;
 
 const mailFrom = (env: MailEnv) => env.MAIL_FROM || 'admin@te2sr.com';
 const mailAdmin = (env: MailEnv) => env.MAIL_ADMIN || 'admin@te2sr.com';
 
 export function isMailEnabled(env: MailEnv): boolean {
-  return !!(env.CLOUDFLARE_ACCOUNT_ID && env.CLOUDFLARE_API_TOKEN);
+  return !!env.RESEND_API_KEY;
 }
 
 interface SendOpts {
@@ -28,37 +35,36 @@ interface SendOpts {
 export async function sendMail(env: MailEnv, opts: SendOpts): Promise<{ ok: boolean; skipped?: boolean; error?: string }> {
   if (!isMailEnabled(env)) return { ok: false, skipped: true };
   try {
-    const res = await fetch(
-      `https://api.cloudflare.com/client/v4/accounts/${env.CLOUDFLARE_ACCOUNT_ID}/email/sending/send`,
-      {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${env.CLOUDFLARE_API_TOKEN}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          to: opts.to,
-          from: { address: mailFrom(env), name: env.MAIL_FROM_NAME || 'TE2SR' },
-          reply_to: opts.replyTo || mailAdmin(env),
-          subject: opts.subject,
-          html: opts.html,
-          text: opts.text,
-        }),
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
       },
-    );
-    const data = (await res.json().catch(() => null)) as
-      | { success?: boolean; errors?: { code?: number; message?: string }[] }
-      | null;
-    if (!res.ok || (data && data.success === false)) {
-      // Ghi cả HTTP status lẫn mã lỗi, không chỉ mỗi câu chữ. Trước đây log chỉ
-      // có "Authentication error" — câu này Cloudflare trả ở cổng API chung nên
-      // không phân biệt được token sai, token thiếu quyền, hay tài khoản chưa
-      // được bật dịch vụ. Mã số mới nói rõ:
-      //   401 + 10000 → cổng API từ chối token (sai/rỗng/không đúng tài khoản)
-      //   403 + 10102 → token đúng nhưng thiếu quyền Email Sending
-      //   403 + 10105 → tài khoản chưa được cấp quyền dùng (chưa lên Workers Paid)
-      //   403 + 10203 → tên miền chưa được bật gửi thư
-      const err = data?.errors?.[0];
-      const msg = err
-        ? `HTTP ${res.status} / code ${err.code ?? '?'}: ${err.message ?? 'không rõ'}`
-        : `HTTP ${res.status}`;
+      body: JSON.stringify({
+        // Resend nhận `from` dạng "Tên <địa-chỉ>", khác Cloudflare (object).
+        from: `${env.MAIL_FROM_NAME || 'TE2SR'} <${mailFrom(env)}>`,
+        to: opts.to,
+        reply_to: opts.replyTo || mailAdmin(env),
+        subject: opts.subject,
+        html: opts.html,
+        text: opts.text,
+      }),
+    });
+
+    if (!res.ok) {
+      // Đọc lỗi phòng thủ: chấp nhận cả dạng {name, message} của Resend lẫn
+      // {errors:[{message}]} phòng khi API đổi. Luôn ghi kèm HTTP status —
+      // thiếu status là thứ đã khiến lần chẩn đoán trước mất ba vòng dò.
+      //   401 missing_api_key   → chưa nạp RESEND_API_KEY
+      //   403 invalid_api_key   → khoá sai hoặc đã bị thu hồi
+      //   403 validation_error  → tên miền te2sr.com chưa xác minh xong DNS
+      //   429 *_quota_exceeded  → vượt 100 thư/ngày hoặc 3.000 thư/tháng
+      const data = (await res.json().catch(() => null)) as
+        | { name?: string; message?: string; errors?: { message?: string }[] }
+        | null;
+      const detail = data?.message || data?.errors?.[0]?.message || 'không rõ';
+      const msg = `HTTP ${res.status}${data?.name ? ` / ${data.name}` : ''}: ${detail}`;
       console.error('✉️  sendMail failed:', msg);
       return { ok: false, error: msg };
     }
