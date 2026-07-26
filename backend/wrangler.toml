@@ -19,10 +19,11 @@ ALLOWED_ORIGINS = "https://te2sr.com,https://www.te2sr.com,https://te2sr.pages.d
 MAIL_FROM = "admin@te2sr.com"
 MAIL_FROM_NAME = "TE2SR"
 MAIL_ADMIN = "admin@te2sr.com"
+CLOUDFLARE_ACCOUNT_ID = "538f170a4371858f97066cf05483b585"
 
 # Secrets (set via: wrangler secret put <NAME>):
-#   JWT_SECRET      — khoá ký phiên đăng nhập
-#   RESEND_API_KEY  — khoá gửi thư qua Resend (bắt đầu bằng re_)
+#   JWT_SECRET            — session signing key
+#   CLOUDFLARE_API_TOKEN  — Email Sending token (optional)
 
 # Giới hạn tần suất (Workers Rate Limiting). Tính theo IP, mỗi data-center.
 # Chặn dò mật khẩu và spam đơn/email. period chỉ nhận 10 hoặc 60.
