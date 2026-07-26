@@ -224,6 +224,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
                   { id: 'Testing', icon: TestTube, label: t('order_service_testing') },
                   { id: 'Publishing', icon: Rocket, label: t('order_service_publishing') },
                   { id: 'Promotion_5Star', icon: Star, label: t('order_service_promotion') },
+                  { id: 'WebTesting', icon: MonitorCheck, label: t('order_service_webtest') },
                   { id: 'WebDesign', icon: Globe, label: t('order_service_web') },
                   { id: 'AppDevelopment', icon: Code2, label: t('order_service_appdev') },
                   { id: 'AppSEO', icon: TrendingUp, label: t('order_service_aseo') },
