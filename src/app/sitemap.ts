@@ -1,4 +1,5 @@
 import type { MetadataRoute } from 'next';
+import { getAllPosts } from '@/lib/blog';
 
 const SITE_URL = 'https://te2sr.com';
 
@@ -19,10 +20,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/services/promotion', priority: 0.8, freq: 'monthly' },
   ];
 
-  return pages.map((p) => ({
+  const staticPages = pages.map((p) => ({
     url: `${SITE_URL}${p.path}`,
     lastModified: now,
     changeFrequency: p.freq,
     priority: p.priority,
   }));
+
+  // Bài viết dùng ngày thật của bài, không dùng ngày build: Google chỉ tin
+  // <lastmod> khi nó phản ánh đúng lần sửa nội dung.
+  const posts = getAllPosts().map((post) => ({
+    url: `${SITE_URL}/blog/${post.slug}`,
+    lastModified: new Date(post.updated ?? post.date),
+    changeFrequency: 'yearly' as const,
+    priority: 0.7,
+  }));
+
+  return [
+    ...staticPages,
+    { url: `${SITE_URL}/blog`, lastModified: now, changeFrequency: 'weekly' as const, priority: 0.8 },
+    ...posts,
+  ];
 }

@@ -28,3 +28,6 @@ backend/.wrangler/
 cf-token.txt
 *.token.txt
 resend-key.txt
+
+# Ảnh gốc chưa xử lý — KHÔNG đưa lên web cho tới khi đã che thông tin cá nhân
+assets-goc/

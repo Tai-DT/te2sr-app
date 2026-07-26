@@ -20,6 +20,7 @@ export const LANGUAGES: LanguageOption[] = [
 
 export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
   vi: {
+    nav_blog: "Bài Viết",
     adm_price_title: "Giá đã chốt",
     adm_price_unset_hint: "Đơn này chưa có giá. Nhập số tiền đã thống nhất với khách để nó được tính vào doanh thu.",
     adm_price_set_hint: "Sửa lại nếu hai bên thống nhất mức khác. Để trống rồi lưu sẽ xoá giá.",
@@ -777,6 +778,7 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     svcr_bonus_line2: "Gói tăng trưởng số lượng lớn sẽ ra mắt sau — liên hệ để được tư vấn sớm.",
   },
   en: {
+    nav_blog: "Blog",
     adm_price_title: "Agreed price",
     adm_price_unset_hint: "No price on this order yet. Enter the amount agreed with the client so it counts towards revenue.",
     adm_price_set_hint: "Change it if you agree a different amount. Saving an empty field clears the price.",
@@ -1531,6 +1533,7 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     svcr_bonus_line2: "Large-scale growth packages are coming soon — contact us for early consultation.",
   },
   ja: {
+    nav_blog: "ブログ",
     adm_price_title: "確定金額",
     adm_price_unset_hint: "この注文には金額が未設定です。お客さまと合意した金額を入力すると売上に計上されます。",
     adm_price_set_hint: "金額を変更する場合は入力し直してください。空欄で保存すると金額を削除します。",
@@ -1981,6 +1984,7 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     svcr_bonus_line2: "大規模グロースパッケージは近日公開予定です。お早めにご相談ください。",
   },
   ko: {
+    nav_blog: "블로그",
     adm_price_title: "확정 금액",
     adm_price_unset_hint: "이 주문에는 금액이 없습니다. 고객과 합의한 금액을 입력하면 매출에 반영됩니다.",
     adm_price_set_hint: "다른 금액으로 합의했다면 수정하세요. 빈칸으로 저장하면 금액이 삭제됩니다.",
@@ -2431,6 +2435,7 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     svcr_bonus_line2: "대규모 성장 패키지는 곧 출시됩니다 — 조기 상담을 원하시면 문의해 주세요.",
   },
   fr: {
+    nav_blog: "Blog",
     adm_price_title: "Montant convenu",
     adm_price_unset_hint: "Cette commande n'a pas encore de montant. Saisissez le montant convenu avec le client pour qu'il compte dans le chiffre d'affaires.",
     adm_price_set_hint: "Modifiez-le si vous convenez d’un autre montant. Enregistrer un champ vide efface le montant.",
@@ -2881,6 +2886,7 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     svcr_bonus_line2: "Les forfaits de croissance à grande échelle arrivent bientôt — contactez-nous pour un conseil anticipé.",
   },
   de: {
+    nav_blog: "Blog",
     adm_price_title: "Vereinbarter Betrag",
     adm_price_unset_hint: "Für diese Bestellung ist noch kein Betrag hinterlegt. Tragen Sie den vereinbarten Betrag ein, damit er in den Umsatz zählt.",
     adm_price_set_hint: "Ändern Sie ihn, wenn ein anderer Betrag vereinbart wurde. Leeres Feld speichern löscht den Betrag.",
@@ -3331,6 +3337,7 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     svcr_bonus_line2: "Große Wachstumspakete kommen bald — kontaktieren Sie uns für eine frühzeitige Beratung.",
   },
   es: {
+    nav_blog: "Blog",
     adm_price_title: "Importe acordado",
     adm_price_unset_hint: "Este pedido aún no tiene importe. Introduce el importe acordado con el cliente para que cuente en los ingresos.",
     adm_price_set_hint: "Cámbialo si acordáis otro importe. Guardar el campo vacío borra el importe.",
@@ -3781,6 +3788,7 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     svcr_bonus_line2: "Los paquetes de crecimiento a gran escala llegarán pronto — contáctanos para una consulta anticipada.",
   },
   zh: {
+    nav_blog: "文章",
     adm_price_title: "确定金额",
     adm_price_unset_hint: "该订单尚未填写金额。填入与客户谈定的金额后才会计入营收。",
     adm_price_set_hint: "若谈定其他金额可直接修改。留空保存将清除金额。",

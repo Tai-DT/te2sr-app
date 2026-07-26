@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LanguageSelector } from './LanguageSelector';
 import { useLanguage } from '@/lib/i18n/language-context';
-import { Layers, TestTube, Rocket, Star, LayoutDashboard, Menu, X, PlusCircle, User as UserIcon, LogOut, ShieldCheck, Package } from 'lucide-react';
+import { Layers, TestTube, Rocket, Star, LayoutDashboard, Menu, X, PlusCircle, User as UserIcon, LogOut, ShieldCheck, Package, BookOpen } from 'lucide-react';
 import { OrderModal } from './OrderModal';
 import { Logo } from './brand/Logo';
 import { useAuth } from '@/lib/auth';
@@ -23,6 +23,7 @@ export const Navbar: React.FC = () => {
     { href: '/services/testing', label: t('nav_testing'), icon: TestTube },
     { href: '/services/publishing', label: t('nav_publishing'), icon: Rocket },
     { href: '/services/promotion', label: t('nav_promotion'), icon: Star },
+    { href: '/blog', label: t('nav_blog'), icon: BookOpen },
   ];
 
   // Khách đã đăng nhập mới thấy mục theo dõi đơn — khách vãng lai bấm vào chỉ
