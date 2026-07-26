@@ -1,0 +1,76 @@
+# ══════════════════════════════════════════════════════════════
+#  Tự động build và đưa website lên Cloudflare Pages khi có thay đổi
+#
+#  Vì sao dùng GitHub Actions thay vì để Cloudflare tự nối Git:
+#  dự án Pages "te2sr" được tạo theo kiểu Direct Upload, mà Cloudflare KHÔNG
+#  cho chuyển một dự án Direct Upload sang chế độ nối Git. Muốn nối phải tạo
+#  dự án mới rồi gỡ te2sr.com sang đó — trong lúc gỡ, khách truy cập sẽ gặp
+#  lỗi và Cloudflare không cam kết bao lâu thì xong. Không đáng đánh đổi cho
+#  một website đang bán hàng. Cách này cho kết quả y hệt mà không đụng gì
+#  tới tên miền.
+#
+#  Sau khi cài xong: sửa file bất kỳ trên github.com → bấm Commit → khoảng
+#  2 phút sau website tự cập nhật. Không cần mở terminal.
+#
+#  Nếu một bản cập nhật bị lỗi: vào Cloudflare → Workers & Pages → te2sr →
+#  Deployments → bấm dấu ba chấm ở bản chạy tốt trước đó → Rollback.
+# ══════════════════════════════════════════════════════════════
+
+name: Đưa website lên Cloudflare Pages
+
+on:
+  push:
+    branches: [main]
+    # Đổi mã backend không cần build lại website tĩnh.
+    paths-ignore:
+      - 'backend/**'
+      - '**.md'
+  workflow_dispatch: # cho phép bấm chạy tay từ tab Actions
+
+# Nếu đẩy hai lần liên tiếp, huỷ lần chạy cũ để không có hai bản deploy
+# tranh nhau ghi đè — bản cuối cùng mới là bản đúng.
+concurrency:
+  group: deploy-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Cài thư viện
+        run: npm ci
+
+      - name: Build website tĩnh
+        env:
+          # Hai biến này được nhúng thẳng vào mã chạy trên trình duyệt lúc
+          # build. Thiếu hoặc sai là đăng nhập Google và gọi API sẽ hỏng —
+          # mà hỏng im lặng, không báo lỗi lúc build. Dùng Variables chứ
+          # không phải Secrets: chúng vốn công khai trong mã trình duyệt,
+          # và để Secrets thì log bị che, khó dò khi có sự cố.
+          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+          NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${{ vars.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}
+        run: npm run build
+
+      - name: Kiểm tra bản build trước khi đưa lên
+        run: |
+          test -f out/index.html      || { echo "Thiếu out/index.html"; exit 1; }
+          test -f out/sitemap.xml     || { echo "Thiếu sitemap.xml"; exit 1; }
+          test -f out/robots.txt      || { echo "Thiếu robots.txt"; exit 1; }
+          grep -q 'api.te2sr.com' out/_next/static/chunks/*.js \
+            || { echo "Bản build không trỏ tới api.te2sr.com — kiểm tra biến NEXT_PUBLIC_API_URL"; exit 1; }
+          echo "Bản build hợp lệ."
+
+      - name: Đưa lên Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy out --project-name=te2sr --branch=main
