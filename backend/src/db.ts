@@ -194,6 +194,22 @@ export async function updateOrderPayment(db: D1Database, id: string, field: 'pai
   return getOrderById(db, id);
 }
 
+/**
+ * Chốt giá cho đơn báo giá theo yêu cầu.
+ *
+ * Sáu trong mười dịch vụ (kiểm thử web, thiết kế web, làm app, SEO app,
+ * SEO web, quản lý page) không có giá niêm yết nên được tạo với
+ * package_price = NULL. Trước đây không có chỗ nào ghi giá sau khi tạo, mà
+ * adminStats lại tính `packagePrice ?? 0` — nên một hợp đồng $2.000 dù đã
+ * thu tiền vẫn cộng $0 vào doanh thu, mãi mãi.
+ *
+ * Truyền null để xoá giá, đưa đơn về trạng thái chờ báo giá.
+ */
+export async function updateOrderPrice(db: D1Database, id: string, price: number | null): Promise<Order | null> {
+  await db.prepare(`UPDATE orders SET package_price = ?, updated_at = ? WHERE id = ?`).bind(price, nowIso(), id).run();
+  return getOrderById(db, id);
+}
+
 /** Set (or clear) the start of the 14-day testing window. */
 export async function setTestingStarted(db: D1Database, id: string, value: string | null): Promise<Order | null> {
   await db.prepare(`UPDATE orders SET testing_started_at = ?, updated_at = ? WHERE id = ?`).bind(value, nowIso(), id).run();

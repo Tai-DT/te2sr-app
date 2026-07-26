@@ -139,6 +139,9 @@ export const api = {
     request<{ order: Order }>(`/api/orders/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status }) }).then((d) => d.order),
   updateOrderPayment: (id: string, field: 'paid_deposit' | 'paid_final', value: boolean) =>
     request<{ order: Order }>(`/api/orders/${id}/payment`, { method: 'PATCH', body: JSON.stringify({ field, value }) }).then((d) => d.order),
+  /** Chốt giá cho đơn báo giá theo yêu cầu. null = xoá giá. */
+  updateOrderPrice: (id: string, price: number | null) =>
+    request<{ order: Order }>(`/api/orders/${id}/price`, { method: 'PATCH', body: JSON.stringify({ price }) }).then((d) => d.order),
   setTesting: (id: string, action: 'start' | 'reset', startedAt?: string) =>
     request<{ order: Order }>(`/api/orders/${id}/testing`, { method: 'PATCH', body: JSON.stringify({ action, startedAt }) }).then((d) => d.order),
 

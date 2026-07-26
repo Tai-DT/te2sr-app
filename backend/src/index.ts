@@ -343,6 +343,25 @@ app.patch('/api/orders/:id/payment', requireAdmin, async (c) => {
   }
 });
 
+// Chốt giá cho đơn báo giá theo yêu cầu (chỉ quản trị).
+app.patch('/api/orders/:id/price', requireAdmin, async (c) => {
+  try {
+    const { price } = await c.req.json();
+    // null = xoá giá. Ngoài ra phải là số hữu hạn, không âm.
+    let value: number | null = null;
+    if (price !== null && price !== undefined && price !== '') {
+      const n = Number(price);
+      if (!Number.isFinite(n) || n < 0) return c.json({ success: false, error: M(c, 'invalid_price') }, 400);
+      value = Math.round(n * 100) / 100;
+    }
+    const order = await db.updateOrderPrice(c.env.DB, c.req.param('id')!, value);
+    if (!order) return c.json({ success: false, error: M(c, 'order_not_found') }, 404);
+    return c.json({ success: true, order });
+  } catch {
+    return c.json({ success: false, error: M(c, 'price_update_failed') }, 500);
+  }
+});
+
 // Manually start / reset the 14-day testing countdown (admin).
 app.patch('/api/orders/:id/testing', requireAdmin, async (c) => {
   try {

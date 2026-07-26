@@ -177,6 +177,9 @@ export default function AdminPortalPage() {
     }
   };
 
+  const [priceInput, setPriceInput] = useState('');
+  const [savingPrice, setSavingPrice] = useState(false);
+
   const handleTogglePayment = async (orderId: string, field: 'paid_deposit' | 'paid_final', value: boolean) => {
     try {
       const updated = await api.updateOrderPayment(orderId, field, value);
@@ -184,6 +187,23 @@ export default function AdminPortalPage() {
       setSelectedOrder((prev) => (prev?.id === orderId ? updated : prev));
     } catch (err) {
       alert(err instanceof ApiError ? err.message : t('adm_payment_update_failed'));
+    }
+  };
+
+  const handleSetPrice = async (orderId: string, raw: string) => {
+    const trimmed = raw.trim();
+    setSavingPrice(true);
+    try {
+      // Ô trống = xoá giá, đưa đơn về trạng thái chờ báo giá.
+      const updated = await api.updateOrderPrice(orderId, trimmed === '' ? null : Number(trimmed));
+      setOrders((prev) => prev.map((o) => (o.id === orderId ? updated : o)));
+      setSelectedOrder((prev) => (prev?.id === orderId ? updated : prev));
+      setPriceInput('');
+      // Thống kê tính tại chỗ từ `orders` nên setOrders ở trên đã làm nó tự cập nhật.
+    } catch (err) {
+      alert(err instanceof ApiError ? err.message : t('adm_price_update_failed'));
+    } finally {
+      setSavingPrice(false);
     }
   };
 
@@ -520,6 +540,51 @@ export default function AdminPortalPage() {
                             <span className="text-slate-900 font-extrabold text-right">{row.value}</span>
                           </div>
                         ))}
+
+                        {/* Chốt giá cho đơn báo giá theo yêu cầu.
+                            Sáu dịch vụ không có giá niêm yết nên đơn tạo ra với
+                            giá NULL; không có ô này thì dù thu tiền xong, doanh
+                            thu vẫn cộng 0 vì adminStats dùng packagePrice ?? 0. */}
+                        {isAdmin && (
+                          <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl space-y-2">
+                            <div className="flex items-center gap-1.5 text-amber-900 font-extrabold text-[11px]">
+                              <DollarSign className="w-3.5 h-3.5" />
+                              <span>{t('adm_price_title')}</span>
+                            </div>
+                            <p className="text-[11px] text-amber-900 leading-relaxed">
+                              {selectedOrder.packagePrice === null
+                                ? t('adm_price_unset_hint')
+                                : t('adm_price_set_hint')}
+                            </p>
+                            <form
+                              onSubmit={(e) => {
+                                e.preventDefault();
+                                handleSetPrice(selectedOrder.id, priceInput);
+                              }}
+                              className="flex gap-2"
+                            >
+                              <div className="relative flex-1 min-w-0">
+                                <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs font-bold">$</span>
+                                <input
+                                  type="number"
+                                  min="0"
+                                  step="1"
+                                  value={priceInput}
+                                  onChange={(e) => setPriceInput(e.target.value)}
+                                  placeholder={selectedOrder.packagePrice !== null ? String(selectedOrder.packagePrice) : '0'}
+                                  className="w-full pl-6 pr-2 py-2 rounded-lg border border-amber-300 bg-white text-xs font-bold text-slate-900 focus:outline-none focus:border-amber-500"
+                                />
+                              </div>
+                              <button
+                                type="submit"
+                                disabled={savingPrice}
+                                className="shrink-0 px-3 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white text-[11px] font-extrabold transition-colors"
+                              >
+                                {savingPrice ? '…' : t('adm_price_save')}
+                              </button>
+                            </form>
+                          </div>
+                        )}
 
                         {/* Payment status (admin can toggle) */}
                         <div className="grid grid-cols-2 gap-2 pt-1">

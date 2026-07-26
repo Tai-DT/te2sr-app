@@ -360,6 +360,27 @@ const MESSAGES = {
     zh: '更新倒计时失败，请重试。',
   },
 
+  invalid_price: {
+    vi: 'Giá không hợp lệ.',
+    en: 'That price is not valid.',
+    ja: '金額が正しくありません。',
+    ko: '올바르지 않은 금액입니다.',
+    fr: 'Ce montant n’est pas valide.',
+    de: 'Dieser Betrag ist ungültig.',
+    es: 'Ese importe no es válido.',
+    zh: '金额无效。',
+  },
+  price_update_failed: {
+    vi: 'Cập nhật giá thất bại.',
+    en: 'Could not update the price. Please try again.',
+    ja: '金額を更新できませんでした。もう一度お試しください。',
+    ko: '금액을 변경하지 못했습니다. 다시 시도해 주세요.',
+    fr: 'Impossible de mettre à jour le montant. Veuillez réessayer.',
+    de: 'Der Betrag konnte nicht aktualisiert werden. Bitte erneut versuchen.',
+    es: 'No se pudo actualizar el importe. Inténtalo de nuevo.',
+    zh: '更新金额失败，请重试。',
+  },
+
   // ── Tin nhắn ──
   empty_message: {
     vi: 'Nội dung tin nhắn trống.',
