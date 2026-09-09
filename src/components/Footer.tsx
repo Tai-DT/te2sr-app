@@ -7,6 +7,7 @@ import { useLanguage } from '@/lib/i18n/language-context';
 import { ShieldCheck, Globe, Star, TestTube, Rocket } from 'lucide-react';
 import { Logo } from './brand/Logo';
 import { FloatingSocialChat } from './FloatingSocialChat';
+import { SOCIAL_LINKS as socialLinks } from '@/lib/social';
 
 export const Footer: React.FC = () => {
   const { t } = useLanguage();
@@ -92,9 +93,49 @@ export const Footer: React.FC = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto pt-6 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
+      <div className="max-w-7xl mx-auto pt-6 border-t border-slate-200 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 gap-4">
         <p>{t('footer_copy')}</p>
-        <p className="mt-2 sm:mt-0 text-[11px] text-slate-400">
+
+        {/* Social Network Connections */}
+        <div className="flex flex-wrap items-center justify-center gap-3.5 text-xs font-bold">
+          <a
+            href={socialLinks.facebook}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-slate-600 hover:text-brand-blue transition-colors"
+          >
+            Facebook Page
+          </a>
+          <span className="text-slate-300">·</span>
+          <a
+            href={socialLinks.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-slate-600 hover:text-slate-900 transition-colors"
+          >
+            GitHub Guide
+          </a>
+          <span className="text-slate-300">·</span>
+          <a
+            href={socialLinks.x}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-slate-600 hover:text-slate-900 transition-colors"
+          >
+            𝕏 (Twitter)
+          </a>
+          <span className="text-slate-300">·</span>
+          <a
+            href={socialLinks.messenger}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-slate-600 hover:text-brand-blue transition-colors"
+          >
+            Messenger
+          </a>
+        </div>
+
+        <p className="text-[11px] text-slate-400">
           TE2SR · Testing → Store Release
         </p>
       </div>
