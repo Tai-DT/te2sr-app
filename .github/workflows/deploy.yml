@@ -24,8 +24,8 @@ on:
     # Đổi mã backend không cần build lại website tĩnh.
     paths-ignore:
       - 'backend/**'
-      - '**.md'
-  workflow_dispatch: # cho phép bấm chạy tay từ tab Actions
+      - '*.md'
+    workflow_dispatch: # cho phép bấm chạy tay từ tab Actions
 
 # Nếu đẩy hai lần liên tiếp, huỷ lần chạy cũ để không có hai bản deploy
 # tranh nhau ghi đè — bản cuối cùng mới là bản đúng.

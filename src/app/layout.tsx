@@ -53,6 +53,139 @@ export const metadata: Metadata = {
   manifest: '/manifest.webmanifest',
 };
 
+const JSON_LD = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': 'https://te2sr.com/#organization',
+      name: 'TE2SR',
+      url: 'https://te2sr.com',
+      logo: 'https://te2sr.com/logo.png',
+      sameAs: [
+        'https://www.facebook.com/profile.php?id=61592332571131',
+        'https://www.facebook.com/p/TE2SR-Google-Play-Closed-Testing-App-Store-Publishing-61592332571131/',
+      ],
+      description:
+        'Professional Google Play 12 testers 14 days closed testing and App Store publishing service on real devices.',
+      contactPoint: {
+        '@type': 'ContactPoint',
+        email: 'admin@te2sr.com',
+        contactType: 'customer support',
+        availableLanguage: [
+          'Vietnamese',
+          'English',
+          'Japanese',
+          'Korean',
+          'French',
+          'German',
+          'Spanish',
+          'Chinese',
+        ],
+      },
+    },
+    {
+      '@type': 'WebSite',
+      '@id': 'https://te2sr.com/#website',
+      url: 'https://te2sr.com',
+      name: 'TE2SR',
+      publisher: {
+        '@id': 'https://te2sr.com/#organization',
+      },
+    },
+    {
+      '@type': 'Service',
+      '@id': 'https://te2sr.com/#service-google-play',
+      name: 'Google Play Closed Testing Service (12 Testers / 14 Days)',
+      serviceType: 'Mobile App QA & Testing',
+      provider: {
+        '@id': 'https://te2sr.com/#organization',
+      },
+      description:
+        '12 testers for 14 continuous days on real Android devices to meet Google Play Console requirements for personal developer accounts.',
+      offers: {
+        '@type': 'Offer',
+        price: '50.00',
+        priceCurrency: 'USD',
+        availability: 'https://schema.org/InStock',
+        description: 'Flexible 2-step payment: 50% once 12 testers start, 50% when app is live.',
+      },
+    },
+    {
+      '@type': 'Service',
+      '@id': 'https://te2sr.com/#service-app-store',
+      name: 'App Store Publishing Service',
+      serviceType: 'Mobile App Deployment',
+      provider: {
+        '@id': 'https://te2sr.com/#organization',
+      },
+      description:
+        'Complete App Store Connect release management, metadata, screenshots, privacy policy declaration, and Apple Guideline review rejection resolution.',
+      offers: {
+        '@type': 'Offer',
+        price: '70.00',
+        priceCurrency: 'USD',
+        availability: 'https://schema.org/InStock',
+      },
+    },
+    {
+      '@type': 'Service',
+      '@id': 'https://te2sr.com/#service-both-stores',
+      name: 'Google Play Closed Testing & App Store Publishing Combo',
+      serviceType: 'Mobile App QA & Store Deployment',
+      provider: {
+        '@id': 'https://te2sr.com/#organization',
+      },
+      description:
+        'Complete dual-store package covering 12 testers x 14 days on Google Play and full App Store deployment.',
+      offers: {
+        '@type': 'Offer',
+        price: '100.00',
+        priceCurrency: 'USD',
+        availability: 'https://schema.org/InStock',
+      },
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': 'https://te2sr.com/#faq',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'How many testers does Google Play require for closed testing?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Google Play requires at least 12 opted-in testers for 14 continuous days for personal developer accounts. This rule was officially updated in December 2024 from the previous 20-tester rule.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Does TE2SR use real devices or emulators?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'TE2SR only uses real physical Android devices with distinct Google accounts and active daily engagement. We never use emulators or bots, ensuring zero risk of account suspension.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How does the 2-step payment work?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'You only pay 50% after all 12 testers have successfully installed and joined the closed test track, and the remaining 50% when your app is officially granted production access and goes live.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is the refund policy?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'We offer a 100% full refund if we fail to maintain 12 active testers across the full 14-day duration.',
+          },
+        },
+      ],
+    },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -66,6 +199,10 @@ export default function RootLayout({
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:ital,wght@0,700;0,800;0,900;1,800;1,900&display=swap"
           rel="stylesheet"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
         />
       </head>
       <body>

@@ -32,6 +32,13 @@ export interface PostMeta {
   tags: string[];
   /** Số phút đọc ước tính. */
   readingMinutes: number;
+  /**
+   * Ngôn ngữ bài viết. Blog phục vụ hai tệp khác nhau: bài tiếng Việt ăn tìm
+   * kiếm Google tại Việt Nam, bài tiếng Anh là nơi khách quốc tế từ Facebook
+   * và cộng đồng lập trình viên đáp xuống. Trộn chung một danh sách thì cả hai
+   * tệp đều thấy nửa số bài không đọc được, nên trang danh sách tách hai khối.
+   */
+  lang: 'vi' | 'en';
 }
 
 export interface Post extends PostMeta {
@@ -67,6 +74,7 @@ function readPostFile(slug: string): Post | null {
     updated: data.updated ? String(data.updated) : undefined,
     cover: data.cover ? String(data.cover) : undefined,
     tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
+    lang: data.lang === 'en' ? 'en' : 'vi',
     readingMinutes: estimateReadingMinutes(content),
     html: marked.parse(content, { async: false }) as string,
   };

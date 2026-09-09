@@ -6,7 +6,12 @@
     "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "brand": "node scripts/brand/build.js && node scripts/brand/platforms.js && node scripts/brand/covers.js && node scripts/brand/proof.js",
+    "brand:web": "node scripts/brand/build.js",
+    "brand:social": "node scripts/brand/platforms.js",
+    "brand:bia": "node scripts/brand/covers.js",
+    "brand:bang-chung": "node scripts/brand/proof.js"
   },
   "dependencies": {
     "clsx": "^2.1.1",
