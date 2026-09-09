@@ -10,10 +10,11 @@ export const FloatingSocialChat: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const channels = [
-    { key: 'zalo', href: socialLinks.zalo, label: t('chat_channel_zalo'), badge: 'Z', badgeClass: 'bg-blue-500', wrap: 'bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-700' },
+    { key: 'telegram', href: socialLinks.telegram, label: 'Telegram (@te2sr)', badge: 'TG', badgeClass: 'bg-sky-500', wrap: 'bg-sky-50 hover:bg-sky-100 border-sky-200 text-sky-700' },
+    { key: 'messenger', href: socialLinks.messenger, label: t('chat_channel_messenger'), badge: 'FB', badgeClass: 'bg-violet-500', wrap: 'bg-violet-50 hover:bg-violet-100 border-violet-200 text-violet-700' },
     { key: 'whatsapp', href: socialLinks.whatsapp, label: t('chat_channel_whatsapp'), badge: 'WA', badgeClass: 'bg-emerald-500', wrap: 'bg-emerald-50 hover:bg-emerald-100 border-emerald-200 text-emerald-700' },
     { key: 'x', href: socialLinks.x, label: t('chat_channel_x'), badge: '𝕏', badgeClass: 'bg-slate-900', wrap: 'bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-800' },
-    { key: 'messenger', href: socialLinks.messenger, label: t('chat_channel_messenger'), badge: 'FB', badgeClass: 'bg-violet-500', wrap: 'bg-violet-50 hover:bg-violet-100 border-violet-200 text-violet-700' },
+    { key: 'zalo', href: socialLinks.zalo, label: t('chat_channel_zalo'), badge: 'Z', badgeClass: 'bg-blue-500', wrap: 'bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-700' },
   ];
 
   return (

@@ -117,12 +117,30 @@ export const Footer: React.FC = () => {
           </a>
           <span className="text-slate-300">·</span>
           <a
+            href={socialLinks.telegram}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-slate-600 hover:text-sky-600 transition-colors"
+          >
+            Telegram
+          </a>
+          <span className="text-slate-300">·</span>
+          <a
             href={socialLinks.x}
             target="_blank"
             rel="noopener noreferrer"
             className="text-slate-600 hover:text-slate-900 transition-colors"
           >
             𝕏 (Twitter)
+          </a>
+          <span className="text-slate-300">·</span>
+          <a
+            href={socialLinks.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-slate-600 hover:text-blue-700 transition-colors"
+          >
+            LinkedIn
           </a>
           <span className="text-slate-300">·</span>
           <a

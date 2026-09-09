@@ -65,6 +65,10 @@ const JSON_LD = {
       sameAs: [
         'https://www.facebook.com/profile.php?id=61592332571131',
         'https://www.facebook.com/p/TE2SR-Google-Play-Closed-Testing-App-Store-Publishing-61592332571131/',
+        'https://github.com/Tai-DT/awesome-google-play-closed-testing',
+        'https://x.com/_te2sr',
+        'https://t.me/te2sr',
+        'https://www.linkedin.com/company/te2sr',
       ],
       description:
         'Professional Google Play 12 testers 14 days closed testing and App Store publishing service on real devices.',

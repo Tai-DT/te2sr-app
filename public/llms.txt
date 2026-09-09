@@ -39,6 +39,10 @@ At least 14 days from the date Google reviews and approves the closed testing re
 - App Testing: https://te2sr.com/services/testing
 - Store Publishing: https://te2sr.com/services/publishing
 - Official Facebook: https://www.facebook.com/p/TE2SR-Google-Play-Closed-Testing-App-Store-Publishing-61592332571131/
+- GitHub Community: https://github.com/Tai-DT/awesome-google-play-closed-testing
+- Telegram Support: https://t.me/te2sr
+- Twitter / X: https://x.com/_te2sr
+- LinkedIn: https://www.linkedin.com/company/te2sr
 - Contact: admin@te2sr.com
 
 ## Supported Languages
