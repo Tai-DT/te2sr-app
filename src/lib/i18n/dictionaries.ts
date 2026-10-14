@@ -172,7 +172,7 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     
     home_svc_testing_feat1: "TestFlight iOS & Android Internal",
     
-    home_svc_testing_feat2: "12 Testers thực tế đếm 14 ngày",
+    home_svc_testing_feat2: "12+ tester opt-in liên tục 14 ngày, tương tác thật",
     
     home_svc_testing_feat3: "Báo cáo Crash, Bug & UI/UX",
     
@@ -938,7 +938,7 @@ export const DICTIONARIES: Record<LanguageCode, Record<string, string>> = {
     
     home_svc_testing_feat1: "TestFlight iOS & Android Internal",
     
-    home_svc_testing_feat2: "12 real testers over 14 days",
+    home_svc_testing_feat2: "12+ testers opted-in 14 consecutive days, real engagement",
     
     home_svc_testing_feat3: "Crash, Bug & UI/UX reports",
     
