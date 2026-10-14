@@ -302,7 +302,7 @@ export default function AdminPortalPageClient() {
             </div>
             <button
               onClick={openAuthModal}
-              className="px-8 py-3 rounded-2xl bg-brand-blue text-white font-extrabold text-sm shadow-brand-blue hover:bg-blue-600 transition-all"
+              className="px-8 py-3 rounded-2xl bg-brand-blue text-white font-extrabold text-sm shadow-brand-blue hover:bg-brand-blue transition-all"
             >
               {t('adm_auth_button')}
             </button>
@@ -355,7 +355,7 @@ export default function AdminPortalPageClient() {
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                   {[
                     { label: t('adm_stat_total_orders'), value: totalOrders, icon: Package, color: 'text-brand-blue', change: `${totalOrders} ${t('adm_unit_orders')}` },
-                    { label: t('adm_stat_in_progress'), value: inProgress, icon: Activity, color: 'text-blue-700', change: `${inProgress} ${t('adm_active')}` },
+                    { label: t('adm_stat_in_progress'), value: inProgress, icon: Activity, color: 'text-brand-blue', change: `${inProgress} ${t('adm_active')}` },
                     { label: t('adm_stat_completed'), value: completed, icon: CheckCircle2, color: 'text-emerald-700', change: `${Math.round((completed / Math.max(totalOrders, 1)) * 100)}%` },
                     { label: isAdmin ? t('adm_stat_revenue') : t('adm_stat_pending'), value: isAdmin ? revenue : pending, icon: isAdmin ? DollarSign : Clock, color: 'text-amber-700', change: isAdmin ? t('adm_collected') : t('adm_needs_action'), prefix: isAdmin ? '$' : '' },
                   ].map((stat, i) => {
@@ -639,7 +639,7 @@ export default function AdminPortalPageClient() {
                                   onChange={(e) => setTestingInput(e.target.value)}
                                   className="flex-1 min-w-0 px-2 py-1.5 bg-white border border-slate-300 rounded-lg text-[11px] font-semibold text-slate-900 focus:outline-none focus:border-brand-blue"
                                 />
-                                <button onClick={() => handleSetTesting(selectedOrder.id, 'start')} className="px-2.5 py-1.5 rounded-lg bg-brand-blue text-white text-[11px] font-extrabold hover:bg-blue-600 shrink-0 transition-colors">
+                                <button onClick={() => handleSetTesting(selectedOrder.id, 'start')} className="px-2.5 py-1.5 rounded-lg bg-brand-blue text-white text-[11px] font-extrabold hover:bg-brand-blue shrink-0 transition-colors">
                                   {t('adm_start_countdown')}
                                 </button>
                               </div>
@@ -748,8 +748,8 @@ export default function AdminPortalPageClient() {
                     {/* Quick contact channels */}
                     <div className="flex items-center gap-2 px-5 py-2.5 border-b border-slate-200 bg-white">
                       <span className="text-[11px] font-bold text-slate-500">{t('adm_quick_contact')}</span>
-                      <a href={SOCIAL_LINKS.zalo} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 text-[11px] font-extrabold hover:bg-blue-100 transition-colors">
-                        <span className="w-4 h-4 rounded bg-blue-500 text-white flex items-center justify-center text-[9px] font-bold">Z</span>Zalo
+                      <a href={SOCIAL_LINKS.zalo} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-50 border border-blue-200 text-brand-blue text-[11px] font-extrabold hover:bg-blue-100 transition-colors">
+                        <span className="w-4 h-4 rounded bg-brand-accent text-white flex items-center justify-center text-[9px] font-bold">Z</span>Zalo
                       </a>
                       <a href={SOCIAL_LINKS.whatsapp} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-[11px] font-extrabold hover:bg-emerald-100 transition-colors">
                         <span className="w-4 h-4 rounded bg-emerald-500 text-white flex items-center justify-center text-[8px] font-bold">WA</span>WhatsApp
@@ -793,7 +793,7 @@ export default function AdminPortalPageClient() {
                         placeholder={isAdmin ? t('adm_input_admin') : t('adm_input_client')}
                         className="flex-1 px-4 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 placeholder-slate-500 focus:outline-none focus:border-brand-blue focus:bg-white transition-colors"
                       />
-                      <button type="submit" disabled={!inputMessage.trim() || sending} className="p-2.5 rounded-xl bg-brand-blue text-white shadow-brand-blue hover:bg-blue-600 transition-all disabled:opacity-50">
+                      <button type="submit" disabled={!inputMessage.trim() || sending} className="p-2.5 rounded-xl bg-brand-blue text-white shadow-brand-blue hover:bg-brand-blue transition-all disabled:opacity-50">
                         {sending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                       </button>
                     </form>

@@ -137,7 +137,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
               </p>
               <div className="grid grid-cols-3 gap-2">
                 {([
-                  { href: SOCIAL_LINKS.zalo, badge: 'Z', badgeClass: 'bg-blue-500', wrap: 'bg-blue-50 hover:bg-blue-100 border-blue-200 text-blue-700' },
+                  { href: SOCIAL_LINKS.zalo, badge: 'Z', badgeClass: 'bg-brand-accent', wrap: 'bg-blue-50 hover:bg-blue-100 border-blue-200 text-brand-blue' },
                   { href: `${SOCIAL_LINKS.whatsapp}?text=${encodeURIComponent(t('order_wa_message').replace('{order}', submittedOrder.id))}`, badge: 'WA', badgeClass: 'bg-emerald-500', wrap: 'bg-emerald-50 hover:bg-emerald-100 border-emerald-200 text-emerald-700' },
                   { href: SOCIAL_LINKS.messenger, badge: 'FB', badgeClass: 'bg-violet-500', wrap: 'bg-violet-50 hover:bg-violet-100 border-violet-200 text-violet-700' },
                 ] as { href: string; badge: string; badgeClass: string; wrap: string }[]).map((ch) => (
@@ -213,7 +213,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
             {user ? (
               <button
                 onClick={() => { resetForm(); router.push('/orders'); }}
-                className="w-full py-3 rounded-xl bg-brand-blue text-white font-extrabold text-xs shadow-brand-blue hover:bg-blue-600 transition-all"
+                className="w-full py-3 rounded-xl bg-brand-blue text-white font-extrabold text-xs shadow-brand-blue hover:bg-brand-blue transition-all"
               >
                 {t('order_view_my_orders')}
               </button>
@@ -418,7 +418,7 @@ export const OrderModal: React.FC<OrderModalProps> = ({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3.5 rounded-xl bg-brand-blue font-extrabold text-white text-sm shadow-brand-blue hover:bg-blue-600 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+              className="w-full py-3.5 rounded-xl bg-brand-blue font-extrabold text-white text-sm shadow-brand-blue hover:bg-brand-blue transition-all flex items-center justify-center gap-2 disabled:opacity-50"
             >
               <Send className="w-4 h-4" />
               <span>{isSubmitting ? t('order_submitting') : t('order_submit')}</span>

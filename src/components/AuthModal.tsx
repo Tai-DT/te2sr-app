@@ -201,7 +201,7 @@ export const AuthModal: React.FC = () => {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-3 rounded-xl bg-brand-blue text-white text-xs font-bold shadow-brand-blue hover:bg-blue-600 hover:scale-[1.02] transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:hover:scale-100"
+            className="w-full py-3 rounded-xl bg-brand-blue text-white text-xs font-bold shadow-brand-blue hover:bg-brand-blue hover:scale-[1.02] transition-all flex items-center justify-center gap-2 disabled:opacity-60 disabled:hover:scale-100"
           >
             {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
             <span>{isRegister ? t('auth_submit_register') : t('auth_submit_login')}</span>

@@ -32,7 +32,7 @@ export default function TestingPageClient() {
           </p>
           <button
             onClick={() => setIsOrderModalOpen(true)}
-            className="px-6 py-3 rounded-xl bg-brand-blue hover:bg-blue-600 font-extrabold text-white text-sm shadow-brand-blue hover:scale-[1.02] transition-all"
+            className="px-6 py-3 rounded-xl bg-brand-blue hover:bg-brand-blue font-extrabold text-white text-sm shadow-brand-blue hover:scale-[1.02] transition-all"
           >
             {t('svct_cta')}
           </button>
