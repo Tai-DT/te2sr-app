@@ -18,7 +18,10 @@ backend/.wrangler/
 
 # Temp screenshots
 *.png
-!public/*.png
+# Ảnh trong /public phải được track ở MỌI cấp thư mục — ngoại lệ cũ chỉ cứu
+# public/*.png gốc nên public/payment/qr-bank.png từng bị ignore, QR chỉ tồn
+# tại trên bản deploy live (sẽ mất ở deploy sau).
+!public/**/*.png
 
 # IDE / OS files
 .DS_Store

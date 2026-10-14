@@ -137,24 +137,28 @@ export function orderConfirmationMail(order: Order): { subject: string; html: st
        <b>Ứng dụng:</b> ${esc(order.appName)}<br/>
        <b>Gói:</b> ${esc(order.platform)} ($${order.packagePrice})`;
 
+  // Luồng tư vấn-trước: mọi yêu cầu đều là lead, kỹ sư liên hệ trong 24h,
+  // thanh toán chỉ sau khi hai bên chốt phương án — không đòi 50% ngay.
   const nextStep = isQuote
     ? `<p>Đây là dịch vụ báo giá theo yêu cầu — <b>bạn chưa cần thanh toán gì ở bước này</b>.
        Kỹ sư TE2SR sẽ đọc yêu cầu và liên hệ báo giá trong vòng 24 giờ. Bạn có thể bổ sung
        thông tin bất cứ lúc nào trong khung trao đổi của đơn.</p>`
-    : `<p>Đơn thanh toán làm 2 đợt: 50% để bắt đầu và 50% khi app đã live trên Store.
-       Bạn có thể theo dõi tiến độ và trao đổi trực tiếp với kỹ sư trong cổng khách hàng.</p>`;
+    : `<p><b>Bạn chưa cần thanh toán gì ở bước này.</b> Kỹ sư TE2SR sẽ liên hệ tư vấn trong
+       vòng 24 giờ; sau khi hai bên chốt phương án, thanh toán linh hoạt theo tiến độ
+       (thường 50% để bắt đầu, 50% khi app live trên Store). Bạn có thể trao đổi trực
+       tiếp với kỹ sư trong cổng khách hàng hoặc qua Zalo/WhatsApp kèm mã yêu cầu.</p>`;
 
-  const html = layout(isQuote ? 'Đã nhận yêu cầu báo giá ✅' : 'Đã nhận yêu cầu dịch vụ ✅', `
-    <p>Cảm ơn bạn đã đăng ký dịch vụ TE2SR.</p>
+  const html = layout(isQuote ? 'Đã nhận yêu cầu báo giá ✅' : 'Đã nhận yêu cầu tư vấn ✅', `
+    <p>Cảm ơn bạn đã gửi yêu cầu cho TE2SR.</p>
     <p>${rows}</p>
     ${nextStep}`);
 
   const text = isQuote
     ? `Da nhan yeu cau bao gia ${order.id} - ${order.appName}. Chua can thanh toan. Ky su se lien he trong 24 gio.`
-    : `Da nhan don ${order.id} - ${order.appName} (${order.platform}). Cam on ban da dung TE2SR.`;
+    : `Da nhan yeu cau ${order.id} - ${order.appName} (${order.platform}). Chua can thanh toan - ky su se lien he tu van trong 24 gio.`;
 
   return {
-    subject: isQuote ? `TE2SR · Đã nhận yêu cầu báo giá ${order.id}` : `TE2SR · Đã nhận đơn ${order.id}`,
+    subject: isQuote ? `TE2SR · Đã nhận yêu cầu báo giá ${order.id}` : `TE2SR · Đã nhận yêu cầu ${order.id}`,
     html,
     text,
   };
