@@ -20,10 +20,10 @@ export const ServiceIllustration: React.FC<{ type: IllustrationType; className?:
           </linearGradient>
         </defs>
         <rect width="320" height="160" rx="16" fill="url(#tg)" />
-        <rect x="118" y="26" width="84" height="112" rx="14" fill="#fff" stroke="#0071E3" strokeWidth="2" />
+        <rect x="118" y="26" width="84" height="112" rx="14" fill="#fff" stroke="#0037B0" strokeWidth="2" />
         <rect x="130" y="42" width="60" height="8" rx="4" fill="#CFE3FF" />
         <rect x="130" y="58" width="44" height="8" rx="4" fill="#E5EEFB" />
-        <circle cx="160" cy="98" r="20" fill="#0071E3" />
+        <circle cx="160" cy="98" r="20" fill="#0037B0" />
         <path d="M151 98l6 6 12-13" stroke="#fff" strokeWidth="3.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
         <circle cx="66" cy="60" r="16" fill="#fff" stroke="#10B981" strokeWidth="2" />
         <path d="M59 60l4.5 4.5 9-9.5" stroke="#10B981" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
@@ -42,14 +42,14 @@ export const ServiceIllustration: React.FC<{ type: IllustrationType; className?:
           </linearGradient>
         </defs>
         <rect width="320" height="160" rx="16" fill="url(#pg)" />
-        <path d="M160 30c14 12 22 30 22 52 0 14-8 24-22 30-14-6-22-16-22-30 0-22 8-40 22-52z" fill="#0071E3" />
+        <path d="M160 30c14 12 22 30 22 52 0 14-8 24-22 30-14-6-22-16-22-30 0-22 8-40 22-52z" fill="#0037B0" />
         <circle cx="160" cy="78" r="9" fill="#fff" />
-        <path d="M143 118l-10 16 20-6M177 118l10 16-20-6" fill="#2997FF" />
-        <g stroke="#0071E3" strokeWidth="2" opacity="0.5">
+        <path d="M143 118l-10 16 20-6M177 118l10 16-20-6" fill="#1D4ED8" />
+        <g stroke="#0037B0" strokeWidth="2" opacity="0.5">
           <path d="M96 44l6-6M224 44l-6-6M104 96l-8 2M216 96l8 2" strokeLinecap="round" />
         </g>
-        <rect x="44" y="120" width="52" height="24" rx="6" fill="#fff" stroke="#0071E3" strokeWidth="1.5" />
-        <text x="70" y="136" fontSize="11" fontWeight="800" fill="#0071E3" textAnchor="middle">iOS</text>
+        <rect x="44" y="120" width="52" height="24" rx="6" fill="#fff" stroke="#0037B0" strokeWidth="1.5" />
+        <text x="70" y="136" fontSize="11" fontWeight="800" fill="#0037B0" textAnchor="middle">iOS</text>
         <rect x="224" y="120" width="52" height="24" rx="6" fill="#fff" stroke="#10B981" strokeWidth="1.5" />
         <text x="250" y="136" fontSize="10" fontWeight="800" fill="#0E9F6E" textAnchor="middle">Play</text>
       </svg>
@@ -71,7 +71,7 @@ export const ServiceIllustration: React.FC<{ type: IllustrationType; className?:
         ))}
         <rect x="70" y="104" width="180" height="10" rx="5" fill="#F59E0B" opacity="0.25" />
         <rect x="70" y="104" width="150" height="10" rx="5" fill="#F59E0B" />
-        <path d="M64 128l30-14 26 10 30-20 26 12 30-16" stroke="#0071E3" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M64 128l30-14 26 10 30-20 26 12 30-16" stroke="#0037B0" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     );
   }
@@ -87,8 +87,8 @@ export const ServiceIllustration: React.FC<{ type: IllustrationType; className?:
         <rect width="320" height="160" rx="16" fill="url(#eg)" />
         <rect x="96" y="46" width="128" height="88" rx="10" fill="#fff" stroke="#1D1D1F" strokeWidth="2" />
         {[112, 140, 168, 196].map((x) => [66, 90].map((y) => <rect key={`${x}-${y}`} x={x} y={y} width="14" height="14" rx="3" fill="#CBD5E1" />))}
-        <rect x="148" y="118" width="24" height="16" rx="3" fill="#0071E3" />
-        <circle cx="160" cy="32" r="10" fill="#0071E3" />
+        <rect x="148" y="118" width="24" height="16" rx="3" fill="#0037B0" />
+        <circle cx="160" cy="32" r="10" fill="#0037B0" />
         <path d="M156 32l3 3 6-6" stroke="#fff" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     );

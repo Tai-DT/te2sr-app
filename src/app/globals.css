@@ -21,8 +21,8 @@
 
   --apple-blue: #0037B0;
   --apple-blue-hover: #1D4ED8;
-  --apple-dark: #1D1D1F;
-  --apple-border: #E5E5EA;
+  --apple-dark: #131B2E;
+  --apple-border: #DAE2FD;
 
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-snappy: cubic-bezier(0.215, 0.610, 0.355, 1.000);
@@ -50,8 +50,8 @@ body {
 
 /* Selection */
 ::selection {
-  background: rgba(0, 113, 227, 0.15);
-  color: #0071E3;
+  background: rgba(0, 55, 176, 0.15);
+  color: #0037B0;
 }
 
 /* ═══════════════════════════════════════════════
@@ -62,7 +62,7 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #F5F5F7;
+  background: #FAF8FF;
 }
 ::-webkit-scrollbar-thumb {
   background: #C7C7CC;
@@ -79,7 +79,7 @@ body {
 /* Clean White Card */
 .glass-panel {
   background: #FFFFFF;
-  border: 1px solid #E5E5EA;
+  border: 1px solid #DAE2FD;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
@@ -95,20 +95,20 @@ body {
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid #E5E5EA;
+  border-bottom: 1px solid #DAE2FD;
 }
 
 /* Interactive Glass Button */
 .glass-button {
-  background: #F5F5F7;
-  border: 1px solid #E5E5EA;
-  color: #1D1D1F;
+  background: #FAF8FF;
+  border: 1px solid #DAE2FD;
+  color: #131B2E;
   transition: all 0.2s var(--ease-smooth);
 }
 
 .glass-button:hover {
-  background: #E8E8ED;
-  border-color: #D1D1D6;
+  background: #F2F3FF;
+  border-color: #C4C5D7;
   color: #000000;
   transform: translateY(-1px);
 }
@@ -117,7 +117,7 @@ body {
    TEXT GRADIENTS
 ═══════════════════════════════════════════════ */
 .text-gradient-neon {
-  background: linear-gradient(135deg, #0071E3 0%, #1D1D1F 100%);
+  background: linear-gradient(135deg, #0037B0 0%, #131B2E 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -139,8 +139,8 @@ body {
 
 .glass-panel-hover:hover {
   background: #FFFFFF;
-  border-color: #0071E3;
-  box-shadow: 0 12px 32px rgba(0, 113, 227, 0.12);
+  border-color: #0037B0;
+  box-shadow: 0 12px 32px rgba(0, 55, 176, 0.12);
   transform: translateY(-2px);
 }
 
@@ -160,7 +160,7 @@ body {
   background: linear-gradient(
     120deg,
     transparent 0%,
-    rgba(0, 113, 227, 0.05) 50%,
+    rgba(0, 55, 176, 0.05) 50%,
     transparent 100%
   );
   transform: skewX(-15deg);
@@ -174,8 +174,8 @@ body {
 /* Light Hero Grid Pattern */
 .hero-grid-bg {
   background-image:
-    linear-gradient(rgba(0, 113, 227, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 113, 227, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(0, 55, 176, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 55, 176, 0.04) 1px, transparent 1px);
   background-size: 48px 48px;
   mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%);
 }
@@ -216,7 +216,7 @@ body {
 .blog-body p { margin-top: 1.15em; }
 .blog-body strong { color: #0f172a; font-weight: 700; }
 .blog-body a {
-  color: #0071e3;
+  color: #0037B0;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
@@ -227,7 +227,7 @@ body {
 .blog-body li { margin-top: 0.45em; }
 .blog-body li::marker { color: #94a3b8; }
 .blog-body blockquote {
-  border-left: 3px solid #0071e3;
+  border-left: 3px solid #0037B0;
   background: #f8fafc;
   padding: 0.9em 1.1em;
   border-radius: 0 12px 12px 0;
