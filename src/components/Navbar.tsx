@@ -122,7 +122,7 @@ export const Navbar: React.FC = () => {
 
             <button
               onClick={() => setIsOrderModalOpen(true)}
-              className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white bg-brand-blue hover:bg-blue-600 shadow-brand-blue hover:scale-[1.02] transition-all active:scale-95"
+              className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white bg-brand-blue hover:bg-brand-blue shadow-brand-blue hover:scale-[1.02] transition-all active:scale-95"
             >
               <PlusCircle className="w-4 h-4" />
               <span>{t('btn_start')}</span>

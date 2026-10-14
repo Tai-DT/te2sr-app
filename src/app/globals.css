@@ -7,20 +7,20 @@
 ═══════════════════════════════════════════════ */
 :root {
   --font-inter: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-montserrat: 'Montserrat', system-ui, -apple-system, sans-serif;
+  --font-montserrat: 'Inter', system-ui, -apple-system, sans-serif; /* Stitch: Inter everywhere, keep var name for compat */
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
   /* Apple / Samsung Light Palette */
   --bg-primary: #FFFFFF;
-  --bg-secondary: #F5F5F7;
-  --bg-tertiary: #E5E5EA;
+  --bg-secondary: #FAF8FF;
+  --bg-tertiary: #DAE2FD;
 
-  --text-primary: #000000;
-  --text-secondary: #2C2C2E;
-  --text-tertiary: #48484A;
+  --text-primary: #131B2E;
+  --text-secondary: #434655;
+  --text-tertiary: #434655;
 
-  --apple-blue: #0071E3;
-  --apple-blue-hover: #0077ED;
+  --apple-blue: #0037B0;
+  --apple-blue-hover: #1D4ED8;
   --apple-dark: #1D1D1F;
   --apple-border: #E5E5EA;
 

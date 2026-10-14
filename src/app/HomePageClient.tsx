@@ -75,7 +75,7 @@ export default function HomePageClient() {
             <div className="space-y-4 max-w-4xl mx-auto">
               <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold font-display tracking-tight text-slate-900 leading-[1.1]">
                 {t('hero_line1')} <br />
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-blue to-blue-600">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-blue to-brand-blue">
                   {t('hero_line2')}
                 </span>
               </h1>
@@ -105,7 +105,7 @@ export default function HomePageClient() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
               <button
                 onClick={() => openServiceModal('Publishing')}
-                className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-brand-blue hover:bg-blue-600 text-white font-extrabold text-sm transition-all shadow-brand-blue hover:scale-[1.02] flex items-center justify-center gap-2.5"
+                className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-brand-blue hover:bg-brand-blue text-white font-extrabold text-sm transition-all shadow-brand-blue hover:scale-[1.02] flex items-center justify-center gap-2.5"
               >
                 <Rocket className="w-4 h-4" />
                 <span>{t('cta_publish_now')}</span>
@@ -451,7 +451,7 @@ export default function HomePageClient() {
               </div>
               <button
                 onClick={() => openServiceModal('Publishing', 'Both')}
-                className="w-full py-3.5 rounded-xl bg-brand-blue hover:bg-blue-600 text-white font-extrabold text-sm shadow-brand-blue hover:scale-[1.02] transition-all"
+                className="w-full py-3.5 rounded-xl bg-brand-blue hover:bg-brand-blue text-white font-extrabold text-sm shadow-brand-blue hover:scale-[1.02] transition-all"
               >
                 {t('home_price_both_btn')}
               </button>

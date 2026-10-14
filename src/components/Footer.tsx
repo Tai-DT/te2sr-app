@@ -138,7 +138,7 @@ export const Footer: React.FC = () => {
             href={socialLinks.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-slate-600 hover:text-blue-700 transition-colors"
+            className="text-slate-600 hover:text-brand-blue transition-colors"
           >
             LinkedIn
           </a>

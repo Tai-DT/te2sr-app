@@ -124,7 +124,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           </p>
           <Link
             href="/services/testing"
-            className="mt-3.5 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-blue hover:bg-blue-600 text-white text-xs font-extrabold shadow-brand-blue transition-colors"
+            className="mt-3.5 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-blue hover:bg-brand-blue text-white text-xs font-extrabold shadow-brand-blue transition-colors"
           >
             <MessageSquare className="w-3.5 h-3.5" aria-hidden />
             Xem dịch vụ kiểm thử

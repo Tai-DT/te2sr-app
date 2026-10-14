@@ -90,7 +90,7 @@ export const ChangePasswordCard: React.FC = () => {
         <button
           type="submit"
           disabled={submitting}
-          className="px-5 py-2.5 rounded-xl bg-brand-blue hover:bg-blue-600 text-white text-xs font-extrabold shadow-apple-sm transition-all flex items-center gap-2 disabled:opacity-60"
+          className="px-5 py-2.5 rounded-xl bg-brand-blue hover:bg-brand-blue text-white text-xs font-extrabold shadow-apple-sm transition-all flex items-center gap-2 disabled:opacity-60"
         >
           {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <KeyRound className="w-4 h-4" />}
           <span>{hasPassword ? t('pwd_btn_change') : t('pwd_btn_set')}</span>

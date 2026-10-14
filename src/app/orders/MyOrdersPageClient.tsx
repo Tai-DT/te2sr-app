@@ -154,7 +154,7 @@ function OrderChat({ orderId }: { orderId: string }) {
         <button
           type="submit"
           disabled={sending || !text.trim()}
-          className="shrink-0 px-3 py-2 rounded-xl bg-brand-blue text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-blue-600 transition-colors"
+          className="shrink-0 px-3 py-2 rounded-xl bg-brand-blue text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-brand-blue transition-colors"
           aria-label={t('myorders_chat_send')}
         >
           {sending
@@ -208,7 +208,7 @@ function OrderCard({ order }: { order: Order }) {
 
       <button
         onClick={() => setChatOpen((v) => !v)}
-        className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-bold text-brand-blue hover:text-blue-700 transition-colors"
+        className="mt-3 inline-flex items-center gap-1.5 text-[11px] font-bold text-brand-blue hover:text-brand-blue transition-colors"
         aria-expanded={chatOpen}
       >
         <MessageSquare className="w-3.5 h-3.5" aria-hidden />
@@ -272,7 +272,7 @@ export default function MyOrdersPageClient() {
             </p>
             <button
               onClick={openAuthModal}
-              className="mt-4 px-5 py-2.5 rounded-xl bg-brand-blue text-white font-bold text-sm shadow-brand-blue hover:bg-blue-600 transition-colors"
+              className="mt-4 px-5 py-2.5 rounded-xl bg-brand-blue text-white font-bold text-sm shadow-brand-blue hover:bg-brand-blue transition-colors"
             >
               {t('myorders_signin_cta')}
             </button>
@@ -303,7 +303,7 @@ export default function MyOrdersPageClient() {
             </p>
             <a
               href="/"
-              className="inline-block mt-4 px-5 py-2.5 rounded-xl bg-brand-blue text-white font-bold text-sm shadow-brand-blue hover:bg-blue-600 transition-colors"
+              className="inline-block mt-4 px-5 py-2.5 rounded-xl bg-brand-blue text-white font-bold text-sm shadow-brand-blue hover:bg-brand-blue transition-colors"
             >
               {t('myorders_empty_cta')}
             </a>
