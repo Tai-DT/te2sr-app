@@ -1,0 +1,18 @@
+# Devin blueprint — te2sr-app
+# https://docs.devin.ai/onboard-devin/environment-yaml
+maintenance: |
+  export PATH="$HOME/.nvm/versions/node/v24.19.0/bin:$PATH"
+  npm install
+knowledge:
+  - name: dev
+    contents: |
+      NEXT_PUBLIC_API_URL=https://api.te2sr.com NEXT_PUBLIC_GOOGLE_CLIENT_ID=336845323505-eunvq0bip43e2h4to13vvp98j580e1vm.apps.googleusercontent.com npm run dev  # localhost:3000
+  - name: build
+    contents: |
+      npm run build  # Next static export → out/ ; deploy: wrangler pages deploy out --project-name=te2sr
+  - name: backend
+    contents: |
+      cd backend && npm install && npm run db:init && npm run dev  # wrangler dev :8787 ; deploy: wrangler deploy
+  - name: notes
+    contents: |
+      Node chỉ có qua nvm (không nằm trên PATH mặc định) — export PATH nvm trước mọi lệnh npm/npx. Login admin = email trong ADMIN_EMAILS (backend/wrangler.toml) qua Google OAuth.
